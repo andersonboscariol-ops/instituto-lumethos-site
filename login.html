@@ -3,348 +3,359 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Entrar · Instituto Lumethos</title>
-  <meta name="description" content="Acesse sua área do aluno no Instituto Lumethos">
-  <link rel="icon" href="favicon.ico">
+  <title>Área do Aluno · Instituto Lumethos</title>
+  <link rel="icon" href="/img/favicon.ico">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+    :root {
+      --navy:#0B1526; --gold:#C79A2E; --gold-hover:#d4a83a;
+      --white:#fff; --gray-100:#f8f9fa; --gray-200:#e9ecef; --gray-300:#dee2e6;
+      --gray-500:#6c757d; --gray-700:#343a40; --gray-900:#111;
+    }
+    body { font-family:'Inter',sans-serif; min-height:100vh; }
+    
+    /* ======== SPLIT LAYOUT ======== */
+    .split { display:flex; min-height:100vh; }
+    
+    /* ======== LEFT PANEL ======== */
+    .left-panel {
+      flex:1; background:var(--navy); color:var(--white);
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      padding:60px 40px; position:relative; overflow:hidden;
+    }
+    .left-panel::before {
+      content:''; position:absolute; top:-50%; right:-30%; width:600px; height:600px;
+      background:radial-gradient(circle,rgba(199,154,46,.06) 0%,transparent 70%);
+      border-radius:50%; pointer-events:none;
+    }
+    .left-content { max-width:420px; text-align:center; position:relative; z-index:1; }
+    .crest { width:120px; height:120px; margin-bottom:20px; object-fit:contain; }
+    .motto-badge {
+      display:inline-block; padding:8px 20px; background:var(--gold); color:var(--navy);
+      border-radius:50px; font-size:11px; font-weight:700; letter-spacing:2px;
+      margin-bottom:28px; font-family:'Inter',sans-serif;
+    }
+    .brand-name { font-family:'Libre Baskerville',serif; font-size:16px; color:var(--gold); letter-spacing:4px; margin-bottom:4px; }
+    .brand-sub { font-family:'Libre Baskerville',serif; font-size:11px; color:rgba(255,255,255,.35); letter-spacing:3px; margin-bottom:40px; }
+    .student-title { font-size:28px; font-weight:700; margin-bottom:12px; }
+    .student-desc { font-size:14px; color:rgba(255,255,255,.55); line-height:1.7; }
 
-    :root{
-      --bg-primary:#0D1B2A;
-      --bg-secondary:#152238;
-      --gold:#C79A2E;
-      --gold-light:#e0b84c;
-      --white:#fff;
-      --text-secondary:rgba(255,255,255,.7);
-      --danger:#ef4444;
-      --success:#22c55e;
+    /* ======== RIGHT PANEL ======== */
+    .right-panel {
+      width:480px; background:var(--white); color:var(--gray-900);
+      display:flex; flex-direction:column; justify-content:center;
+      padding:60px 48px; position:relative;
     }
+    .right-content { max-width:380px; width:100%; margin:0 auto; }
+    .welcome-title { font-size:26px; font-weight:700; margin-bottom:6px; }
+    .welcome-sub { font-size:14px; color:var(--gray-500); margin-bottom:32px; }
 
-    body{
-      font-family:'Inter',sans-serif;
-      background:var(--bg-primary);
-      color:var(--white);
-      min-height:100vh;
-      display:flex;align-items:center;justify-content:center;
-      padding:24px;
+    .form-group { margin-bottom:18px; }
+    .form-group label {
+      display:block; font-size:12px; font-weight:600; color:var(--gray-700);
+      margin-bottom:6px; text-transform:uppercase; letter-spacing:.5px;
     }
+    .form-group input[type="email"],
+    .form-group input[type="password"],
+    .form-group input[type="text"] {
+      width:100%; padding:12px 14px; background:var(--gray-100); border:1px solid var(--gray-300);
+      border-radius:8px; font-size:14px; font-family:'Inter',sans-serif;
+      color:var(--gray-900); outline:none; transition:border-color .2s,box-shadow .2s;
+    }
+    .form-group input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(199,154,46,.1); }
+    .form-group input::placeholder { color:var(--gray-500); }
 
-    .login-container{
-      width:100%;max-width:420px;
+    .form-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
+    .remember-me { display:flex; align-items:center; gap:8px; cursor:pointer; }
+    .remember-me input[type="checkbox"] {
+      width:16px; height:16px; accent-color:var(--gold); cursor:pointer;
     }
+    .remember-me label { font-size:13px; color:var(--gray-700); cursor:pointer; }
+    .forgot-link { font-size:13px; color:var(--gold); text-decoration:none; font-weight:500; }
+    .forgot-link:hover { text-decoration:underline; }
 
-    .login-header{
-      text-align:center;margin-bottom:32px;
+    .btn-primary {
+      width:100%; padding:13px; background:var(--gold); color:var(--navy);
+      border:none; border-radius:8px; font-size:15px; font-weight:700;
+      cursor:pointer; font-family:'Inter',sans-serif; transition:background .2s,transform .1s;
     }
-    .login-header .logo{
-      font-family:'Libre Baskerville',serif;
-      font-size:24px;color:var(--gold);
-      margin-bottom:8px;
-    }
-    .login-header p{color:var(--text-secondary);font-size:14px;}
+    .btn-primary:hover { background:var(--gold-hover); }
+    .btn-primary:active { transform:scale(.98); }
+    .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
 
-    .card{
-      background:var(--bg-secondary);
-      border-radius:16px;padding:32px;
-      border:1px solid rgba(255,255,255,.06);
-    }
+    .register-row { text-align:center; margin-top:28px; padding-top:20px; border-top:1px solid var(--gray-200); }
+    .register-row span { font-size:13px; color:var(--gray-500); }
+    .register-row a { font-size:13px; color:var(--gold); text-decoration:none; font-weight:600; }
+    .register-row a:hover { text-decoration:underline; }
 
-    .form-group{margin-bottom:20px;}
-    .form-group label{
-      display:block;font-size:13px;font-weight:500;
-      color:var(--text-secondary);margin-bottom:6px;
+    .alert {
+      padding:12px 14px; border-radius:8px; font-size:13px; margin-bottom:16px;
+      display:none; animation:fadeIn .3s;
     }
-    .form-group input{
-      width:100%;padding:12px 16px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:10px;color:var(--white);
-      font-size:15px;font-family:'Inter',sans-serif;
-      transition:border-color .2s;
-    }
-    .form-group input:focus{
-      outline:none;border-color:var(--gold);
-    }
-    .form-group input::placeholder{color:rgba(255,255,255,.25);}
+    .alert.error { background:#fef2f2; color:#991b1b; border:1px solid #fecaca; display:block; }
+    .alert.success { background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; display:block; }
+    .alert.info { background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; display:block; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
 
-    .btn{
-      width:100%;padding:14px;border:none;border-radius:10px;
-      font-size:15px;font-weight:600;cursor:pointer;
-      font-family:'Inter',sans-serif;
-      transition:all .2s;
-    }
-    .btn-primary{
-      background:var(--gold);color:var(--bg-primary);
-    }
-    .btn-primary:hover{background:var(--gold-light);}
-    .btn-primary:disabled{opacity:.6;cursor:not-allowed;}
+    /* ======== REGISTER FORM (hidden by default) ======== */
+    .register-form { display:none; }
+    .register-form.active { display:block; }
+    .login-form { display:block; }
+    .login-form.hidden { display:none; }
 
-    .divider{
-      display:flex;align-items:center;gap:12px;
-      margin:24px 0;color:var(--text-secondary);
-      font-size:12px;
-    }
-    .divider::before,.divider::after{
-      content:'';flex:1;height:1px;
-      background:rgba(255,255,255,.08);
-    }
-
-    .social-btn{
-      width:100%;padding:12px;border:1px solid rgba(255,255,255,.12);
-      border-radius:10px;background:transparent;color:var(--white);
-      font-size:14px;font-weight:500;cursor:pointer;
-      display:flex;align-items:center;justify-content:center;gap:10px;
-      transition:background .2s;
-      font-family:'Inter',sans-serif;
-    }
-    .social-btn:hover{background:rgba(255,255,255,.04);}
-
-    .links{
-      text-align:center;margin-top:20px;
-      font-size:13px;color:var(--text-secondary);
-    }
-    .links a{color:var(--gold);text-decoration:none;font-weight:500;}
-    .links a:hover{text-decoration:underline;}
-
-    .alert{
-      padding:12px 16px;border-radius:10px;
-      font-size:13px;margin-bottom:16px;display:none;
-    }
-    .alert-error{
-      background:rgba(239,68,68,.12);color:var(--danger);
-      border:1px solid rgba(239,68,68,.25);display:block;
-    }
-    .alert-success{
-      background:rgba(34,197,94,.12);color:var(--success);
-      border:1px solid rgba(34,197,94,.25);display:block;
-    }
-
-    .back-link{
-      display:block;text-align:center;margin-top:24px;
-      color:var(--text-secondary);text-decoration:none;
-      font-size:13px;
-    }
-    .back-link:hover{color:var(--gold);}
-
-    @media(max-width:480px){
-      .card{padding:24px 20px;}
-      .login-header .logo{font-size:20px;}
+    /* ======== MOBILE ======== */
+    @media(max-width:768px) {
+      .split { flex-direction:column; }
+      .left-panel { padding:40px 24px 32px; }
+      .right-panel { width:100%; flex:1; padding:32px 24px 40px; }
+      .crest { width:80px; height:80px; }
+      .student-title { font-size:22px; }
+      .welcome-title { font-size:22px; }
+      .right-content { max-width:100%; }
     }
   </style>
 </head>
 <body>
 
-<div class="login-container">
-  <div class="login-header">
-    <div class="logo">Instituto Lumethos</div>
-    <p>Entre para acessar seus cursos</p>
-  </div>
-
-  <div class="card">
-    <div class="alert alert-error" id="errorAlert"></div>
-    <div class="alert alert-success" id="successAlert"></div>
-
-    <form id="loginForm">
-      <div class="form-group">
-        <label for="email">E-mail</label>
-        <input type="email" id="email" placeholder="seu@email.com" required autocomplete="email">
-      </div>
-
-      <div class="form-group">
-        <label for="password">Senha</label>
-        <input type="password" id="password" placeholder="Sua senha" required autocomplete="current-password">
-      </div>
-
-      <button type="submit" class="btn btn-primary" id="loginBtn">
-        Entrar
-      </button>
-    </form>
-
-    <div class="divider">ou continue com</div>
-
-    <button class="social-btn" onclick="loginWithGoogle()">
-      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 01-1.8 2.72v2.26h2.92A8.78 8.78 0 0017.64 9.2z"/><path fill="#34A853" d="M9 18c2.48 0 4.56-.82 6.08-2.22l-2.92-2.26c-.8.54-1.84.86-3.16.86-2.44 0-4.5-1.64-5.24-3.86H.84v2.34A8.96 8.96 0 009 18z"/><path fill="#FBBC05" d="M3.76 10.52A5.52 5.52 0 013.46 9c0-.54.1-1.06.3-1.52V5.14H.84A8.96 8.96 0 000 9c0 1.46.34 2.84.84 4.06l2.92-2.54z"/><path fill="#EA4335" d="M9 3.48c1.34 0 2.54.46 3.48 1.36l2.6-2.6C13.54.98 11.46 0 9 0A8.96 8.96 0 00.84 5.14l2.92 2.54C4.5 5.12 6.56 3.48 9 3.48z"/></svg>
-      Google
-    </button>
-
-    <div class="links" style="margin-top:20px;">
-      <a href="#" onclick="showForgotPassword(event)">Esqueceu a senha?</a>
+<div class="split">
+  <!-- ======== LEFT PANEL ======== -->
+  <div class="left-panel">
+    <div class="left-content">
+      <img src="/img/logo-selo.webp" alt="Instituto Lumethos" class="crest" onerror="this.style.display='none'">
+      <div class="motto-badge">SAPIENTIA AD MINISTERIUM</div>
+      <div class="brand-name">INSTITUTO</div>
+      <div class="brand-sub">LUMETHOS</div>
+      <div class="student-title">Área do Aluno</div>
+      <p class="student-desc">Acesse seus cursos, certificados, biblioteca digital e ferramentas ministeriais.</p>
     </div>
   </div>
 
-  <div class="links" style="margin-top:16px;">
-    Não tem conta? <a href="#" onclick="showRegister(event)">Criar conta</a>
-  </div>
+  <!-- ======== RIGHT PANEL ======== -->
+  <div class="right-panel">
+    <div class="right-content">
+      <!-- LOGIN FORM -->
+      <div class="login-form" id="loginForm">
+        <h1 class="welcome-title">Bem-vindo de volta</h1>
+        <p class="welcome-sub">Faça login para acessar sua conta</p>
 
-  <a href="/" class="back-link">← Voltar para o site</a>
+        <div class="alert error" id="loginError"></div>
+        <div class="alert success" id="loginSuccess"></div>
+        <div class="alert info" id="loginInfo"></div>
+
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" placeholder="seu@email.com" autocomplete="email" autofocus>
+        </div>
+        <div class="form-group">
+          <label for="password">Senha</label>
+          <input type="password" id="password" placeholder="Sua senha" autocomplete="current-password">
+        </div>
+        <div class="form-row">
+          <label class="remember-me">
+            <input type="checkbox" id="remember">
+            <label for="remember">Lembrar-me</label>
+          </label>
+          <a href="#" class="forgot-link" onclick="showForgotPassword(event)">Esqueci a senha</a>
+        </div>
+        <button class="btn-primary" id="loginBtn" onclick="handleLogin()">Entrar</button>
+        <div class="register-row">
+          <span>Ainda não tem conta?</span> <a href="#" onclick="showRegisterForm(event)">Cadastre-se</a>
+        </div>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div class="register-form" id="registerForm">
+        <h1 class="welcome-title">Criar conta</h1>
+        <p class="welcome-sub">Cadastre-se para acessar os cursos</p>
+
+        <div class="alert error" id="registerError"></div>
+        <div class="alert success" id="registerSuccess"></div>
+
+        <div class="form-group">
+          <label for="regName">Nome completo</label>
+          <input type="text" id="regName" placeholder="Seu nome completo">
+        </div>
+        <div class="form-group">
+          <label for="regEmail">E-mail</label>
+          <input type="email" id="regEmail" placeholder="seu@email.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="regPassword">Senha</label>
+          <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+        </div>
+        <div class="form-group">
+          <label for="regPassword2">Confirmar senha</label>
+          <input type="password" id="regPassword2" placeholder="Repita a senha">
+        </div>
+        <button class="btn-primary" id="registerBtn" onclick="handleRegister()">Criar conta</button>
+        <div class="register-row">
+          <span>Já tem conta?</span> <a href="#" onclick="showLoginForm(event)">Fazer login</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- Supabase SDK -->
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://xplqghmhslfpyyqhwvkp.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_sQPtweum0Qbml5zK3vd4Yg_tbdnxJ-o";
+  const SUPABASE_ANON_KEY = "***";
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const errorAlert = document.getElementById('errorAlert');
-  const successAlert = document.getElementById('successAlert');
-  const loginBtn = document.getElementById('loginBtn');
-
-  function showError(msg) {
-    errorAlert.textContent = msg;
-    errorAlert.style.display = 'block';
-    successAlert.style.display = 'none';
+  // ======== REDIRECT ========
+  function getRedirect() {
+    const params = new URLSearchParams(location.search);
+    return params.get('redirect') || '/aluno/dashboard.html';
   }
 
-  function showSuccess(msg) {
-    successAlert.textContent = msg;
-    successAlert.style.display = 'block';
-    errorAlert.style.display = 'none';
-  }
-
-  function hideAlerts() {
-    errorAlert.style.display = 'none';
-    successAlert.style.display = 'none';
-  }
-
-  // Check if already logged in
+  // ======== CHECK EXISTING SESSION ========
   async function checkSession() {
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
-      redirectAfterLogin();
+      window.location.href = getRedirect();
     }
   }
 
-  function redirectAfterLogin() {
-    const params = new URLSearchParams(location.search);
-    const redirect = params.get('redirect') || '/aluno/dashboard.html';
-    window.location.href = redirect;
+  // ======== ALERTS ========
+  function show(prefix, type, msg) {
+    const el = document.getElementById(prefix + type.charAt(0).toUpperCase() + type.slice(1));
+    if (!el) return;
+    el.textContent = msg;
+    el.style.display = 'block';
+    // Auto-hide success
+    if (type === 'success') setTimeout(() => { el.style.display = 'none'; }, 5000);
+  }
+  function hide(prefix) {
+    ['Error','Success','Info'].forEach(t => {
+      const el = document.getElementById(prefix + t);
+      if (el) el.style.display = 'none';
+    });
   }
 
-  // Login form
-  document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    hideAlerts();
-    loginBtn.disabled = true;
-    loginBtn.textContent = 'Entrando...';
-
+  // ======== LOGIN ========
+  async function handleLogin() {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
+    const btn = document.getElementById('loginBtn');
 
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    hide('login');
+    if (!email || !password) { show('login','error','Preencha e-mail e senha'); return; }
 
-      if (error) {
-        if (error.message.includes('Invalid login')) {
-          showError('E-mail ou senha incorretos');
-        } else if (error.message.includes('Email not confirmed')) {
-          showError('Confirme seu e-mail antes de entrar');
-        } else {
-          showError(error.message);
-        }
-        loginBtn.disabled = false;
-        loginBtn.textContent = 'Entrar';
-        return;
-      }
+    btn.disabled = true;
+    btn.textContent = 'Entrando...';
 
-      showSuccess('Login realizado! Redirecionando...');
-      setTimeout(redirectAfterLogin, 800);
-    } catch (err) {
-      showError('Erro de conexão. Tente novamente.');
-      loginBtn.disabled = false;
-      loginBtn.textContent = 'Entrar';
-    }
-  });
-
-  // Google OAuth
-  async function loginWithGoogle() {
-    hideAlerts();
-    loginBtn.disabled = true;
-    loginBtn.textContent = 'Redirecionando...';
-
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.origin + '/aluno/dashboard.html',
-        queryParams: { access_type: 'offline', prompt: 'consent' }
-      }
-    });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-      showError('Erro ao iniciar login com Google');
-      loginBtn.disabled = false;
-      loginBtn.textContent = 'Entrar';
-    }
-  }
-
-  // Register
-  window.showRegister = async function(e) {
-    e.preventDefault();
-    const email = prompt('Digite seu e-mail para criar uma conta:');
-    if (!email) return;
-
-    hideAlerts();
-    const password = prompt('Crie uma senha (mínimo 6 caracteres):');
-    if (!password || password.length < 6) {
-      showError('A senha precisa ter no mínimo 6 caracteres');
+      let msg = error.message;
+      if (msg === 'Invalid login credentials') msg = 'E-mail ou senha incorretos';
+      if (msg.includes('Email not confirmed')) msg = 'Confirme seu e-mail antes de fazer login';
+      show('login','error',msg);
+      btn.disabled = false;
+      btn.textContent = 'Entrar';
       return;
     }
 
-    const name = prompt('Seu nome completo:');
-    if (!name) return;
+    if (data.session) {
+      show('login','success','Login realizado! Redirecionando...');
+      setTimeout(() => { window.location.href = getRedirect(); }, 600);
+    }
+  }
 
-    loginBtn.disabled = true;
-    loginBtn.textContent = 'Criando conta...';
+  // ======== REGISTER ========
+  function showRegisterForm(e) {
+    e.preventDefault();
+    hide('login');
+    hide('register');
+    document.getElementById('loginForm').classList.add('hidden');
+    document.getElementById('registerForm').classList.add('active');
+    document.getElementById('regName').focus();
+  }
+  function showLoginForm(e) {
+    e.preventDefault();
+    hide('login');
+    hide('register');
+    document.getElementById('registerForm').classList.remove('active');
+    document.getElementById('loginForm').classList.remove('hidden');
+    document.getElementById('email').focus();
+  }
+
+  async function handleRegister() {
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const password2 = document.getElementById('regPassword2').value;
+    const btn = document.getElementById('registerBtn');
+
+    hide('register');
+    if (!name || !email || !password) { show('register','error','Preencha todos os campos'); return; }
+    if (password.length < 6) { show('register','error','A senha precisa ter no mínimo 6 caracteres'); return; }
+    if (password !== password2) { show('register','error','As senhas não conferem'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Criando conta...';
 
     const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: name },
-        emailRedirectTo: window.location.origin + '/aluno/dashboard.html'
-      }
+      email, password,
+      options: { data: { name, full_name: name } }
     });
 
     if (error) {
-      showError(error.message);
-      loginBtn.disabled = false;
-      loginBtn.textContent = 'Entrar';
+      let msg = error.message;
+      if (msg.includes('already registered') || msg.includes('already exists')) msg = 'Este e-mail já está cadastrado';
+      show('register','error',msg);
+      btn.disabled = false;
+      btn.textContent = 'Criar conta';
       return;
     }
 
     if (data.user?.identities?.length === 0) {
-      showError('Este e-mail já está cadastrado');
-      loginBtn.disabled = false;
-      loginBtn.textContent = 'Entrar';
+      show('register','error','Este e-mail já está cadastrado. Faça login.');
+      btn.disabled = false;
+      btn.textContent = 'Criar conta';
       return;
     }
 
-    showSuccess('Conta criada! Verifique seu e-mail para confirmar.');
-    loginBtn.textContent = 'Entrar';
-    loginBtn.disabled = false;
-  };
+    show('register','success','Conta criada! Confirme seu e-mail para ativar.');
+    btn.textContent = 'Criar conta';
+    btn.disabled = false;
 
-  // Forgot password
-  window.showForgotPassword = async function(e) {
+    // Auto-switch to login after 2s
+    setTimeout(() => showLoginForm(new Event('click')), 2500);
+  }
+
+  // ======== FORGOT PASSWORD ========
+  async function showForgotPassword(e) {
     e.preventDefault();
-    const email = prompt('Digite seu e-mail para redefinir a senha:');
+    const email = document.getElementById('email').value.trim() || prompt('Digite seu e-mail para redefinir a senha:');
     if (!email) return;
 
-    hideAlerts();
+    hide('login');
+    show('login','info','Enviando link de redefinição...');
+
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: window.location.origin + '/login.html?reset=true'
     });
 
     if (error) {
-      showError(error.message);
-      return;
+      show('login','error','Erro ao enviar. Verifique o e-mail digitado.');
+    } else {
+      show('login','success','Link de redefinição enviado! Verifique seu e-mail.');
     }
+  }
 
-    showSuccess('E-mail de redefinição enviado! Verifique sua caixa de entrada.');
-  };
+  // ======== ENTER KEY ========
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (document.getElementById('registerForm').classList.contains('active')) {
+        handleRegister();
+      } else {
+        handleLogin();
+      }
+    }
+  });
 
-  // Init
   checkSession();
 </script>
 
