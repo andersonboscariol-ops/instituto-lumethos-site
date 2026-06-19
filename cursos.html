@@ -4,19 +4,83 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="description" content="Instituto Lumethos — Cursos de formação ministerial cristã. Capelania, Teologia, Ministério Pastoral, Diaconal, Hinologia, Infantil, Jovens, Patrística e História da Igreja.">
-  <meta name="keywords" content="cursos teologia, capelania, formação ministerial, instituto lumethos, curso pastoral, hinologia">
+  <meta name="keywords" content="cursos teologia, capelania, formação ministerial, instituto lumethos">
   <meta name="author" content="Instituto Lumethos">
   <title>Nossos Cursos — Instituto Lumethos</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-  <link media="all" rel="stylesheet" href="css/main.1781808844.css"><style>.nav-top{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,27,42,0.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;padding:10px 20px;gap:12px;}.nav-top a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:13px;font-weight:500;color:rgba(255,255,255,0.7);padding:6px 12px;border-radius:8px;transition:all 0.15s}.nav-top a:hover{background:rgba(255,255,255,0.1);color:#C79A2E}.nav-top a svg{width:18px;height:18px;fill:currentColor}.nav-top .spacer{flex:1}.nav-top .logo-mini{height:22px;opacity:0.4}</style>
+  <link media="all" rel="stylesheet" href="css/main.1781808844.css">
+  <style>
+    /* === NAV-TOP FIXED === */
+    .nav-top{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(13,27,42,0.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;align-items:center;padding:8px 20px;gap:12px;border-bottom:1px solid rgba(199,154,46,0.1)}
+    .nav-top a{display:inline-flex;align-items:center;gap:5px;text-decoration:none;font-size:12px;font-weight:500;color:rgba(255,255,255,0.7);padding:5px 12px;border-radius:8px;transition:all 0.15s}
+    .nav-top a:hover{background:rgba(255,255,255,0.1);color:#C79A2E}
+    .nav-top a svg{width:16px;height:16px;fill:currentColor}
+    .nav-top .spacer{flex:1}
+    .nav-top .logo-mini{height:20px;opacity:0.35}
+    body{padding-top:44px}
 
+    /* === NETFLIX-STYLE LIBRARY === */
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#0D1B2A;color:#fff;font-family:'Roboto',sans-serif}
+
+    /* Hero */
+    .lib-hero{position:relative;padding:80px 0 60px;text-align:center;background:linear-gradient(180deg,rgba(13,27,42,0) 0%,#0D1B2A 100%),url('img/bg-cursos.jpg') center/cover;background-color:#0D1B2A}
+    .lib-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#0D1B2A 0%,transparent 60%)}
+    .lib-hero .container{position:relative;z-index:2}
+    .lib-hero .badge{display:inline-block;background:rgba(199,154,46,0.15);border:1px solid rgba(199,154,46,0.3);color:#C79A2E;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;padding:5px 16px;border-radius:4px;margin-bottom:16px}
+    .lib-hero h1{font-family:'Libre Baskerville',serif;font-size:clamp(32px,6vw,56px);color:#fff;margin:0 0 12px;line-height:1.1}
+    .lib-hero .sub{color:rgba(255,255,255,0.6);font-size:17px;max-width:520px;margin:0 auto}
+
+    /* Grid */
+    .lib-grid{padding:0 0 80px}
+    .lib-grid .container{max-width:1200px;margin:0 auto;padding:0 24px}
+    .lib-row{display:grid;grid-template-columns:repeat(3,1fr);gap:32px 24px}
+    @media(max-width:1024px){.lib-row{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:640px){.lib-row{grid-template-columns:1fr;max-width:400px;margin:0 auto}}
+
+    /* Card */
+    .lib-card{display:block;text-decoration:none;color:#fff;background:#152238;border-radius:10px;overflow:hidden;transition:all 0.35s cubic-bezier(0.25,0.46,0.45,0.94);border:1px solid rgba(255,255,255,0.04);position:relative}
+    .lib-card:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(0,0,0,0.5);border-color:rgba(199,154,46,0.3)}
+    .lib-card:hover .lib-card-img{transform:scale(1.08)}
+    .lib-card:hover .lib-card-img-wrap::after{opacity:0.3}
+    .lib-card-img-wrap{position:relative;overflow:hidden;aspect-ratio:16/10;background:#0D1B2A}
+    .lib-card-img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(13,27,42,0.7) 0%,transparent 40%);transition:opacity 0.35s;opacity:0.5}
+    .lib-card-img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s}
+    .lib-card-body{padding:20px 22px 24px}
+    .lib-card-body h3{font-family:'Libre Baskerville',serif;font-size:18px;color:#fff;margin:0 0 8px;line-height:1.2}
+    .lib-card-body p{color:rgba(255,255,255,0.55);font-size:13.5px;line-height:1.6;margin:0 0 14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .lib-card-meta{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,0.06);padding-top:14px}
+    .lib-card-meta .meta-info{font-size:12px;color:rgba(255,255,255,0.35)}
+    .lib-card-meta .meta-info strong{color:#C79A2E;font-weight:700}
+    .lib-card-meta .meta-link{font-size:13px;color:#C79A2E;font-weight:600;transition:all 0.2s}
+    .lib-card:hover .lib-card-meta .meta-link{color:#d4a83a}
+
+    /* CTA */
+    .lib-cta{background:#152238;padding:60px 0;text-align:center;border-top:1px solid rgba(255,255,255,0.04)}
+    .lib-cta h2{font-family:'Libre Baskerville',serif;font-size:30px;color:#fff;margin:0 0 10px}
+    .lib-cta p{color:rgba(255,255,255,0.5);margin:0 0 28px;font-size:16px}
+    .lib-cta .btn-gold-netflix{display:inline-block;padding:15px 40px;background:#C79A2E;color:#0D1B2A;font-weight:700;font-size:16px;border-radius:8px;text-decoration:none;transition:all 0.2s}
+    .lib-cta .btn-gold-netflix:hover{background:#d4a83a;transform:scale(1.03)}
+
+    /* Footer override for dark */
+    .footer{background:#0D1B2A;border-top:1px solid rgba(255,255,255,0.06)}
+    .footer,.footer *{color:rgba(255,255,255,0.6)!important}
+    .footer .footer-tagline,.footer a{color:rgba(255,255,255,0.5)!important}
+    .footer a:hover{color:#C79A2E!important}
+  </style>
 </head>
-<body><div class="nav-top"><a href="javascript:history.back()" title="Voltar"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg> Voltar</a><a href="/" title="Página Inicial"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></a><span class="spacer"></span><img class="logo-mini" src="img/logo-lumethos-correto.png" alt="Lumethos"></div>
+<body>
+  <!-- == NAV-TOP (Voltar + Home) == -->
+  <div class="nav-top">
+    <a href="javascript:history.back()" title="Voltar"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg> Voltar</a>
+    <a href="/" title="Página Inicial"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> Início</a>
+    <span class="spacer"></span>
+    <img class="logo-mini" src="img/logo-lumethos-correto.png" alt="Lumethos">
+  </div>
+
   <!-- == NAVBAR == -->
   <header class="header header--secondary">
     <div class="container">
@@ -32,19 +96,19 @@
             <ul class="menu">
               <li><a class="menu__link" href="index.html">Início</a></li>
               <li><a class="menu__link" href="/cursos/capelania.html">Capelania</a></li>
-              <li style="position:relative">
-                <a href="cursos.html" class="menu__link" style="padding-right:20px">Cursos <span id="dd-arrow" style="font-size:10px;display:inline-block;transition:transform .2s">▾</span></a>
-                <ul id="dd-menu" style="display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid rgba(13,27,42,0.08);border-radius:12px;padding:8px;min-width:230px;box-shadow:0 12px 40px rgba(0,0,0,0.12);z-index:99999;list-style:none">
-                  <li style="margin:0;padding:0;border:none"><a href="cursos.html" style="display:block;padding:10px 14px;color:#C79A2E;font-size:13.5px;font-weight:700;text-decoration:none;border-bottom:1px solid rgba(13,27,42,0.06);margin-bottom:4px;padding-bottom:12px;border-radius:8px">Ver Todos os Cursos</a></li>
-                  <li style="margin:0;padding:0;border:none"><a href="/cursos/capelania.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Capelania Cristã</a></li>
-                  <li style="margin:0;padding:0;border:none"><a href="/cursos/teologia.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Teologia</a></li>
-                  <li style="margin:0;padding:0;border:none"><a href="/cursos/pastoral.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Ministério Pastoral</a></li>
-                  <li style="margin:0;padding:0;border:none"><a href="/cursos/diaconal.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Ministério Diaconal</a></li>
-                  <li style="margin:0;padding:0;border:none"><a href="/cursos/hinologia.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Hinologia Cristã</a></li>
-                  <li style="margin:0;padding:0;border:none"><a href="/cursos/jovens.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Ministério dos Jovens</a></li>
-                  <li style="margin:0;padding:0;border:none"><a href="/cursos/infantil.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Ministério Infantil</a></li>
-                  <li style="margin:0;padding:0;border:none"><a href="/cursos/patristica.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Patrística</a></li>
-                  <li style="margin:0;padding:0;border:none"><a href="/cursos/historia-igreja.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">História da Igreja</a></li>
+              <li class="nav-item dropdown">
+                <a href="cursos.html" class="nav-link menu__link">Cursos <span class="dropdown-arrow">▾</span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="cursos.html" class="dropdown-link">Ver Todos os Cursos</a></li>
+                  <li><a href="/cursos/capelania.html" class="dropdown-link">Capelania Cristã</a></li>
+                  <li><a href="/cursos/teologia.html" class="dropdown-link">Teologia</a></li>
+                  <li><a href="/cursos/pastoral.html" class="dropdown-link">Ministério Pastoral</a></li>
+                  <li><a href="/cursos/diaconal.html" class="dropdown-link">Ministério Diaconal</a></li>
+                  <li><a href="/cursos/hinologia.html" class="dropdown-link">Hinologia Cristã</a></li>
+                  <li><a href="/cursos/infantil.html" class="dropdown-link">Ministério Infantil</a></li>
+                  <li><a href="/cursos/jovens.html" class="dropdown-link">Ministério dos Jovens</a></li>
+                  <li><a href="/cursos/patristica.html" class="dropdown-link">Patrística</a></li>
+                  <li><a href="/cursos/historia-igreja.html" class="dropdown-link">História da Igreja</a></li>
                 </ul>
               </li>
               <li><a class="menu__link" href="biblioteca.html">Biblioteca</a></li>
@@ -60,167 +124,116 @@
     </div>
   </header>
 
-  <main class="main">
-
-    <!-- ===== HERO ===== -->
-    <section class="cursos-hero">
+  <main>
+    <!-- == HERO == -->
+    <section class="lib-hero">
       <div class="container">
+        <span class="badge">Formação Ministerial</span>
         <h1>Nossos Cursos</h1>
-        <p>Formação ministerial cristã completa para quem deseja servir com excelência. De capelania a teologia, encontre o curso certo para sua jornada.</p>
+        <p class="sub">9 cursos completos com certificação institucional e registro MIRC. Escolha o seu caminho ministerial.</p>
       </div>
     </section>
 
-    <!-- ===== GRID DE CURSOS ===== -->
-    <section class="section-palette section-white">
+    <!-- == GRID == -->
+    <section class="lib-grid">
       <div class="container">
-        <div class="cursos-grid">
-
-          <!-- 1. CAPELANIA CRISTÃ -->
-          <a href="/cursos/capelania.html" class="curso-card-link"><div class="curso-card">
-            <img src="img/cursos/capelania.png" alt="Capelania Cristã" class="curso-card-img" loading="lazy">
-            <div class="curso-card-body">
-              <span class="curso-card-categoria">Essencial para o Ministério</span>
-              <h3 class="curso-card-title">Capelania Cristã</h3>
-              <p class="curso-card-desc">Formação completa para atuar em hospitais, presídios, escolas, empresas e projetos sociais. Com certificação MIRC e credencial de capelão.</p>
-              <div class="curso-card-footer">
-                <span class="curso-card-ch"><strong>150h</strong> | 15 módulos</span>
-                <a href="/cursos/capelania.html" class="curso-card-cta">Saiba mais →</a>
-              </div></a>
+        <div class="lib-row">
+          <!-- 1. Capelania Cristã -->
+          <a href="/cursos/capelania.html" class="lib-card">
+            <div class="lib-card-img-wrap"><img class="lib-card-img" src="img/cursos/capelania.png" alt="Capelania Cristã" loading="lazy"></div>
+            <div class="lib-card-body">
+              <h3>Capelania Cristã</h3>
+              <p>Formação completa para assistência espiritual em hospitais, presídios, escolas e empresas.</p>
+              <div class="lib-card-meta"><span class="meta-info"><strong>150h</strong> · 15 módulos</span><span class="meta-link">Saiba mais →</span></div>
             </div>
-          </div>
-
-          <!-- 2. TEOLOGIA -->
-          <a href="/cursos/teologia.html" class="curso-card-link"><div class="curso-card">
-            <img src="img/cursos/teologia.png" alt="Teologia" class="curso-card-img" loading="lazy">
-            <div class="curso-card-body">
-              <span class="curso-card-categoria">Base Teológica</span>
-              <h3 class="curso-card-title">Teologia</h3>
-              <p class="curso-card-desc">Base teológica sólida com teologia sistemática, bíblica, histórica, apologética, hermenêutica e exegese. Ideal para quem busca fundamentos.</p>
-              <div class="curso-card-footer">
-                <span class="curso-card-ch"><strong>150h</strong> | 10 módulos</span>
-                <a href="/cursos/teologia.html" class="curso-card-cta">Saiba mais →</a>
-              </div></a>
+          </a>
+          <!-- 2. Teologia -->
+          <a href="/cursos/teologia.html" class="lib-card">
+            <div class="lib-card-img-wrap"><img class="lib-card-img" src="img/cursos/teologia.png" alt="Teologia" loading="lazy"></div>
+            <div class="lib-card-body">
+              <h3>Teologia</h3>
+              <p>Fundamentos teológicos sólidos: sistemática, bíblica, histórica, apologética e hermenêutica.</p>
+              <div class="lib-card-meta"><span class="meta-info"><strong>150h</strong> · 10 módulos</span><span class="meta-link">Saiba mais →</span></div>
             </div>
-          </div>
-
-          <!-- 3. MINISTÉRIO PASTORAL -->
-          <a href="/cursos/pastoral.html" class="curso-card-link"><div class="curso-card">
-            <img src="img/cursos/pastoral.png" alt="Ministério Pastoral" class="curso-card-img" loading="lazy">
-            <div class="curso-card-body">
-              <span class="curso-card-categoria">Pastoral</span>
-              <h3 class="curso-card-title">Ministério Pastoral</h3>
-              <p class="curso-card-desc">Preparo completo para o pastorado: liderança, aconselhamento, homilética, gestão eclesial e discipulado com foco prático no dia a dia da igreja.</p>
-              <div class="curso-card-footer">
-                <span class="curso-card-ch"><strong>120h</strong> | 7 módulos</span>
-                <a href="/cursos/pastoral.html" class="curso-card-cta">Saiba mais →</a>
-              </div></a>
+          </a>
+          <!-- 3. Ministério Pastoral -->
+          <a href="/cursos/pastoral.html" class="lib-card">
+            <div class="lib-card-img-wrap"><img class="lib-card-img" src="img/cursos/pastoral.png" alt="Ministério Pastoral" loading="lazy"></div>
+            <div class="lib-card-body">
+              <h3>Ministério Pastoral</h3>
+              <p>Formação para liderança eclesiástica com pregação, cuidado pastoral e administração.</p>
+              <div class="lib-card-meta"><span class="meta-info"><strong>120h</strong> · 12 módulos</span><span class="meta-link">Saiba mais →</span></div>
             </div>
-          </div>
-
-          <!-- 4. MINISTÉRIO DIACONAL -->
-          <a href="/cursos/diaconal.html" class="curso-card-link"><div class="curso-card">
-            <img src="img/cursos/diaconal.png" alt="Ministério Diaconal" class="curso-card-img" loading="lazy">
-            <div class="curso-card-body">
-              <span class="curso-card-categoria">Serviço Cristão</span>
-              <h3 class="curso-card-title">Ministério Diaconal</h3>
-              <p class="curso-card-desc">Fundamentos bíblicos do diaconato, serviço cristão, administração eclesial e visitação. Capacitação para servir com excelência na igreja.</p>
-              <div class="curso-card-footer">
-                <span class="curso-card-ch"><strong>80h</strong> | 5 módulos</span>
-                <a href="/cursos/diaconal.html" class="curso-card-cta">Saiba mais →</a>
-              </div></a>
+          </a>
+          <!-- 4. Ministério Diaconal -->
+          <a href="/cursos/diaconal.html" class="lib-card">
+            <div class="lib-card-img-wrap"><img class="lib-card-img" src="img/cursos/diaconal.png" alt="Ministério Diaconal" loading="lazy"></div>
+            <div class="lib-card-body">
+              <h3>Ministério Diaconal</h3>
+              <p>Capacitação para o serviço cristão prático com assistência social e ação comunitária.</p>
+              <div class="lib-card-meta"><span class="meta-info"><strong>100h</strong> · 10 módulos</span><span class="meta-link">Saiba mais →</span></div>
             </div>
-          </div>
-
-          <!-- 5. HINOLOGIA CRISTÃ -->
-          <a href="/cursos/hinologia.html" class="curso-card-link"><div class="curso-card">
-            <img src="img/cursos/hinologia.png" alt="Hinologia Cristã" class="curso-card-img" loading="lazy">
-            <div class="curso-card-body">
-              <span class="curso-card-categoria">Música e Louvor</span>
-              <h3 class="curso-card-title">Hinologia Cristã</h3>
-              <p class="curso-card-desc">História da hinologia cristã, análise de hinos, teologia do louvor e composição. Formação única no Brasil para músicos e ministros de louvor.</p>
-              <div class="curso-card-footer">
-                <span class="curso-card-ch"><strong>60h</strong> | 4 módulos</span>
-                <a href="/cursos/hinologia.html" class="curso-card-cta">Saiba mais →</a>
-              </div></a>
+          </a>
+          <!-- 5. Hinologia Cristã -->
+          <a href="/cursos/hinologia.html" class="lib-card">
+            <div class="lib-card-img-wrap"><img class="lib-card-img" src="img/cursos/hinologia.png" alt="Hinologia Cristã" loading="lazy"></div>
+            <div class="lib-card-body">
+              <h3>Hinologia Cristã</h3>
+              <p>Estudo da música sacra, hinódia brasileira, técnica vocal e regência para louvor.</p>
+              <div class="lib-card-meta"><span class="meta-info"><strong>80h</strong> · 8 módulos</span><span class="meta-link">Saiba mais →</span></div>
             </div>
-          </div>
-
-          <!-- 6. MINISTÉRIO DOS JOVENS -->
-          <a href="/cursos/jovens.html" class="curso-card-link"><div class="curso-card">
-            <img src="img/cursos/jovens.png" alt="Ministério dos Jovens" class="curso-card-img" loading="lazy">
-            <div class="curso-card-body">
-              <span class="curso-card-categoria">Pastores de Jovens</span>
-              <h3 class="curso-card-title">Ministério dos Jovens</h3>
-              <p class="curso-card-desc">Liderança juvenil, psicologia do adolescente, dinâmicas, evangelismo jovem e projeto de vida. Capacitação contextualizada para a geração atual.</p>
-              <div class="curso-card-footer">
-                <span class="curso-card-ch"><strong>60h</strong> | 4 módulos</span>
-                <a href="/cursos/jovens.html" class="curso-card-cta">Saiba mais →</a>
-              </div></a>
+          </a>
+          <!-- 6. Ministério Infantil -->
+          <a href="/cursos/infantil.html" class="lib-card">
+            <div class="lib-card-img-wrap"><img class="lib-card-img" src="img/cursos/infantil.png" alt="Ministério Infantil" loading="lazy"></div>
+            <div class="lib-card-body">
+              <h3>Ministério Infantil</h3>
+              <p>Formação para ensino bíblico criativo, discipulado e cuidado pastoral de crianças.</p>
+              <div class="lib-card-meta"><span class="meta-info"><strong>100h</strong> · 10 módulos</span><span class="meta-link">Saiba mais →</span></div>
             </div>
-          </div>
-
-          <!-- 7. MINISTÉRIO INFANTIL -->
-          <a href="/cursos/infantil.html" class="curso-card-link"><div class="curso-card">
-            <img src="img/cursos/infantil.png" alt="Ministério Infantil" class="curso-card-img" loading="lazy">
-            <div class="curso-card-body">
-              <span class="curso-card-categoria">Educação Cristã</span>
-              <h3 class="curso-card-title">Ministério Infantil</h3>
-              <p class="curso-card-desc">Pedagogia cristã, desenvolvimento infantil, didática bíblica, segurança e criatividade. Formação completa para transformar o ministério infantil.</p>
-              <div class="curso-card-footer">
-                <span class="curso-card-ch"><strong>60h</strong> | 4 módulos</span>
-                <a href="/cursos/infantil.html" class="curso-card-cta">Saiba mais →</a>
-              </div></a>
+          </a>
+          <!-- 7. Ministério dos Jovens -->
+          <a href="/cursos/jovens.html" class="lib-card">
+            <div class="lib-card-img-wrap"><img class="lib-card-img" src="img/cursos/jovens.png" alt="Ministério dos Jovens" loading="lazy"></div>
+            <div class="lib-card-body">
+              <h3>Ministério dos Jovens</h3>
+              <p>Capacitação para liderança de juventude com discipulado, projetos e mentoria.</p>
+              <div class="lib-card-meta"><span class="meta-info"><strong>100h</strong> · 10 módulos</span><span class="meta-link">Saiba mais →</span></div>
             </div>
-          </div>
-
-          <!-- 8. PATRÍSTICA -->
-          <a href="/cursos/patristica.html" class="curso-card-link"><div class="curso-card">
-            <img src="img/cursos/patristica.png" alt="Patrística" class="curso-card-img" loading="lazy">
-            <div class="curso-card-body">
-              <span class="curso-card-categoria">História da Igreja</span>
-              <h3 class="curso-card-title">Patrística</h3>
-              <p class="curso-card-desc">Pais da igreja, credos, heresias, concílios e desenvolvimento doutrinário. Um mergulho nas raízes do cristianismo e sua formação histórica.</p>
-              <div class="curso-card-footer">
-                <span class="curso-card-ch"><strong>40h</strong> | 5 módulos</span>
-                <a href="/cursos/patristica.html" class="curso-card-cta">Saiba mais →</a>
-              </div></a>
+          </a>
+          <!-- 8. Patrística -->
+          <a href="/cursos/patristica.html" class="lib-card">
+            <div class="lib-card-img-wrap"><img class="lib-card-img" src="img/cursos/patristica.png" alt="Patrística" loading="lazy"></div>
+            <div class="lib-card-body">
+              <h3>Patrística</h3>
+              <p>Estudo dos Pais da Igreja, teologia patrística e sua relevância para a fé contemporânea.</p>
+              <div class="lib-card-meta"><span class="meta-info"><strong>120h</strong> · 10 módulos</span><span class="meta-link">Saiba mais →</span></div>
             </div>
-          </div>
-
-          <!-- 9. HISTÓRIA DA IGREJA -->
-          <a href="/cursos/historia-igreja.html" class="curso-card-link"><div class="curso-card">
-            <img src="img/cursos/historia-igreja.png" alt="História da Igreja" class="curso-card-img" loading="lazy">
-            <div class="curso-card-body">
-              <span class="curso-card-categoria">História</span>
-              <h3 class="curso-card-title">História da Igreja</h3>
-              <p class="curso-card-desc">Igreja primitiva, medieval, reforma, modernidade e contemporânea. Visão panorâmica que ilumina o presente e prepara para o futuro do ministério.</p>
-              <div class="curso-card-footer">
-                <span class="curso-card-ch"><strong>40h</strong> | 6 módulos</span>
-                <a href="/cursos/historia-igreja.html" class="curso-card-cta">Saiba mais →</a>
-              </div></a>
+          </a>
+          <!-- 9. História da Igreja -->
+          <a href="/cursos/historia-igreja.html" class="lib-card">
+            <div class="lib-card-img-wrap"><img class="lib-card-img" src="img/cursos/historia-igreja.png" alt="História da Igreja" loading="lazy"></div>
+            <div class="lib-card-body">
+              <h3>História da Igreja</h3>
+              <p>Da Igreja Primitiva aos movimentos contemporâneos. 2.000 anos em 12 módulos.</p>
+              <div class="lib-card-meta"><span class="meta-info"><strong>120h</strong> · 12 módulos</span><span class="meta-link">Saiba mais →</span></div>
             </div>
-          </div>
-
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- ===== CTA ===== -->
-    <section class="section-palette section-dark-cta">
-      <div class="container text--center">
-        <span class="badge-gold">Dúvidas?</span>
-        <h2 class="headline-light" style="max-width:520px;margin:16px auto 10px;">Não sabe qual curso escolher?</h2>
-        <p class="headline-sub-light" style="max-width:480px;margin:0 auto 28px;">Fale conosco e descubra qual formação é ideal para seu chamado ministerial</p>
-        <div class="cta-row">
-          <a href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20vim%20pelo%20site%20e%20quero%20saber%20mais%20sobre%20os%20cursos" class="btn-gold-lg">Fale Conosco</a>
-          <a href="contato.html" class="btn-outline-light">Enviar Mensagem</a>
-        </div>
+    <!-- == CTA == -->
+    <section class="lib-cta">
+      <div class="container">
+        <h2>Pronto para sua jornada ministerial?</h2>
+        <p>Escolha seu curso e comece hoje mesmo. Acesso vitalício, certificado com registro MIRC.</p>
+        <a href="https://cursos.institutolumethos.online" class="btn-gold-netflix">Ver Planos de Matrícula</a>
       </div>
     </section>
-
   </main>
 
-  <!-- ===== FOOTER ===== -->
+  <!-- == FOOTER == -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
@@ -228,100 +241,42 @@
           <div class="footer-selo-wrap">
             <img src="img/logo-selo.png" alt="Selo Lumethos" class="footer-selo-img">
           </div>
-          <p class="footer-tagline">Capacitando servos para o ministério cristão com excelência acadêmica, espiritual e compromisso com a verdade. Sapientia ad Ministerium.</p>
+          <p class="footer-tagline">Capacitando servos para o ministério cristão com excelência acadêmica, espiritual e compromisso com a verdade.</p>
           <div class="footer-social">
             <a href="https://instagram.com/instituto.lumethos" target="_blank" aria-label="Instagram" class="social-ring icon-mono"><svg class="social-icon" width="14" height="14" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
-            <a href="https://youtube.com/@institutolumethos" target="_blank" aria-label="YouTube" class="social-ring icon-mono"><svg class="social-icon" width="14" height="14" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-            <a href="https://facebook.com/institutolumethos" target="_blank" aria-label="Facebook" class="social-ring icon-mono"><svg class="social-icon" width="14" height="14" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
           </div>
         </div>
-
-        <div class="footer-col footer-col--links">
-          <h4 class="footer-col-title">Institucional</h4>
-          <nav class="footer-nav">
-            <a href="sobre.html">Quem Somos</a>
-            <a href="cursos.html">Nossos Cursos</a>
-            <a href="contato.html">Fale Conosco</a>
-            <a href="#">Termos de Uso</a>
-          </nav>
+        <div class="footer-col">
+          <h4>Cursos</h4>
+          <ul>
+            <li><a href="/cursos/capelania.html">Capelania Cristã</a></li>
+            <li><a href="/cursos/teologia.html">Teologia</a></li>
+            <li><a href="/cursos/pastoral.html">Ministério Pastoral</a></li>
+            <li><a href="/cursos/diaconal.html">Ministério Diaconal</a></li>
+          </ul>
         </div>
-
-        <div class="footer-col footer-col--contact">
-          <h4 class="footer-col-title">Contato</h4>
-          <ul class="footer-contact-list">
-            <li>
-              <span class="footer-contact-icon icon-mono"><svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              <a href="mailto:instituto.lumethos@gmail.com">instituto.lumethos@gmail.com</a>
-            </li>
-            <li>
-              <span class="footer-contact-icon icon-mono"><svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3c2.5 3 4 6.5 4 9s-1.5 6-4 9c-2.5-3-4-6.5-4-9s1.5-6 4-9z" stroke="currentColor" stroke-width="2"/></svg></span>
-              <span>Ensino 100% online</span>
-            </li>
-            <li>
-              <span class="footer-contact-icon icon-mono"><svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20"><path d="M21 12a9 9 0 01-4.5 7.8 9 9 0 01-9 0A9 9 0 013 12a9 9 0 014.5-7.8 9 9 0 019 0A9 9 0 0121 12z" stroke="currentColor" stroke-width="2"/><path d="M8 9h8M8 13h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-              <a href="https://wa.me/5511999999999" target="_blank">WhatsApp</a>
-            </li>
+        <div class="footer-col">
+          <h4>Institucional</h4>
+          <ul>
+            <li><a href="sobre.html">Sobre Nós</a></li>
+            <li><a href="verificacao.html">Verificar Certificado</a></li>
+            <li><a href="biblioteca.html">Biblioteca</a></li>
+            <li><a href="contato.html">Contato</a></li>
           </ul>
         </div>
       </div>
-
-      <div class="footer-divider-gold"></div>
-
-      <div class="footer-bottom">
-        <p>&copy; 2026 Instituto Lumethos &mdash; SAPIENTIA AD MINISTERIUM. Todos os direitos reservados.</p>
-      </div>
+      <div class="footer-bottom">© 2026 Instituto Lumethos · Sapientia ad Ministerium</div>
     </div>
   </footer>
 
-  <!-- WhatsApp Float -->
-  <a href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20vim%20pelo%20site%20do%20Instituto%20Lumethos" target="_blank" rel="noopener" class="whatsapp-float icon-mono" aria-label="Fale conosco">
-    <svg width="30" height="30" viewBox="0 0 24 24">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-    </svg>
-  </a>
-
-  <!-- Back to Top -->
-  <a href="#" id="btn-topo" aria-label="Voltar ao topo" class="icon-mono" style="position:fixed;bottom:94px;right:24px;z-index:9998;width:44px;height:44px;border-radius:50%;background:rgba(199,154,46,0.9);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.2);transition:all 0.3s;text-decoration:none;opacity:0;pointer-events:none;">
-    <svg width="20" height="20" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M18 15l-6-6-6 6"/></svg>
-  </a>
-  
-    </script>
-
-<script>
-// DROPDOWN CURSOS - hover desktop, click mobile
-(function(){
-  var menu = document.getElementById('dd-menu');
-  var link = menu && menu.previousElementSibling;
-  if(!menu || !link) return;
-  
-  function isMobile(){ return window.innerWidth < 1024; }
-  
-  // Desktop: hover no li pai
-  var li = menu.parentElement;
-  li.addEventListener('mouseenter', function(){ if(!isMobile()) menu.style.display = 'block'; });
-  li.addEventListener('mouseleave', function(){ if(!isMobile()) menu.style.display = 'none'; });
-  
-  // Mobile: clique
-  link.addEventListener('click', function(e){
-    if(isMobile()){
-      e.preventDefault();
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
-  });
-  
-  // Fecha ao clicar fora
-  document.addEventListener('click', function(e){
-    if(!e.target.closest('li') || !e.target.closest('li').parentElement) return;
-    if(isMobile() && menu.style.display === 'block' && !e.target.closest('#dd-menu') && e.target !== link && !link.contains(e.target)){
-      menu.style.display = 'none';
-    }
-  });
-  
-  // Reset no resize
-  window.addEventListener('resize', function(){
-    if(!isMobile()) menu.style.display = 'none';
-  });
-})();
-</script>
+  <script src="js/main.js"></script>
+  <script>
+    // DROPDOWN
+    document.querySelectorAll('.nav-item.dropdown > a').forEach(function(l){
+      l.addEventListener('click',function(e){
+        if(window.innerWidth<1024){e.preventDefault();l.parentElement.classList.toggle('open')}
+      });
+    });
+  </script>
 </body>
 </html>
