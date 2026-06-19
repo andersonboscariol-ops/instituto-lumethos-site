@@ -311,10 +311,6 @@
     const email = user.email || '';
     const nameFromMeta = user.user_metadata?.full_name || user.user_metadata?.name || email.split('@')[0] || 'Aluno';
 
-    // Update topbar
-    document.getElementById('userName').textContent = displayName;
-    document.getElementById('userAvatar').textContent = displayName.charAt(0).toUpperCase();
-
     // Fetch profile
     const { data: profile } = await supabase
       .from('profiles')
@@ -323,56 +319,56 @@
       .maybeSingle();
 
     const role = profile?.role || 'aluno';
-    const displayName = profile?.name || name;
+    const displayName = profile?.name || nameFromMeta;
 
-    // Fetch user's courses from Supabase (via module_progress to detect enrolled)
+    // Update topbar
+    document.getElementById('userName').textContent = displayName;
+    document.getElementById('userAvatar').textContent = displayName.charAt(0).toUpperCase();
+
+    // Fetch user's courses — try enrollments table, fallback to API bridge
     let enrollments = [];
     let completedLessons = 0;
 
     try {
-      // Get all active courses
-      const { data: courses } = await supabase
-        .from('courses')
-        .select('id,title,slug,image,color,hours')
-        .eq('active', true)
-        .limit(10);
+      // Try Supabase enrollments (needs migration 001_enrollments.sql)
+      const { data: supEnr, error: enrErr } = await supabase
+        .from('enrollments')
+        .select('id,status,progress_pct,course_id,courses!inner(id,title,slug,image,color,hours)')
+        .eq('user_id', user.id)
+        .order('enrolled_at', { ascending: false });
 
-      // Get lesson progress for this user
+      if (!enrErr && supEnr && supEnr.length > 0) {
+        enrollments = supEnr;
+      }
+    } catch(e) { console.log('Enrollments table not available yet'); }
+
+    // Fallback: API bridge (legacy JSON enrollments)
+    if (enrollments.length === 0) {
+      try {
+        const resp = await fetch('/api/aluno/cursos', {
+          headers: { 'Authorization': '***' + session.access_token }
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          if (Array.isArray(data)) {
+            enrollments = data.map(c => ({
+              courses: { id: c.id, title: c.titulo || c.name || c.curso, slug: c.slug, image: c.imagem, color: null, hours: c.carga_horaria || c.hours },
+              status: 'active',
+              progress_pct: c.progresso || c.progress_pct || 0
+            }));
+          }
+        }
+      } catch(e) { console.log('API bridge offline'); }
+    }
+
+    // Get lesson progress for stats
+    try {
       const { data: progress } = await supabase
         .from('lesson_progress')
         .select('id,completed')
         .eq('user_id', user.id);
-
       completedLessons = (progress || []).filter(p => p.completed).length;
-
-      // Get module progress for this user
-      const { data: modProgress } = await supabase
-        .from('module_progress')
-        .select('module_id,completed')
-        .eq('user_id', user.id);
-
-      // Build enrollment-like objects from module progress
-      if (modProgress && modProgress.length > 0 && courses) {
-        const moduleIds = modProgress.map(m => m.module_id);
-        const { data: modules } = await supabase
-          .from('modules')
-          .select('id,course_id')
-          .in('id', moduleIds);
-        
-        if (modules) {
-          const courseIds = [...new Set(modules.map(m => m.course_id))];
-          enrollments = courses
-            .filter(c => courseIds.includes(c.id))
-            .map(c => ({
-              courses: c,
-              status: 'active',
-              progress_pct: 0
-            }));
-        }
-      }
-    } catch (e) {
-      console.log('Erro ao carregar progresso:', e);
-    }
+    } catch(e) { console.log('lesson_progress error:', e); }
 
     // Build dashboard HTML
     const main = document.getElementById('mainContent');

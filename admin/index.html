@@ -1,685 +1,360 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Admin — Instituto Lumethos</title>
-<link rel="icon" type="image/x-icon" href="../img/favicon.ico">
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0D1B2A;--bg2:#142D4C;--sidebar:#0a1628;--gold:#C79A2E;--gold-hover:#d4aa3a;--card:#1a2744;--card-hover:#1f2f50;--border:rgba(199,154,46,0.15);--text:#f0f0f0;--text2:#8899bb;--text3:#556688;--radius:12px;--shadow:0 4px 20px rgba(0,0,0,0.3);--danger:#ef4444;--success:#22c55e}
-body{font-family:'Roboto',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex}
-.sidebar{width:240px;background:var(--sidebar);min-height:100vh;display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;border-right:1px solid rgba(255,255,255,0.04)}
-.sidebar-logo{padding:20px 18px;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;gap:10px}
-.sidebar-logo img{width:32px;height:32px;border-radius:8px}
-.sidebar-logo div{flex:1}
-.sidebar-logo h2{font-family:'Libre Baskerville',serif;font-size:15px;color:var(--gold)}
-.sidebar-logo small{color:var(--text3);font-size:9px;text-transform:uppercase;letter-spacing:1px}
-.sidebar-nav{padding:8px 0;flex:1;overflow-y:auto}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 18px;color:var(--text2);font-size:13px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;font-weight:500}
-.nav-item:hover{color:var(--text);background:rgba(199,154,46,0.04)}
-.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:rgba(199,154,46,0.06)}
-.nav-item .icon{font-size:16px;width:22px;text-align:center}
-.nav-item .badge{margin-left:auto;background:var(--gold);color:var(--bg);font-size:9px;font-weight:700;padding:1px 7px;border-radius:10px}
-.sidebar-footer{padding:12px 18px;border-top:1px solid rgba(255,255,255,0.04)}
-.sidebar-footer .user-info{display:flex;align-items:center;gap:10px}
-.sidebar-footer .avatar{width:30px;height:30px;border-radius:50%;background:var(--gold);color:var(--bg);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
-.sidebar-footer .name{font-size:12px;font-weight:500}
-.sidebar-footer .role{font-size:10px;color:var(--text3)}
-.sidebar-footer .logout{color:var(--text3);font-size:11px;cursor:pointer;display:inline-block;transition:color 0.2s}
-.sidebar-footer .logout:hover{color:var(--danger)}
-.main{flex:1;margin-left:240px;padding:24px 32px;min-height:100vh}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
-.topbar h1{font-size:20px;font-family:'Libre Baskerville',serif}
-.topbar h1 span{color:var(--gold)}
-.topbar-right{display:flex;align-items:center;gap:12px}
-.page{display:none}.page.active{display:block}
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:20px}
-.card-metric{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center}
-.card-metric .num{font-size:30px;font-weight:700;color:var(--gold);font-family:'Libre Baskerville',serif}
-.card-metric .label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
-.table-wrap{overflow-x:auto;background:var(--card);border-radius:var(--radius);border:1px solid var(--border)}
-table{width:100%;border-collapse:collapse;font-size:13px}
-thead{background:rgba(13,27,42,0.5)}
-th{padding:10px 14px;text-align:left;color:var(--text3);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:0.5px;white-space:nowrap}
-td{padding:10px 14px;border-top:1px solid rgba(255,255,255,0.04);color:var(--text2)}
-tr:hover td{background:rgba(199,154,46,0.02)}
-.status{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
-.status.publicado{background:rgba(34,197,94,0.15);color:#22c55e}
-.status.rascunho{background:rgba(234,179,8,0.15);color:#eab308}
-.status.ativo{background:rgba(34,197,94,0.15);color:#22c55e}
-.status.pendente{background:rgba(234,179,8,0.15);color:#eab308}
-.status.concluido{background:rgba(59,130,246,0.15);color:#3b82f6}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.25s;font-family:'Roboto',sans-serif}
-.btn-gold{background:var(--gold);color:var(--bg)}.btn-gold:hover{background:var(--gold-hover);transform:translateY(-1px);box-shadow:0 4px 15px rgba(199,154,46,0.25)}
-.btn-sm{padding:5px 10px;font-size:11px}
-.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text2)}.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
-.btn-danger{background:rgba(239,68,68,0.15);color:var(--danger)}.btn-danger:hover{background:rgba(239,68,68,0.25)}
-.btn-success{background:rgba(34,197,94,0.15);color:var(--success)}.btn-success:hover{background:rgba(34,197,94,0.25)}
-.btn-xs{padding:3px 7px;font-size:10px;border-radius:5px}
-.btn-group{display:flex;gap:6px;flex-wrap:wrap}
-.search-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-.search-bar input{flex:1;min-width:200px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-size:13px;font-family:'Roboto',sans-serif}
-.search-bar input::placeholder{color:var(--text3)}.search-bar input:focus{outline:none;border-color:var(--gold)}
-.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:200;align-items:center;justify-content:center}
-.modal-overlay.show{display:flex}
-.modal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);width:90%;max-width:680px;max-height:90vh;overflow-y:auto;padding:24px;color:var(--text)}
-.modal h2{font-family:'Libre Baskerville',serif;font-size:17px;margin-bottom:16px;color:var(--text)}
-.form-group{margin-bottom:14px}
-.form-group label{display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:7px;background:rgba(255,255,255,0.04);color:var(--text);font-size:13px;font-family:'Roboto',sans-serif}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--gold)}
-.form-group textarea{resize:vertical;min-height:80px}
-.form-group select option{background:var(--bg);color:var(--text)}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.modal-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
-.empty-state{text-align:center;padding:40px 20px;color:var(--text3)}
-.empty-state .icon{font-size:40px;margin-bottom:10px}
-.empty-state h3{font-size:16px;color:var(--text2);margin-bottom:4px}
-.empty-state p{font-size:12px;max-width:360px;margin:0 auto}
-.toast{position:fixed;bottom:20px;right:20px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 18px;color:var(--text);font-size:13px;z-index:300;box-shadow:0 8px 30px rgba(0,0,0,0.4);display:none;animation:slideUp 0.3s ease}
-.toast.show{display:block}.toast.success{border-color:var(--success)}.toast.error{border-color:var(--danger)}
-@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-.tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--card);border-radius:8px;padding:4px;border:1px solid var(--border);flex-wrap:wrap}
-.tab{flex:1;padding:8px 14px;border:none;background:transparent;color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;border-radius:6px;transition:all 0.2s;font-family:'Roboto',sans-serif;text-align:center;white-space:nowrap}
-.tab:hover{color:var(--text)}.tab.active{background:var(--gold);color:var(--bg);font-weight:600}
-.progress-bar{height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;margin:4px 0}
-.progress-bar .fill{height:100%;background:var(--gold);border-radius:3px}
-.editor-toolbar{display:flex;gap:2px;padding:5px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-bottom:none;border-radius:7px 7px 0 0;flex-wrap:wrap}
-.editor-toolbar button{padding:5px 9px;border:none;background:transparent;color:var(--text2);cursor:pointer;border-radius:4px;font-size:13px;transition:all 0.15s;font-family:'Roboto',sans-serif}
-.editor-toolbar button:hover{background:rgba(199,154,46,0.1);color:var(--gold)}
-.editor-toolbar .sep{width:1px;background:var(--border);margin:0 3px}
-.editor-area{width:100%;min-height:250px;padding:12px;border:1px solid var(--border);border-radius:0 0 7px 7px;background:rgba(255,255,255,0.03);color:var(--text);font-size:13px;font-family:'Roboto',sans-serif;line-height:1.6;resize:vertical}
-.editor-area:focus{outline:none;border-color:var(--gold)}
-.img-preview{max-width:180px;max-height:100px;border-radius:6px;margin-top:6px;border:1px solid var(--border);display:none;object-fit:cover}
-.img-preview.show{display:block}
-.checkbox-group{display:flex;align-items:center;gap:6px}
-.checkbox-group input[type=checkbox]{width:16px;height:16px;accent-color:var(--gold)}
-.file-upload{position:relative;display:inline-block}
-.file-upload input[type=file]{position:absolute;opacity:0;width:100%;height:100%;cursor:pointer;top:0;left:0}
-.import-area{border:2px dashed var(--border);border-radius:var(--radius);padding:30px;text-align:center;cursor:pointer;transition:all 0.3s;margin-bottom:16px}
-.import-area:hover{border-color:var(--gold);background:rgba(199,154,46,0.03)}
-.import-area .icon{font-size:32px;margin-bottom:6px}
-.import-area h3{color:var(--text2);font-size:15px;margin-bottom:4px}
-.import-area p{color:var(--text3);font-size:11px}
-.import-preview{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-top:10px;max-height:250px;overflow-y:auto;display:none}
-.import-preview.show{display:block}
-.import-preview pre{font-size:11px;color:var(--text2);white-space:pre-wrap}.text-gold{color:var(--gold)}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
-.section-header h3{font-size:15px;font-weight:500}
-@media(max-width:768px){
-.sidebar{width:56px}.sidebar-logo h2,.sidebar-logo small,.nav-item span,.sidebar-footer .name,.sidebar-footer .role{display:none}
-.nav-item{padding:10px;justify-content:center}.nav-item .icon{font-size:18px;width:auto}
-.main{margin-left:56px;padding:14px}.form-row{grid-template-columns:1fr}.modal{width:95%;padding:16px}.topbar h1{font-size:16px}.card-grid{grid-template-columns:repeat(2,1fr)}
-}
-</style>
-<style>.nav-top{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(13,27,42,0.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;align-items:center;padding:8px 20px;gap:12px;border-bottom:1px solid rgba(199,154,46,0.1)}.nav-top a{display:inline-flex;align-items:center;gap:5px;text-decoration:none;font-size:12px;font-weight:500;color:rgba(255,255,255,0.7);padding:5px 12px;border-radius:8px;transition:all 0.15s}.nav-top a:hover{background:rgba(255,255,255,0.1);color:#C79A2E}.nav-top a svg{width:16px;height:16px;fill:currentColor}.nav-top .spacer{flex:1}.nav-top .logo-mini{height:20px;opacity:0.35}body{padding-top:44px}</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Instituto Lumethos</title>
+  <link rel="icon" href="/img/favicon.ico">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --navy:#0D1B2A; --navy-light:#152238; --navy-card:#1a2d45;
+      --gold:#C79A2E; --gold-light:#e0b84c; --white:#fff;
+      --text-secondary:rgba(255,255,255,0.7); --text-muted:rgba(255,255,255,0.45);
+      --border:rgba(255,255,255,0.06); --radius:10px;
+      --sidebar-w:240px;
+    }
+
+    body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; }
+
+    .topbar {
+      position:fixed; top:0; left:0; right:0; z-index:200; height:48px;
+      background:rgba(13,27,42,0.94); backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px); border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+    }
+    .topbar .logo {
+      font-family:'Libre Baskerville',serif; font-size:14px; color:var(--gold);
+      text-decoration:none;
+    }
+    .topbar .user-area { display:flex; align-items:center; gap:10px; font-size:12px; color:var(--text-secondary); }
+    .topbar .logout-btn {
+      background:none; border:1px solid rgba(255,255,255,.12); color:var(--text-muted);
+      padding:4px 10px; border-radius:6px; font-size:11px; cursor:pointer; font-family:'Inter',sans-serif;
+    }
+    .topbar .logout-btn:hover { color:var(--white); border-color:rgba(255,255,255,.25); }
+
+    .layout { display:flex; padding-top:48px; min-height:calc(100vh - 48px); }
+
+    .sidebar {
+      width:var(--sidebar-w); min-width:var(--sidebar-w);
+      background:var(--navy-light); border-right:1px solid var(--border);
+      position:sticky; top:48px; height:calc(100vh - 48px); overflow-y:auto;
+      padding:12px 0;
+    }
+    .sidebar .nav-section { padding:4px 12px; margin-bottom:8px; }
+    .sidebar .nav-label {
+      font-size:9px; text-transform:uppercase; letter-spacing:1px;
+      color:var(--text-muted); padding:0 10px; margin-bottom:6px;
+    }
+    .sidebar .nav-link {
+      display:flex; align-items:center; gap:10px; padding:9px 10px;
+      border-radius:7px; color:var(--text-secondary); text-decoration:none;
+      font-size:13px; transition:all .15s;
+    }
+    .sidebar .nav-link:hover { background:rgba(255,255,255,.04); color:var(--white); }
+    .sidebar .nav-link.active { background:rgba(199,154,46,.1); color:var(--gold); font-weight:600; }
+    .sidebar .nav-link .icon { font-size:16px; width:20px; text-align:center; }
+
+    .main-content { flex:1; padding:28px; overflow-y:auto; }
+
+    .page-title {
+      font-family:'Libre Baskerville',serif; font-size:24px; margin-bottom:6px;
+    }
+    .page-subtitle { color:var(--text-muted); font-size:13px; margin-bottom:28px; }
+
+    .stats-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-bottom:32px;
+    }
+    .stat-card {
+      background:var(--navy-card); border-radius:var(--radius); padding:18px;
+      border:1px solid var(--border);
+    }
+    .stat-card .stat-icon { font-size:22px; margin-bottom:6px; }
+    .stat-card .stat-num { font-size:26px; font-weight:700; }
+    .stat-card .stat-num.gold { color:var(--gold); }
+    .stat-card .stat-label { font-size:11px; color:var(--text-muted); margin-top:4px; }
+
+    .panel {
+      background:var(--navy-card); border-radius:var(--radius);
+      border:1px solid var(--border); margin-bottom:24px; overflow:hidden;
+    }
+    .panel-header {
+      padding:14px 18px; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .panel-header h3 { font-size:14px; font-weight:600; }
+    .panel-header .panel-action {
+      font-size:11px; color:var(--gold); cursor:pointer; background:none; border:none;
+      font-family:'Inter',sans-serif; font-weight:500;
+    }
+    .panel-body { padding:16px 18px; }
+
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th { text-align:left; padding:10px 8px; border-bottom:1px solid var(--border); color:var(--text-muted); font-weight:500; font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
+    td { padding:10px 8px; border-bottom:1px solid var(--border); }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:rgba(255,255,255,.01); }
+
+    .badge {
+      font-size:10px; font-weight:600; padding:2px 8px; border-radius:12px;
+    }
+    .badge-green { background:rgba(34,197,94,.15); color:#4ade80; }
+    .badge-yellow { background:rgba(199,154,46,.15); color:var(--gold); }
+    .badge-red { background:rgba(239,68,68,.12); color:#f87171; }
+    .badge-blue { background:rgba(96,165,250,.12); color:#93c5fd; }
+
+    .action-btn {
+      font-size:11px; padding:4px 10px; border-radius:5px;
+      border:1px solid var(--border); background:none; color:var(--text-secondary);
+      cursor:pointer; font-family:'Inter',sans-serif; transition:all .15s;
+    }
+    .action-btn:hover { border-color:var(--gold); color:var(--gold); }
+    .action-btn.danger:hover { border-color:#f87171; color:#f87171; }
+
+    .loading-text { text-align:center; padding:40px; color:var(--text-muted); }
+
+    @media(max-width:768px) {
+      .layout { flex-direction:column; }
+      .sidebar { width:100%; min-width:100%; height:auto; position:relative; top:auto; border-right:none; border-bottom:1px solid var(--border); }
+      .sidebar .nav-section { display:flex; gap:4px; overflow-x:auto; padding:4px 8px; }
+      .sidebar .nav-label { display:none; }
+      .main-content { padding:16px; }
+    }
+  </style>
 </head>
 <body>
-  <div class="nav-top"><a href="javascript:history.back()" title="Voltar"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg> Voltar</a><a href="/" title="Página Inicial"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> Início</a><span class="spacer"></span><img class="logo-mini" src="../img/logo-lumethos-correto.png" alt="Lumethos"></div>
 
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-logo">
-    <div><h2>Lumethos</h2><small>Administração</small></div>
+<nav class="topbar">
+  <a href="/admin/index.html" class="logo">LUMETHOS ADMIN</a>
+  <div class="user-area">
+    <span id="adminName">Admin</span>
+    <button class="logout-btn" onclick="logout()">Sair</button>
   </div>
-  <div class="sidebar-nav" id="sidebarNav">
-    <div class="nav-item active" data-page="dashboard" onclick="irPara('dashboard')"><span class="icon">📊</span><span>Dashboard</span></div>
-    <div class="nav-item" data-page="cursos" onclick="irPara('cursos')"><span class="icon">📚</span><span>Cursos</span><span class="badge" id="badgeCursos">0</span></div>
-    <div class="nav-item" data-page="alunos" onclick="irPara('alunos')"><span class="icon">👥</span><span>Alunos</span><span class="badge" id="badgeAlunos">0</span></div>
-    <div class="nav-item" data-page="tutores" onclick="irPara('tutores')"><span class="icon">👨‍🏫</span><span>Tutores</span><span class="badge" id="badgeTutores">0</span></div>
-    <div class="nav-item" data-page="matriculas" onclick="irPara('matriculas')"><span class="icon">📋</span><span>Matrículas</span><span class="badge" id="badgeMatriculas">0</span></div>
-  </div>
-  <div class="sidebar-footer">
-    <div class="user-info">
-      <div class="avatar" id="adminAvatar">A</div>
-      <div>
-        <div class="name" id="adminNome">Admin</div>
-        <div class="role" id="adminRole">Administrador</div>
-      </div>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="nav-section">
+      <div class="nav-label">Principal</div>
+      <a href="/admin/index.html" class="nav-link active"><span class="icon">📊</span> Dashboard</a>
+      <a href="#" class="nav-link" onclick="showSection('courses')"><span class="icon">📚</span> Cursos</a>
+      <a href="#" class="nav-link" onclick="showSection('students')"><span class="icon">👥</span> Alunos</a>
+      <a href="#" class="nav-link" onclick="showSection('mirc')"><span class="icon">🔍</span> MIRC</a>
     </div>
-    <a class="logout" onclick="fazerLogout()">Sair</a>
-  </div>
-</div>
-
-<div class="main">
-  <div class="topbar">
-    <h1 id="pageTitle">📊 <span>Dashboard</span></h1>
-    <div class="topbar-right">
-      <span class="notif" onclick="window.open('/admin/login.html','_blank')" style="cursor:pointer;font-size:14px;margin-right:8px;color:var(--gold)" title="Admin (login)">🔐</span><span class="notif" onclick="window.open('/aluno.html','_blank')" style="cursor:pointer;font-size:14px;margin-right:8px;color:var(--gold)" title="Área do Aluno (Netflix)">📚</span><span class="notif" onclick="window.open('/','_blank')" style="cursor:pointer;font-size:18px;color:var(--text2)" title="Ver site">🌐</span>
+    <div class="nav-section">
+      <div class="nav-label">Links</div>
+      <a href="/biblioteca.html" class="nav-link" target="_blank"><span class="icon">📖</span> Biblioteca</a>
+      <a href="/" class="nav-link" target="_blank"><span class="icon">🏠</span> Site</a>
     </div>
-  </div>
+  </aside>
 
-  <div class="page active" id="pageDashboard">
-    <div class="card-grid" id="metricasGrid">
-      <div class="card-metric"><div class="num" id="totalCursos">0</div><div class="label">Cursos</div></div>
-      <div class="card-metric"><div class="num" id="totalAlunos">0</div><div class="label">Alunos</div></div>
-      <div class="card-metric"><div class="num" id="totalTutores">0</div><div class="label">Tutores</div></div>
-      <div class="card-metric"><div class="num" id="taxaConclusao">0%</div><div class="label">Taxa Conclusão</div></div>
-    </div>
-    <div class="card"><h3 style="margin-bottom:10px;font-size:14px">📈 Últimas Atividades</h3><div id="ultimasAtividades"><div class="empty-state"><div class="icon">📋</div><h3>Nenhuma atividade recente</h3><p>As matrículas e progressos aparecerão aqui.</p></div></div></div>
-  </div>
-
-  <div class="page" id="pageCursos">
-    <div class="section-header"><h3>📚 Todos os Cursos</h3><div><button class="btn btn-gold" onclick="abrirModalCurso()">+ Novo Curso</button><button class="btn btn-outline" onclick="abrirImportador()" style="margin-left:6px">📄 Importar .MD</button></div></div>
-    <div class="search-bar"><input type="text" id="buscaCursos" placeholder="Buscar cursos..." oninput="renderCursos()"></div>
-    <div id="cursosLista"></div>
-  </div>
-
-  <div class="page" id="pageAlunos">
-    <div class="section-header"><h3>👥 Alunos</h3></div>
-    <div class="search-bar"><input type="text" id="buscaAlunos" placeholder="Buscar alunos..." oninput="renderAlunos()"></div>
-    <div class="table-wrap"><table><thead><tr><th>Nome</th><th>Email</th><th>Tutor</th><th>Cursos</th><th>Status</th><th>Ações</th></tr></thead><tbody id="alunosLista"></tbody></table></div>
-  </div>
-
-  <div class="page" id="pageTutores">
-    <div class="section-header"><h3>👨‍🏫 Tutores</h3><div><button class="btn btn-gold" onclick="abrirModalTutor()">+ Novo Tutor</button></div></div>
-    <div class="search-bar"><input type="text" id="buscaTutores" placeholder="Buscar tutores..." oninput="renderTutores()"></div>
-    <div class="table-wrap"><table><thead><tr><th>Nome</th><th>Email</th><th>Alunos</th><th>Status</th><th>Ações</th></tr></thead><tbody id="tutoresLista"></tbody></table></div>
-  </div>
-
-  <div class="page" id="pageMatriculas">
-    <div class="section-header"><h3>📋 Matrículas</h3></div>
-    <div class="search-bar"><input type="text" id="buscaMatriculas" placeholder="Buscar matrículas..." oninput="renderMatriculas()"></div>
-    <div class="table-wrap"><table><thead><tr><th>Aluno</th><th>Curso</th><th>Data</th><th>Progresso</th><th>Status</th><th>Ações</th></tr></thead><tbody id="matriculasLista"></tbody></table></div>
-  </div>
+  <main class="main-content" id="mainContent">
+    <div class="loading-text">Carregando...</div>
+  </main>
 </div>
-
-<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)fecharModal()">
-  <div class="modal" id="modalContent"></div>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="../js/api-config.js"></script>
 <script>
-const API = window.API;
-if (!API.isAuthenticated()) { window.location.href = 'login2.html'; }
-async function supabaseFetch(tabela,opts={}){
-  if(tabela==='cursos'||tabela==='cursos') return API.getCursos();
-  if(tabela==='modulos'){let id=opts&&opts.curso_id;return API.getModulos(id);}
-  if(tabela==='aulas'){let id=opts&&opts.modulo_id;return API.getAulas(id);}
-  if(tabela==='usuarios'||tabela==='alunos') return API.getUsuarios();
-  if(tabela==='matriculas') return [];
-  return [];
-}
-async function supabaseInsert(tabela,dados){
-  if(tabela==='cursos') return API.criarCurso(dados);
-  if(tabela==='modulos') return API.criarModulo(dados);
-  if(tabela==='aulas') return API.criarAula(dados);
-  if(tabela==='usuarios'||tabela==='alunos'){const r=await API.criarUsuario(dados);return r;}
-  return {};
-}
-async function supabaseUpdate(tabela,id,dados){
-  if(tabela==='cursos') return API.atualizarCurso(id,dados);
-  if(tabela==='modulos') return API.atualizarModulo(id,dados);
-  if(tabela==='aulas') return API.atualizarAula(id,dados);
-  return {};
-}
-async function supabaseDelete(tabela,id){
-  if(tabela==='cursos') return API.deletarCurso(id);
-  if(tabela==='modulos') return API.deletarModulo(id);
-  if(tabela==='aulas') return API.deletarAula(id);
-  return {};
-}
-function init(){
-  userInfo=JSON.parse(localStorage.getItem('lumethos_user'));
-  if(!userInfo||!localStorage.getItem('lms_token')){window.location.href='login2.html';return}
-  document.getElementById('adminNome').textContent=userInfo.nome||'Admin';
-  document.getElementById('adminAvatar').textContent=(userInfo.nome||'A')[0].toUpperCase();
-  document.getElementById('adminRole').textContent=userInfo.is_admin?'Administrador':'Tutor';
-  if(userInfo.is_tutor)document.querySelector('.nav-item[data-page="tutores"]').style.display='none';
-  carregarDashboard();
-}
+  const SUPABASE_URL = "https://xplqghmhslfpyyqhwvkp.supabase.co";
+  const SUPABASE_ANON_KEY = "***";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-async function carregarDashboard(){
-  try{
-    const c=await supabaseFetch('cursos');
-    const a=await supabaseFetch('alunos');
-    const t=await supabaseFetch('alunos',{filter:'role=eq.tutor'});
-    const m=await supabaseFetch('matriculas');
-    document.getElementById('totalCursos').textContent=c.length||0;
-    document.getElementById('totalAlunos').textContent=a.length||0;
-    document.getElementById('totalTutores').textContent=t.length||0;
-    if(c.length>0&&m.length>0){
-      let totalProgresso=0;
-      const pm=await supabaseFetch('progresso_modulos');
-      if(pm.length>0){
-        pm.forEach(p=>{totalProgresso+=p.concluido?100:0});
-        document.getElementById('taxaConclusao').textContent=Math.round(totalProgresso/(pm.length||1))+'%';
-      }
+  let adminUser = null;
+  let currentSection = 'dashboard';
+
+  async function init() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      window.location.href = '/login.html?redirect=/admin/index.html';
+      return;
     }
-    document.getElementById('badgeAlunos').textContent=a.length||'0';
-    document.getElementById('badgeCursos').textContent=c.length||'0';
-    document.getElementById('badgeMatriculas').textContent=m.length||'0';
-    const tCount=t.length||0;
-    document.getElementById('badgeTutores').textContent=tCount;
-    // Ultimas matriculas
-    const recentes=m.slice(-5).reverse();
-    let html='';
-    if(recentes.length===0)html='<div class="empty-state"><div class="icon">📋</div><h3>Nenhuma matrícula recente</h3></div>';
-    else{
-      html='<div class="table-wrap"><table><thead><tr><th>Aluno</th><th>Curso</th><th>Data</th></tr></thead><tbody>';
-      for(const mat of recentes){
-        const aluno=a.find(x=>x.id===mat.aluno_id);
-        const curso=c.find(x=>x.id===mat.curso_id);
-        html+='<tr><td>'+(aluno?.nome||'---')+'</td><td>'+(curso?.titulo||'---')+'</td><td>'+new Date(mat.created_at).toLocaleDateString('pt-BR')+'</td></tr>';
-      }
-      html+='</tbody></table></div>';
+    adminUser = session.user;
+
+    // Check if admin
+    const { data: profile } = await supabase.from('profiles').select('role,name').eq('id', adminUser.id).maybeSingle();
+    if (!profile || profile.role !== 'admin') {
+      document.getElementById('mainContent').innerHTML = `
+        <div class="page-title">Acesso Negado</div>
+        <p style="color:var(--text-muted);margin-bottom:16px;">Você não tem permissão de administrador.</p>
+        <a href="/aluno/dashboard.html" style="color:var(--gold)">Ir para área do aluno</a>`;
+      return;
     }
-    document.getElementById('ultimasAtividades').innerHTML=html;
-  }catch(e){console.error(e)}
-}
 
-async function carregarCursos(){
-  try{
-    cursos=await supabaseFetch('cursos',{order:'created_at.desc'});
-    renderCursos();
-  }catch(e){console.error(e)}
-}
-
-function renderCursos(){
-  const q=document.getElementById('buscaCursos').value.toLowerCase();
-  const f=cursos.filter(c=>c.titulo.toLowerCase().includes(q));
-  const lista=document.getElementById('cursosLista');
-  if(f.length===0){lista.innerHTML='<div class="empty-state"><div class="icon">📚</div><h3>Nenhum curso encontrado</h3></div>';return}
-  let html='<div class="table-wrap"><table><thead><tr><th>Título</th><th>Categoria</th><th>Carga</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
-  for(const c of f){
-    html+='<tr><td><strong>'+c.titulo+'</strong></td><td>'+(c.categoria||'---')+'</td><td>'+(c.carga_horaria||'---')+'h</td>';
-    html+='<td><span class="status '+(c.status||'rascunho')+'">'+(c.status||'rascunho')+'</span></td>';
-    html+='<td><div class="btn-group">';
-    html+='<button class="btn btn-sm btn-outline" onclick="editarCurso(\''+c.id+'\')">✏️</button>';
-    html+='<button class="btn btn-sm btn-outline" onclick="gerenciarModulos(\''+c.id+'\',\''+c.titulo+'\')">📂</button>';
-    html+='<button class="btn btn-sm btn-danger" onclick="excluirCurso(\''+c.id+'\')">🗑️</button>';
-    html+='</div></td></tr>';
+    document.getElementById('adminName').textContent = profile.name || adminUser.email;
+    showSection('dashboard');
   }
-  html+='</tbody></table></div>';
-  lista.innerHTML=html;
-}
 
-function abrirModalCurso(dados){
-  const d=dados||{};
-  const isEdit=!!d.id;
-  const html='<h2>'+(isEdit?'Editar Curso':'Novo Curso')+'</h2>'+
-    '<div class="form-group"><label>Título</label><input id="fTitulo" value="'+(d.titulo||'')+'"></div>'+
-    '<div class="form-row"><div class="form-group"><label>Categoria</label><select id="fCategoria">'+
-      '<option value="Trilha do Capelão"'+(d.categoria==='Trilha do Capelão'?' selected':'')+'>Trilha do Capelão</option>'+
-      '<option value="Capelania Avançada"'+(d.categoria==='Capelania Avançada'?' selected':'')+'>Capelania Avançada</option>'+
-      '<option value="Liderança"'+(d.categoria==='Liderança'?' selected':'')+'>Liderança</option>'+
-      '<option value="Teologia"'+(d.categoria==='Teologia'?' selected':'')+'>Teologia</option>'+
-    '</select></div>'+
-    '<div class="form-group"><label>Carga Horária (h)</label><input id="fCarga" type="number" value="'+(d.carga_horaria||'')+'"></div></div>'+
-    '<div class="form-group"><label>Descrição Curta</label><textarea id="fDesc">'+(d.descricao_curta||'')+'</textarea></div>'+
-    '<div class="form-group"><label>Conteúdo</label><div class="editor-toolbar">'+
-      '<button onclick="inserirTag(\'fConteudo\',\'**\',\'**\')" title="Negrito"><b>B</b></button>'+
-      '<button onclick="inserirTag(\'fConteudo\',\'*\',\'*\')" title="Itálico"><i>I</i></button>'+
-      '<div class="sep"></div>'+
-      '<button onclick="inserirTag(\'fConteudo\',\'## \',\'\')" title="Título">H2</button>'+
-      '<button onclick="inserirTag(\'fConteudo\',\'### \',\'\')" title="Subtítulo">H3</button>'+
-      '<div class="sep"></div>'+
-      '<button onclick="inserirTag(\'fConteudo\',\'- \',\'\')" title="Lista">•</button>'+
-      '<button onclick="inserirTag(\'fConteudo\',\'[texto](url)\',\'\')" title="Link">🔗</button>'+
-      '<button onclick="inserirTag(\'fConteudo\',\'![](url)\',\'\')" title="Imagem">🖼️</button>'+
-    '</div><textarea id="fConteudo" class="editor-area">'+(d.conteudo||'')+'</textarea></div>'+
-    '<div class="form-row"><div class="form-group"><label>Nível</label><select id="fNivel">'+
-      '<option value="">Selecione</option>'+
-      '<option value="Iniciante"'+(d.nivel==='Iniciante'?' selected':'')+'>Iniciante</option>'+
-      '<option value="Intermediário"'+(d.nivel==='Intermediário'?' selected':'')+'>Intermediário</option>'+
-      '<option value="Avançado"'+(d.nivel==='Avançado'?' selected':'')+'>Avançado</option>'+
-    '</select></div>'+
-    '<div class="form-group"><label>Status</label><select id="fStatus">'+
-      '<option value="rascunho"'+(d.status==='rascunho'?' selected':'')+'>Rascunho</option>'+
-      '<option value="publicado"'+(d.status==='publicado'?' selected':'')+'>Publicado</option>'+
-    '</select></div></div>'+
-    '<div class="form-group checkbox-group"><input type="checkbox" id="fDestaque"'+(d.destaque?' checked':'')+'><label style="text-transform:none">Curso em destaque</label></div>'+
-    '<div class="modal-actions">'+
-      '<button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>'+
-      '<button class="btn btn-gold" onclick="salvarCurso(\''+(d.id||'')+'\')">'+(isEdit?'Salvar Alterações':'Criar Curso')+'</button>'+
-    '</div>';
-  abrirModal(html);
-}
+  async function logout() {
+    await supabase.auth.signOut();
+    window.location.href = '/login.html';
+  }
 
-async function salvarCurso(id){
-  const dados={titulo:document.getElementById('fTitulo').value,descricao_curta:document.getElementById('fDesc').value,conteudo:document.getElementById('fConteudo').value,categoria:document.getElementById('fCategoria').value,nivel:document.getElementById('fNivel').value,status:document.getElementById('fStatus').value,carga_horaria:parseInt(document.getElementById('fCarga').value)||0,destaque:document.getElementById('fDestaque').checked,updated_at:new Date().toISOString()};
-  try{
-    if(id){await supabaseUpdate('cursos',id,dados);toast('Curso atualizado!','success')}
-    else{await supabaseInsert('cursos',dados);toast('Curso criado!','success')}
-    fecharModal();carregarCursos();
-  }catch(e){toast('Erro ao salvar','error')}
-}
+  async function showSection(section) {
+    currentSection = section;
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(l => {
+      if (l.getAttribute('onclick')?.includes(section)) l.classList.add('active');
+    });
 
-async function editarCurso(id){
-  const c=cursos.find(x=>x.id===id);
-  if(c)abrirModalCurso(c);
-}
+    const mc = document.getElementById('mainContent');
 
-async function excluirCurso(id){
-  if(!confirm('Excluir curso permanentemente?'))return;
-  try{await supabaseDelete('cursos',id);toast('Curso excluído','success');carregarCursos()}catch(e){toast('Erro','error')}
-}
-
-function gerenciarModulos(id,titulo){
-  irPara('cursos');
-  abrirModal('<h2>📂 Módulos: '+titulo+'</h2><div id="modulosLista"><p>Carregando...</p></div><div class="modal-actions"><button class="btn btn-gold" onclick="abrirModalModulo(\''+id+'\')">+ Módulo</button><button class="btn btn-outline" onclick="fecharModal()">Fechar</button></div>');
-  carregarModulos(id);
-}
-
-async function carregarModulos(cursoId){
-  try{
-    const ms=await supabaseFetch('modulos',{filter:'curso_id=eq.'+cursoId,order:'ordem.asc'});
-    let html='<div class="table-wrap" style="margin-top:12px"><table><thead><tr><th>#</th><th>Módulo</th><th>Carga</th><th>Ações</th></tr></thead><tbody>';
-    if(ms.length===0)html+='<tr><td colspan="4" style="text-align:center;color:var(--text3)">Nenhum módulo criado</td></tr>';
-    else for(const m of ms){
-      html+='<tr><td>'+(m.ordem||'---')+'</td><td><strong>'+m.titulo+'</strong></td><td>'+(m.carga_horaria||'')+'h</td>';
-      html+='<td><div class="btn-group">';
-      html+='<button class="btn btn-xs btn-outline" onclick="abrirModalModulo(\''+cursoId+'\',\''+m.id+'\')">✏️</button>';
-      html+='<button class="btn btn-xs btn-outline" onclick="gerenciarAulas(\''+m.id+'\',\''+m.titulo+'\')">📄</button>';
-      html+='<button class="btn btn-xs btn-outline" onclick="subirModulo(\''+m.id+'\',\''+m.ordem+'\',\''+cursoId+'\')">⬆️</button>';
-      html+='<button class="btn btn-xs btn-outline" onclick="descerModulo(\''+m.id+'\',\''+m.ordem+'\',\''+cursoId+'\')">⬇️</button>';
-      html+='<button class="btn btn-xs btn-danger" onclick="excluirModulo(\''+m.id+'\',\''+cursoId+'\')">🗑️</button>';
-      html+='</div></td></tr>';
-    }
-    html+='</tbody></table></div>';
-    document.getElementById('modulosLista').innerHTML=html;
-  }catch(e){console.error(e)}
-}
-
-function abrirModalModulo(cursoId,modId){
-  const m=modId?modulos.find(x=>x.id===modId):{};
-  const html='<h2>'+(modId?'Editar Módulo':'Novo Módulo')+'</h2>'+
-    '<div class="form-group"><label>Título</label><input id="fModTitulo" value="'+(m.titulo||'')+'"></div>'+
-    '<div class="form-row"><div class="form-group"><label>Ordem</label><input id="fModOrdem" type="number" value="'+(m.ordem||'')+'"></div>'+
-    '<div class="form-group"><label>Carga Horária (h)</label><input id="fModCarga" type="number" value="'+(m.carga_horaria||'')+'"></div></div>'+
-    '<div class="form-group"><label>Descrição</label><textarea id="fModDesc">'+(m.descricao||'')+'</textarea></div>'+
-    '<div class="form-group"><label>URL do Vídeo (opcional)</label><input id="fModVideo" value="'+(m.video_url||'')+'"></div>'+
-    '<div class="modal-actions">'+
-      '<button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>'+
-      '<button class="btn btn-gold" onclick="salvarModulo(\''+cursoId+'\',\''+(modId||'')+'\')">'+(modId?'Salvar':'Criar Módulo')+'</button>'+
-    '</div>';
-  abrirModal(html);
-}
-
-async function salvarModulo(cursoId,modId){
-  const dados={curso_id:cursoId,titulo:document.getElementById('fModTitulo').value,descricao:document.getElementById('fModDesc').value,ordem:parseInt(document.getElementById('fModOrdem').value)||0,carga_horaria:parseInt(document.getElementById('fModCarga').value)||0,video_url:document.getElementById('fModVideo').value};
-  try{
-    if(modId){await supabaseUpdate('modulos',modId,dados);toast('Módulo atualizado!','success')}
-    else{await supabaseInsert('modulos',dados);toast('Módulo criado!','success')}
-    fecharModal();carregarModulos(cursoId);
-  }catch(e){toast('Erro','error')}
-}
-
-async function excluirModulo(modId,cursoId){
-  if(!confirm('Excluir módulo?'))return;
-  try{await supabaseDelete('modulos',modId);toast('Excluído','success');carregarModulos(cursoId)}catch(e){toast('Erro','error')}
-}
-
-async function subirModulo(modId,ordem,cursoId){
-  try{
-    const ms=await supabaseFetch('modulos',{filter:'curso_id=eq.'+cursoId,order:'ordem.asc'});
-    const idx=ms.findIndex(m=>m.id===modId);
-    if(idx>0){await supabaseUpdate('modulos',ms[idx].id,{ordem:parseInt(ordem)-1});await supabaseUpdate('modulos',ms[idx-1].id,{ordem:parseInt(ordem)});carregarModulos(cursoId)}
-  }catch(e){toast('Erro','error')}
-}
-
-async function descerModulo(modId,ordem,cursoId){
-  try{
-    const ms=await supabaseFetch('modulos',{filter:'curso_id=eq.'+cursoId,order:'ordem.asc'});
-    const idx=ms.findIndex(m=>m.id===modId);
-    if(idx<ms.length-1){await supabaseUpdate('modulos',ms[idx].id,{ordem:parseInt(ordem)+1});await supabaseUpdate('modulos',ms[idx+1].id,{ordem:parseInt(ordem)});carregarModulos(cursoId)}
-  }catch(e){toast('Erro','error')}
-}
-
-function gerenciarAulas(modId,titulo){
-  abrirModal('<h2>📄 Aulas: '+titulo+'</h2><div id="aulasLista"><p>Carregando...</p></div><div class="modal-actions"><button class="btn btn-gold" onclick="abrirModalAula(\''+modId+'\')">+ Aula</button><button class="btn btn-outline" onclick="fecharModal()">Fechar</button></div>');
-  carregarAulas(modId);
-}
-
-async function carregarAulas(modId){
-  try{
-    const as=await supabaseFetch('aulas',{filter:'modulo_id=eq.'+modId,order:'ordem.asc'});
-    let html='<div class="table-wrap" style="margin-top:12px"><table><thead><tr><th>#</th><th>Aula</th><th>Tipo</th><th>Ações</th></tr></thead><tbody>';
-    if(as.length===0)html+='<tr><td colspan="4" style="text-align:center;color:var(--text3)">Nenhuma aula</td></tr>';
-    else for(const a of as){
-      html+='<tr><td>'+(a.ordem||'')+'</td><td>'+a.titulo+'</td><td>'+(a.tipo||'texto')+'</td>';
-      html+='<td><div class="btn-group"><button class="btn btn-xs btn-outline" onclick="abrirModalAula(\''+modId+'\',\''+a.id+'\')">✏️</button><button class="btn btn-xs btn-danger" onclick="excluirAula(\''+a.id+'\',\''+modId+'\')">🗑️</button></div></td></tr>';
-    }
-    html+='</tbody></table></div>';
-    document.getElementById('aulasLista').innerHTML=html;
-  }catch(e){console.error(e)}
-}
-
-function abrirModalAula(modId,aulaId){
-  const a=aulaId?aulas.find(x=>x.id===aulaId):{};
-  const html='<h2>'+(aulaId?'Editar Aula':'Nova Aula')+'</h2>'+
-    '<div class="form-group"><label>Título</label><input id="fAulaTitulo" value="'+(a.titulo||'')+'"></div>'+
-    '<div class="form-row"><div class="form-group"><label>Tipo</label><select id="fAulaTipo"><option value="texto"'+(a.tipo==='texto'?' selected':'')+'>Texto</option><option value="video"'+(a.tipo==='video'?' selected':'')+'>Vídeo</option><option value="quiz"'+(a.tipo==='quiz'?' selected':'')+'>Quiz</option></select></div>'+
-    '<div class="form-group"><label>Ordem</label><input id="fAulaOrdem" type="number" value="'+(a.ordem||'')+'"></div></div>'+
-    '<div class="form-group"><label>Conteúdo</label><div class="editor-toolbar">'+
-      '<button onclick="inserirTag(\'fAulaConteudo\',\'**\',\'**\')"><b>B</b></button>'+
-      '<button onclick="inserirTag(\'fAulaConteudo\',\'*\',\'*\')"><i>I</i></button>'+
-      '<div class="sep"></div>'+
-      '<button onclick="inserirTag(\'fAulaConteudo\',\'## \',\'\')">H2</button>'+
-      '<button onclick="inserirTag(\'fAulaConteudo\',\'- \',\'\')">•</button>'+
-    '</div><textarea id="fAulaConteudo" class="editor-area">'+(a.conteudo||'')+'</textarea></div>'+
-    '<div class="form-group"><label>URL do Vídeo (se tipo vídeo)</label><input id="fAulaVideo" value="'+(a.video_url||'')+'"></div>'+
-    '<div class="form-group"><label>Quiz (JSON)</label><textarea id="fAulaQuiz" style="min-height:80px">'+(typeof a.quiz==='string'?a.quiz:JSON.stringify(a.quiz||''))+'</textarea></div>'+
-    '<div class="modal-actions"><button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>'+
-    '<button class="btn btn-gold" onclick="salvarAula(\''+modId+'\',\''+(aulaId||'')+'\')">'+(aulaId?'Salvar':'Criar Aula')+'</button></div>';
-  abrirModal(html);
-}
-
-async function salvarAula(modId,aulaId){
-  let quiz;
-  try{quiz=JSON.parse(document.getElementById('fAulaQuiz').value||'{}')}catch(e){quiz={}}
-  const dados={modulo_id:modId,titulo:document.getElementById('fAulaTitulo').value,conteudo:document.getElementById('fAulaConteudo').value,tipo:document.getElementById('fAulaTipo').value,ordem:parseInt(document.getElementById('fAulaOrdem').value)||0,video_url:document.getElementById('fAulaVideo').value,quiz};
-  try{
-    if(aulaId){await supabaseUpdate('aulas',aulaId,dados);toast('Aula atualizada!','success')}
-    else{await supabaseInsert('aulas',dados);toast('Aula criada!','success')}
-    fecharModal();carregarAulas(modId);
-  }catch(e){toast('Erro','error')}
-}
-
-async function excluirAula(aulaId,modId){
-  if(!confirm('Excluir aula?'))return;
-  try{await supabaseDelete('aulas',aulaId);toast('Excluído','success');carregarAulas(modId)}catch(e){toast('Erro','error')}
-}
-
-function inserirTag(id,abre,fecha){
-  const ta=document.getElementById(id);
-  const start=ta.selectionStart,end=ta.selectionEnd,sel=ta.value.substring(start,end);
-  ta.value=ta.value.substring(0,start)+abre+sel+fecha+ta.value.substring(end);
-  ta.focus();
-}
-
-function abrirImportador(){
-  const html='<h2>📄 Importar Curso de Arquivo .MD</h2>'+
-    '<div class="import-area" onclick="document.getElementById(\'fileImport\').click()">'+
-      '<div class="icon">📄</div><h3>Clique para selecionar arquivo .md</h3><p>O arquivo será parseado automaticamente: H1=título, H2=módulos, H3=aulas</p>'+
-      '<input type="file" id="fileImport" accept=".md" style="display:none" onchange="importarMD(event)">'+
-    '</div>'+
-    '<div id="importPreview" class="import-preview"></div>'+
-    '<div class="form-group"><label>Ou cole o conteúdo Markdown</label><textarea id="importRaw" style="min-height:200px" placeholder="Cole aqui o conteúdo do curso em Markdown..."></textarea></div>'+
-    '<div class="modal-actions">'+
-      '<button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>'+
-      '<button class="btn btn-gold" onclick="processarImport()">Importar Curso</button>'+
-    '</div>';
-  abrirModal(html);
-}
-
-function importarMD(e){
-  const file=e.target.files[0];
-  if(!file)return;
-  const reader=new FileReader();
-  reader.onload=function(ev){
-    document.getElementById('importRaw').value=ev.target.result;
-    document.getElementById('importPreview').innerHTML='<pre>✅ Arquivo carregado: '+file.name+'\nCarregando preview...</pre>';
-    document.getElementById('importPreview').classList.add('show');
-  };
-  reader.readAsText(file);
-}
-
-async function processarImport(){
-  const md=document.getElementById('importRaw').value;
-  if(!md.trim()){toast('Cole o markdown primeiro','error');return}
-  const linhas=md.split('\n');
-  let titulo='',categorias=[],modulos=[],modAtual=null,aulaAtual=null,conteudo=[];
-  for(const linha of linhas){
-    if(linha.startsWith('# ')&&!linha.startsWith('## ')&&!linha.startsWith('### ')){
-      titulo=linha.replace(/^#\s*/,'').trim();
-    }else if(linha.startsWith('## ')&&!linha.startsWith('### ')){
-      if(modAtual)modulos.push(modAtual);
-      modAtual={titulo:linha.replace(/^##\s*/,'').trim(),descricao:'',aulas:[]};
-      conteudo=[];
-    }else if(linha.startsWith('### ')){
-      if(modAtual){
-        if(conteudo.length>0&&aulaAtual){aulaAtual.conteudo=conteudo.join('\n');conteudo=[]}
-        aulaAtual={titulo:linha.replace(/^###\s*/,'').trim(),conteudo:'',tipo:'texto'};
-        modAtual.aulas.push(aulaAtual);
-      }
-    }else{
-      if(modAtual&&!linha.startsWith('#')&&!linha.startsWith('###')){
-        if(aulaAtual)conteudo.push(linha);
-        else if(linha.trim())modAtual.descricao+=linha+'\n';
-      }
+    if (section === 'dashboard') {
+      await renderDashboard(mc);
+    } else if (section === 'courses') {
+      await renderCourses(mc);
+    } else if (section === 'students') {
+      await renderStudents(mc);
+    } else if (section === 'mirc') {
+      await renderMIRC(mc);
     }
   }
-  if(modAtual){if(conteudo.length>0&&aulaAtual)aulaAtual.conteudo=conteudo.join('\n');modulos.push(modAtual)}
-  const info=document.getElementById('importPreview');
-  info.innerHTML='<pre>📋 Preview:\nTítulo: '+titulo+'\nMódulos: '+modulos.length+'\n';
-  let totalAulas=0;
-  for(const m of modulos){totalAulas+=m.aulas.length;info.innerHTML+='  📂 '+m.titulo+' ('+m.aulas.length+' aulas)\n'}
-  info.innerHTML+='\nTotal de aulas: '+totalAulas+'\n\n✅ Clique em "Importar Curso" para confirmar.</pre>';
-  info.classList.add('show');
-  // Salva no escopo global pra processar depois
-  window._importData={titulo,modulos};
-}
 
-// ALUNOS
-async function carregarAlunos(){
-  try{
-    alunos=await supabaseFetch('alunos',{filter:'role=eq.aluno',order:'created_at.desc'});
-    const tuts=await supabaseFetch('alunos',{filter:'role=eq.tutor'});
-    const mats=await supabaseFetch('matriculas');
-    renderAlunos(tuts,mats);
-  }catch(e){console.error(e)}
-}
+  async function renderDashboard(mc) {
+    const { count: courseCount } = await supabase.from('courses').select('*', { count:'exact', head:true });
+    const { count: studentCount } = await supabase.from('profiles').select('*', { count:'exact', head:true });
+    const { count: lessonCount } = await supabase.from('lessons').select('*', { count:'exact', head:true });
+    const { count: mircCount } = await supabase.from('profiles').select('*', { count:'exact', head:true }).not('mirc_code', 'is', null);
 
-function renderAlunos(tuts,mats){
-  const q=document.getElementById('buscaAlunos').value.toLowerCase();
-  const f=alunos.filter(a=>a.nome?.toLowerCase().includes(q)||a.email?.toLowerCase().includes(q));
-  const lista=document.getElementById('alunosLista');
-  if(f.length===0){lista.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text3)">Nenhum aluno encontrado</td></tr>';return}
-  let html='';
-  for(const a of f){
-    const tutor=tuts?.find(t=>t.id===a.tutor_id);
-    const cursosAluno=mats?.filter(m=>m.aluno_id===a.id)||[];
-    html+='<tr><td><strong>'+a.nome+'</strong></td><td>'+a.email+'</td><td>'+(tutor?.nome||'<em style="color:var(--text3)">Sem tutor</em>')+'</td><td>'+cursosAluno.length+'</td>';
-    html+='<td><span class="status '+(a.status||'ativo')+'">'+(a.status||'ativo')+'</span></td>';
-    html+='<td><div class="btn-group"><button class="btn btn-xs btn-outline" onclick="verAluno(\''+a.id+'\')">👁️</button></div></td></tr>';
+    mc.innerHTML = `
+      <div class="page-title">Dashboard Admin</div>
+      <div class="page-subtitle">Visão geral do Instituto Lumethos</div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📚</div>
+          <div class="stat-num gold">${courseCount || 0}</div>
+          <div class="stat-label">Cursos ativos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-num">${studentCount || 0}</div>
+          <div class="stat-label">Alunos cadastrados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📖</div>
+          <div class="stat-num">${lessonCount || 0}</div>
+          <div class="stat-label">Aulas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔍</div>
+          <div class="stat-num">${mircCount || 0}</div>
+          <div class="stat-label">Registros MIRC</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h3>🔗 Links Rápidos</h3>
+        </div>
+        <div class="panel-body" style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button class="action-btn" onclick="showSection('courses')">📚 Gerenciar Cursos</button>
+          <button class="action-btn" onclick="showSection('students')">👥 Ver Alunos</button>
+          <button class="action-btn" onclick="showSection('mirc')">🔍 MIRC</button>
+          <a href="/biblioteca.html" class="action-btn" target="_blank">📖 Biblioteca (site)</a>
+          <a href="/aluno/dashboard.html" class="action-btn" target="_blank">🎓 Área do Aluno</a>
+        </div>
+      </div>`;
   }
-  lista.innerHTML=html;
-}
 
-// TUTORES
-async function carregarTutores(){
-  try{
-    tutores=await supabaseFetch('alunos',{filter:'role=eq.tutor',order:'created_at.desc'});
-    const mats=await supabaseFetch('matriculas');
-    const alns=await supabaseFetch('alunos',{filter:'role=eq.aluno'});
-    renderTutores(mats,alns);
-  }catch(e){console.error(e)}
-}
+  async function renderCourses(mc) {
+    const { data: courses } = await supabase.from('courses').select('*').order('title');
 
-function renderTutores(mats,alns){
-  const q=document.getElementById('buscaTutores').value.toLowerCase();
-  const f=tutores.filter(t=>t.nome?.toLowerCase().includes(q)||t.email?.toLowerCase().includes(q));
-  const lista=document.getElementById('tutoresLista');
-  if(f.length===0){lista.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text3)">Nenhum tutor encontrado</td></tr>';return}
-  let html='';
-  for(const t of f){
-    const alunosDoTutor=alns?.filter(a=>a.tutor_id===t.id)||[];
-    html+='<tr><td><strong>'+t.nome+'</strong></td><td>'+t.email+'</td><td>'+alunosDoTutor.length+'</td>';
-    html+='<td><span class="status ativo">Ativo</span></td>';
-    html+='<td><div class="btn-group"><button class="btn btn-xs btn-outline" onclick="editarTutor(\''+t.id+'\')">✏️</button></div></td></tr>';
+    const rows = (courses || []).map(c => `
+      <tr>
+        <td><strong>${c.title}</strong></td>
+        <td>${c.hours || 0}h</td>
+        <td>${c.active ? '<span class="badge badge-green">Ativo</span>' : '<span class="badge badge-red">Inativo</span>'}</td>
+        <td>${c.price_cents ? `R$ ${(c.price_cents/100).toFixed(2)}` : 'Grátis'}</td>
+        <td style="display:flex;gap:6px;">
+          <button class="action-btn" onclick="editCourse('${c.id}')">Editar</button>
+          <button class="action-btn danger">Arquivar</button>
+        </td>
+      </tr>`).join('');
+
+    mc.innerHTML = `
+      <div class="page-title">📚 Cursos</div>
+      <div class="page-subtitle">${courses?.length || 0} cursos cadastrados no Supabase</div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Todos os Cursos</h3>
+          <button class="panel-action">+ Novo Curso</button>
+        </div>
+        <div class="panel-body" style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Curso</th><th>Carga</th><th>Status</th><th>Preço</th><th>Ações</th></tr></thead>
+            <tbody>${rows || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">Nenhum curso</td></tr>'}</tbody>
+          </table>
+        </div>
+      </div>`;
   }
-  lista.innerHTML=html;
-}
 
-function abrirModalTutor(d){
-  const dados=d||{};
-  const isEdit=!!dados.id;
-  const html='<h2>'+(isEdit?'Editar Tutor':'Novo Tutor')+'</h2>'+
-    '<div class="form-group"><label>Nome</label><input id="fTutorNome" value="'+(dados.nome||'')+'"></div>'+
-    '<div class="form-group"><label>Email</label><input id="fTutorEmail" type="email" value="'+(dados.email||'')+'"'+(isEdit?' readonly':'')+'></div>'+
-    '<div class="form-group"><label>Telefone</label><input id="fTutorTel" value="'+(dados.telefone||'')+'"></div>'+
-    (!isEdit?'<div class="form-group"><label>Senha</label><input id="fTutorSenha" type="password" placeholder="Senha inicial"></div>':'')+
-    '<div class="modal-actions"><button class="btn btn-outline" onclick="fecharModal()">Cancelar</button>'+
-    '<button class="btn btn-gold" onclick="salvarTutor(\''+(dados.id||'')+'\')">'+(isEdit?'Salvar':'Criar Tutor')+'</button></div>';
-  abrirModal(html);
-}
+  async function renderStudents(mc) {
+    const { data: students } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
 
-async function salvarTutor(id){
-  const dados={nome:document.getElementById('fTutorNome').value,email:document.getElementById('fTutorEmail').value,telefone:document.getElementById('fTutorTel').value,role:'tutor'};
-  try{
-    if(id){await supabaseUpdate('alunos',id,dados);toast('Tutor atualizado!','success')}
-    else{
-      const senha=document.getElementById('fTutorSenha').value||'tutor123';
-      const {data,error}=await supabase.auth.admin.createUser({email:dados.email,password:senha,email_confirm:true,user_metadata:{nome:dados.nome,role:'tutor'}});
-      if(error){toast('Erro ao criar usuário: '+error.message,'error');return}
-      dados.auth_id=data.user.id;
-      await supabaseInsert('alunos',dados);
-      toast('Tutor criado! Senha: '+senha,'success');
-    }
-    fecharModal();carregarTutores();
-  }catch(e){toast('Erro','error')}
-}
+    const rows = (students || []).map(s => `
+      <tr>
+        <td><strong>${s.name || 'Sem nome'}</strong></td>
+        <td>${s.email || '-'}</td>
+        <td>${s.matricula || '-'}</td>
+        <td>${s.role === 'admin' ? '<span class="badge badge-yellow">Admin</span>' : s.role === 'tutor' ? '<span class="badge badge-blue">Tutor</span>' : '<span class="badge badge-green">Aluno</span>'}</td>
+        <td>${s.mirc_code ? '<span class="badge badge-green">✓ '+s.mirc_code+'</span>' : '<span class="badge badge-red">Sem MIRC</span>'}</td>
+      </tr>`).join('');
 
-async function editarTutor(id){
-  const t=tutores.find(x=>x.id===id);
-  if(t)abrirModalTutor(t);
-}
+    mc.innerHTML = `
+      <div class="page-title">👥 Alunos</div>
+      <div class="page-subtitle">${students?.length || 0} perfis cadastrados</div>
 
-// MATRICULAS
-async function carregarMatriculas(){
-  try{
-    matriculas=await supabaseFetch('matriculas',{order:'created_at.desc'});
-    const alns=await supabaseFetch('alunos');
-    const crs=await supabaseFetch('cursos');
-    renderMatriculas(alns,crs);
-  }catch(e){console.error(e)}
-}
-
-function renderMatriculas(alns,crs){
-  const q=document.getElementById('buscaMatriculas').value.toLowerCase();
-  const f=matriculas.filter(m=>{
-    const aluno=alns.find(a=>a.id===m.aluno_id);
-    const curso=crs.find(c=>c.id===m.curso_id);
-    return (aluno?.nome||'').toLowerCase().includes(q)||(curso?.titulo||'').toLowerCase().includes(q);
-  });
-  const lista=document.getElementById('matriculasLista');
-  if(f.length===0){lista.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text3)">Nenhuma matrícula</td></tr>';return}
-  let html='';
-  for(const m of f){
-    const aluno=alns.find(a=>a.id===m.aluno_id);
-    const curso=crs.find(c=>c.id===m.curso_id);
-    const progresso=m.progresso||0;
-    html+='<tr><td>'+(aluno?.nome||'---')+'</td><td>'+(curso?.titulo||'---')+'</td><td>'+new Date(m.created_at).toLocaleDateString('pt-BR')+'</td>';
-    html+='<td><div class="progress-bar" style="width:120px"><div class="fill" style="width:'+progresso+'%"></div></div><small style="font-size:10px">'+progresso+'%</small></td>';
-    html+='<td><span class="status '+(m.status||'ativo')+'">'+(m.status||'ativo')+'</span></td>';
-    html+='<td><button class="btn btn-xs btn-danger" onclick="cancelarMatricula(\''+m.id+'\')">Cancelar</button></td></tr>';
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Todos os Alunos</h3>
+        </div>
+        <div class="panel-body" style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Nome</th><th>Email</th><th>Matrícula</th><th>Papel</th><th>MIRC</th></tr></thead>
+            <tbody>${rows || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">Nenhum aluno</td></tr>'}</tbody>
+          </table>
+        </div>
+      </div>`;
   }
-  lista.innerHTML=html;
-}
 
-async function cancelarMatricula(id){
-  if(!confirm('Cancelar matrícula?'))return;
-  try{await supabaseUpdate('matriculas',id,{status:'cancelado'});toast('Matrícula cancelada','success');carregarMatriculas()}catch(e){toast('Erro','error')}
-}
+  async function renderMIRC(mc) {
+    const { data: profiles } = await supabase.from('profiles').select('name,email,mirc_code,mirc_status,mirc_issued_at').not('mirc_code', 'is', null).order('mirc_issued_at', { ascending: false });
 
-init();
+    const rows = (profiles || []).map(p => `
+      <tr>
+        <td><strong>${p.name || '-'}</strong></td>
+        <td>${p.email || '-'}</td>
+        <td><code>${p.mirc_code}</code></td>
+        <td>${p.mirc_status === 'active' ? '<span class="badge badge-green">Ativo</span>' : '<span class="badge badge-red">'+ (p.mirc_status||'pendente') +'</span>'}</td>
+        <td>${p.mirc_issued_at ? new Date(p.mirc_issued_at).toLocaleDateString('pt-BR') : '-'}</td>
+      </tr>`).join('');
+
+    mc.innerHTML = `
+      <div class="page-title">🔍 Registro MIRC</div>
+      <div class="page-subtitle">Ministério Internacional de Registro de Capelães — ${profiles?.length || 0} registros</div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Registros MIRC</h3>
+        </div>
+        <div class="panel-body" style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Nome</th><th>Email</th><th>Código MIRC</th><th>Status</th><th>Emissão</th></tr></thead>
+            <tbody>${rows || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">Nenhum registro MIRC</td></tr>'}</tbody>
+          </table>
+        </div>
+      </div>`;
+  }
+
+  function editCourse(id) {
+    alert('Editor de curso: ' + id + '\n\nFuncionalidade de edição via Supabase em desenvolvimento.');
+  }
+
+  init();
 </script>
-  <script src="/js/juju-chat.js"></script>
 </body>
 </html>
