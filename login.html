@@ -7,98 +7,93 @@
   <link rel="icon" href="/img/favicon.ico">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
     :root {
-      --navy:#0B1526; --gold:#C79A2E; --gold-hover:#d4a83a;
-      --white:#fff; --gray-100:#f8f9fa; --gray-200:#e9ecef; --gray-300:#dee2e6;
-      --gray-500:#6c757d; --gray-700:#343a40; --gray-900:#111;
+      --navy:#1B2E45; --gold-badge:#D4A631; --gold-btn:#E6A829;
+      --white:#fff; --gray-bg:#F5F7FA; --gray-border:#CCC;
+      --gray-placeholder:#999; --gray-subtitle:#666; --gray-dark:#333;
     }
     body { font-family:'Inter',sans-serif; min-height:100vh; }
-    
+
     /* ======== SPLIT LAYOUT ======== */
     .split { display:flex; min-height:100vh; }
-    
-    /* ======== LEFT PANEL ======== */
+
+    /* ======== LEFT PANEL — 40% ======== */
     .left-panel {
-      flex:1; background:var(--navy); color:var(--white);
+      width:40%; background:var(--navy); color:var(--white);
       display:flex; flex-direction:column; justify-content:center; align-items:center;
-      padding:60px 40px; position:relative; overflow:hidden;
+      padding:60px 52px; position:relative; min-width:340px;
     }
-    .left-panel::before {
-      content:''; position:absolute; top:-50%; right:-30%; width:600px; height:600px;
-      background:radial-gradient(circle,rgba(199,154,46,.06) 0%,transparent 70%);
-      border-radius:50%; pointer-events:none;
+    .left-inner { max-width:380px; width:100%; }
+    .shield-crest {
+      width:110px; height:auto; display:block; margin:0 auto 22px;
     }
-    .left-content { max-width:420px; text-align:center; position:relative; z-index:1; }
-    .crest { width:120px; height:120px; margin-bottom:20px; object-fit:contain; }
     .motto-badge {
-      display:inline-block; padding:8px 20px; background:var(--gold); color:var(--navy);
-      border-radius:50px; font-size:11px; font-weight:700; letter-spacing:2px;
-      margin-bottom:28px; font-family:'Inter',sans-serif;
+      display:inline-block; padding:8px 22px; background:var(--gold-badge); color:var(--navy);
+      border-radius:50px; font-size:10.5px; font-weight:700; letter-spacing:2.5px;
+      text-align:center; width:100%; margin-bottom:36px;
     }
-    .brand-name { font-family:'Libre Baskerville',serif; font-size:16px; color:var(--gold); letter-spacing:4px; margin-bottom:4px; }
-    .brand-sub { font-family:'Libre Baskerville',serif; font-size:11px; color:rgba(255,255,255,.35); letter-spacing:3px; margin-bottom:40px; }
-    .student-title { font-size:28px; font-weight:700; margin-bottom:12px; }
-    .student-desc { font-size:14px; color:rgba(255,255,255,.55); line-height:1.7; }
+    .brand-block { text-align:center; margin-bottom:48px; }
+    .brand-inst { font-size:13px; letter-spacing:5px; opacity:.7; text-transform:uppercase; margin-bottom:2px; }
+    .brand-name { font-size:22px; font-weight:700; letter-spacing:4px; text-transform:uppercase; margin-bottom:6px; }
+    .brand-motto { font-size:10px; letter-spacing:3px; opacity:.45; text-transform:uppercase; }
+    .left-heading { font-size:28px; font-weight:800; margin-bottom:16px; text-align:left; }
+    .left-desc { font-size:14px; opacity:.55; line-height:1.75; max-width:340px; text-align:left; }
 
-    /* ======== RIGHT PANEL ======== */
+    /* ======== RIGHT PANEL — 60% ======== */
     .right-panel {
-      width:480px; background:var(--white); color:var(--gray-900);
-      display:flex; flex-direction:column; justify-content:center;
-      padding:60px 48px; position:relative;
+      flex:1; background:var(--white); display:flex; flex-direction:column;
+      justify-content:center; align-items:center; padding:60px 40px;
     }
-    .right-content { max-width:380px; width:100%; margin:0 auto; }
-    .welcome-title { font-size:26px; font-weight:700; margin-bottom:6px; }
-    .welcome-sub { font-size:14px; color:var(--gray-500); margin-bottom:32px; }
+    .right-inner { max-width:420px; width:100%; }
+    .welcome-title { font-size:28px; font-weight:800; color:var(--gray-dark); margin-bottom:6px; }
+    .welcome-sub { font-size:15px; color:var(--gray-subtitle); margin-bottom:44px; }
 
-    .form-group { margin-bottom:18px; }
+    .form-group { margin-bottom:22px; }
     .form-group label {
-      display:block; font-size:12px; font-weight:600; color:var(--gray-700);
-      margin-bottom:6px; text-transform:uppercase; letter-spacing:.5px;
+      display:block; font-size:13px; font-weight:600; color:var(--gray-dark);
+      margin-bottom:8px;
     }
-    .form-group input[type="email"],
-    .form-group input[type="password"],
-    .form-group input[type="text"] {
-      width:100%; padding:12px 14px; background:var(--gray-100); border:1px solid var(--gray-300);
-      border-radius:8px; font-size:14px; font-family:'Inter',sans-serif;
-      color:var(--gray-900); outline:none; transition:border-color .2s,box-shadow .2s;
+    .form-group input {
+      width:100%; padding:13px 16px; background:var(--gray-bg); border:1px solid var(--gray-border);
+      border-radius:10px; font-size:15px; font-family:'Inter',sans-serif;
+      color:var(--gray-dark); outline:none; transition:border-color .2s,box-shadow .2s;
     }
-    .form-group input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(199,154,46,.1); }
-    .form-group input::placeholder { color:var(--gray-500); }
+    .form-group input::placeholder { color:var(--gray-placeholder); }
+    .form-group input:focus { border-color:var(--gold-btn); box-shadow:0 0 0 3px rgba(230,168,41,.1); }
 
-    .form-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
+    .form-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; }
     .remember-me { display:flex; align-items:center; gap:8px; cursor:pointer; }
-    .remember-me input[type="checkbox"] {
-      width:16px; height:16px; accent-color:var(--gold); cursor:pointer;
-    }
-    .remember-me label { font-size:13px; color:var(--gray-700); cursor:pointer; }
-    .forgot-link { font-size:13px; color:var(--gold); text-decoration:none; font-weight:500; }
+    .remember-me input[type="checkbox"] { width:17px; height:17px; accent-color:var(--gold-badge); cursor:pointer; }
+    .remember-me span { font-size:14px; color:var(--gray-subtitle); }
+    .forgot-link { font-size:14px; color:var(--gold-badge); text-decoration:none; font-weight:600; }
     .forgot-link:hover { text-decoration:underline; }
 
     .btn-primary {
-      width:100%; padding:13px; background:var(--gold); color:var(--navy);
-      border:none; border-radius:8px; font-size:15px; font-weight:700;
+      width:100%; padding:15px; background:var(--gold-btn); color:var(--white);
+      border:none; border-radius:10px; font-size:16px; font-weight:700;
       cursor:pointer; font-family:'Inter',sans-serif; transition:background .2s,transform .1s;
+      letter-spacing:.5px;
     }
-    .btn-primary:hover { background:var(--gold-hover); }
+    .btn-primary:hover { filter:brightness(1.06); }
     .btn-primary:active { transform:scale(.98); }
-    .btn-primary:disabled { opacity:.6; cursor:not-allowed; }
+    .btn-primary:disabled { opacity:.55; cursor:not-allowed; }
 
-    .register-row { text-align:center; margin-top:28px; padding-top:20px; border-top:1px solid var(--gray-200); }
-    .register-row span { font-size:13px; color:var(--gray-500); }
-    .register-row a { font-size:13px; color:var(--gold); text-decoration:none; font-weight:600; }
+    .register-row { text-align:center; margin-top:32px; }
+    .register-row span { font-size:14px; color:var(--gray-subtitle); }
+    .register-row a { font-size:14px; color:var(--gold-badge); text-decoration:none; font-weight:700; margin-left:4px; }
     .register-row a:hover { text-decoration:underline; }
 
     .alert {
-      padding:12px 14px; border-radius:8px; font-size:13px; margin-bottom:16px;
-      display:none; animation:fadeIn .3s;
+      padding:12px 16px; border-radius:10px; font-size:13px; margin-bottom:18px;
+      display:none; animation:fadeIn .3s; font-weight:500;
     }
     .alert.error { background:#fef2f2; color:#991b1b; border:1px solid #fecaca; display:block; }
     .alert.success { background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; display:block; }
     .alert.info { background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; display:block; }
     @keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
 
-    /* ======== REGISTER FORM (hidden by default) ======== */
+    /* Register form — hidden by default */
     .register-form { display:none; }
     .register-form.active { display:block; }
     .login-form { display:block; }
@@ -107,12 +102,13 @@
     /* ======== MOBILE ======== */
     @media(max-width:768px) {
       .split { flex-direction:column; }
-      .left-panel { padding:40px 24px 32px; }
-      .right-panel { width:100%; flex:1; padding:32px 24px 40px; }
-      .crest { width:80px; height:80px; }
-      .student-title { font-size:22px; }
+      .left-panel { width:100%; min-width:0; padding:40px 28px 32px; }
+      .left-inner { max-width:100%; }
+      .left-heading { font-size:22px; }
+      .right-panel { padding:28px 24px 40px; }
+      .right-inner { max-width:100%; }
       .welcome-title { font-size:22px; }
-      .right-content { max-width:100%; }
+      .shield-crest { width:80px; }
     }
   </style>
 </head>
@@ -121,19 +117,23 @@
 <div class="split">
   <!-- ======== LEFT PANEL ======== -->
   <div class="left-panel">
-    <div class="left-content">
-      <img src="/img/logo-selo.webp" alt="Instituto Lumethos" class="crest" onerror="this.style.display='none'">
+    <div class="left-inner">
+      <img src="/img/logo-selo.webp" alt="Brasão Instituto Lumethos" class="shield-crest"
+        onerror="this.style.display='none'">
       <div class="motto-badge">SAPIENTIA AD MINISTERIUM</div>
-      <div class="brand-name">INSTITUTO</div>
-      <div class="brand-sub">LUMETHOS</div>
-      <div class="student-title">Área do Aluno</div>
-      <p class="student-desc">Acesse seus cursos, certificados, biblioteca digital e ferramentas ministeriais.</p>
+      <div class="brand-block">
+        <div class="brand-inst">INSTITUTO</div>
+        <div class="brand-name">LUMETHOS</div>
+        <div class="brand-motto">SAPIENTIA AD MINISTERIUM</div>
+      </div>
+      <div class="left-heading">Área do Aluno</div>
+      <p class="left-desc">Acesse seus cursos, certificados, biblioteca digital e ferramentas ministeriais.</p>
     </div>
   </div>
 
   <!-- ======== RIGHT PANEL ======== -->
   <div class="right-panel">
-    <div class="right-content">
+    <div class="right-inner">
       <!-- LOGIN FORM -->
       <div class="login-form" id="loginForm">
         <h1 class="welcome-title">Bem-vindo de volta</h1>
@@ -145,7 +145,7 @@
 
         <div class="form-group">
           <label for="email">E-mail</label>
-          <input type="email" id="email" placeholder="seu@email.com" autocomplete="email" autofocus>
+          <input type="email" id="email" placeholder="anderson.boscariol@gmail.com" autocomplete="email" autofocus>
         </div>
         <div class="form-group">
           <label for="password">Senha</label>
@@ -154,13 +154,13 @@
         <div class="form-row">
           <label class="remember-me">
             <input type="checkbox" id="remember">
-            <label for="remember">Lembrar-me</label>
+            <span>Lembrar-me</span>
           </label>
           <a href="#" class="forgot-link" onclick="showForgotPassword(event)">Esqueci a senha</a>
         </div>
         <button class="btn-primary" id="loginBtn" onclick="handleLogin()">Entrar</button>
         <div class="register-row">
-          <span>Ainda não tem conta?</span> <a href="#" onclick="showRegisterForm(event)">Cadastre-se</a>
+          <span>Ainda não tem conta?</span><a href="#" onclick="showRegisterForm(event)">Cadastre-se</a>
         </div>
       </div>
 
@@ -190,7 +190,7 @@
         </div>
         <button class="btn-primary" id="registerBtn" onclick="handleRegister()">Criar conta</button>
         <div class="register-row">
-          <span>Já tem conta?</span> <a href="#" onclick="showLoginForm(event)">Fazer login</a>
+          <span>Já tem conta?</span><a href="#" onclick="showLoginForm(event)">Fazer login</a>
         </div>
       </div>
     </div>
@@ -200,44 +200,39 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://xplqghmhslfpyyqhwvkp.supabase.co";
-  const SUPABASE_ANON_KEY = "***";
+  const SUPABASE_ANON_KEY = "sb_publishable_sQPtweum0Qbml5zK3vd4Yg_tbdnxJ-o";
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // ======== REDIRECT ========
   function getRedirect() {
     const params = new URLSearchParams(location.search);
     return params.get('redirect') || '/aluno/dashboard.html';
   }
 
-  // ======== CHECK EXISTING SESSION ========
   async function checkSession() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      window.location.href = getRedirect();
-    }
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) window.location.href = getRedirect();
+    } catch(e) { console.log('Session check:', e); }
   }
 
-  // ======== ALERTS ========
   function show(prefix, type, msg) {
     const el = document.getElementById(prefix + type.charAt(0).toUpperCase() + type.slice(1));
     if (!el) return;
     el.textContent = msg;
     el.style.display = 'block';
-    // Auto-hide success
-    if (type === 'success') setTimeout(() => { el.style.display = 'none'; }, 5000);
+    if (type === 'success') setTimeout(function(){ el.style.display = 'none'; }, 5000);
   }
   function hide(prefix) {
-    ['Error','Success','Info'].forEach(t => {
-      const el = document.getElementById(prefix + t);
+    ['Error','Success','Info'].forEach(function(t) {
+      var el = document.getElementById(prefix + t);
       if (el) el.style.display = 'none';
     });
   }
 
-  // ======== LOGIN ========
   async function handleLogin() {
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
-    const btn = document.getElementById('loginBtn');
+    var email = document.getElementById('email').value.trim();
+    var password = document.getElementById('password').value;
+    var btn = document.getElementById('loginBtn');
 
     hide('login');
     if (!email || !password) { show('login','error','Preencha e-mail e senha'); return; }
@@ -245,25 +240,28 @@
     btn.disabled = true;
     btn.textContent = 'Entrando...';
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) {
-      let msg = error.message;
-      if (msg === 'Invalid login credentials') msg = 'E-mail ou senha incorretos';
-      if (msg.includes('Email not confirmed')) msg = 'Confirme seu e-mail antes de fazer login';
-      show('login','error',msg);
+    try {
+      var result = await supabase.auth.signInWithPassword({ email: email, password: password });
+      if (result.error) {
+        var msg = result.error.message;
+        if (msg === 'Invalid login credentials') msg = 'E-mail ou senha incorretos';
+        if (msg.indexOf('Email not confirmed') >= 0) msg = 'Confirme seu e-mail antes de fazer login';
+        show('login','error',msg);
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+        return;
+      }
+      if (result.data.session) {
+        show('login','success','Login realizado! Redirecionando...');
+        setTimeout(function(){ window.location.href = getRedirect(); }, 600);
+      }
+    } catch(err) {
+      show('login','error','Erro de conexão. Tente novamente.');
       btn.disabled = false;
       btn.textContent = 'Entrar';
-      return;
-    }
-
-    if (data.session) {
-      show('login','success','Login realizado! Redirecionando...');
-      setTimeout(() => { window.location.href = getRedirect(); }, 600);
     }
   }
 
-  // ======== REGISTER ========
   function showRegisterForm(e) {
     e.preventDefault();
     hide('login');
@@ -272,6 +270,7 @@
     document.getElementById('registerForm').classList.add('active');
     document.getElementById('regName').focus();
   }
+
   function showLoginForm(e) {
     e.preventDefault();
     hide('login');
@@ -282,11 +281,11 @@
   }
 
   async function handleRegister() {
-    const name = document.getElementById('regName').value.trim();
-    const email = document.getElementById('regEmail').value.trim();
-    const password = document.getElementById('regPassword').value;
-    const password2 = document.getElementById('regPassword2').value;
-    const btn = document.getElementById('registerBtn');
+    var name = document.getElementById('regName').value.trim();
+    var email = document.getElementById('regEmail').value.trim();
+    var password = document.getElementById('regPassword').value;
+    var password2 = document.getElementById('regPassword2').value;
+    var btn = document.getElementById('registerBtn');
 
     hide('register');
     if (!name || !email || !password) { show('register','error','Preencha todos os campos'); return; }
@@ -296,57 +295,58 @@
     btn.disabled = true;
     btn.textContent = 'Criando conta...';
 
-    const { data, error } = await supabase.auth.signUp({
-      email, password,
-      options: { data: { name, full_name: name } }
-    });
-
-    if (error) {
-      let msg = error.message;
-      if (msg.includes('already registered') || msg.includes('already exists')) msg = 'Este e-mail já está cadastrado';
-      show('register','error',msg);
+    try {
+      var result = await supabase.auth.signUp({
+        email: email, password: password,
+        options: { data: { name: name, full_name: name } }
+      });
+      if (result.error) {
+        var msg = result.error.message;
+        if (msg.indexOf('already registered') >= 0 || msg.indexOf('already exists') >= 0) msg = 'Este e-mail já está cadastrado';
+        show('register','error',msg);
+        btn.disabled = false;
+        btn.textContent = 'Criar conta';
+        return;
+      }
+      if (result.data.user && (!result.data.user.identities || result.data.user.identities.length === 0)) {
+        show('register','error','Este e-mail já está cadastrado. Faça login.');
+        btn.disabled = false;
+        btn.textContent = 'Criar conta';
+        return;
+      }
+      show('register','success','Conta criada! Confirme seu e-mail para ativar.');
+      btn.textContent = 'Criar conta';
+      btn.disabled = false;
+      setTimeout(function(){ showLoginForm(new Event('click')); }, 2500);
+    } catch(err) {
+      show('register','error','Erro de conexão. Tente novamente.');
       btn.disabled = false;
       btn.textContent = 'Criar conta';
-      return;
     }
-
-    if (data.user?.identities?.length === 0) {
-      show('register','error','Este e-mail já está cadastrado. Faça login.');
-      btn.disabled = false;
-      btn.textContent = 'Criar conta';
-      return;
-    }
-
-    show('register','success','Conta criada! Confirme seu e-mail para ativar.');
-    btn.textContent = 'Criar conta';
-    btn.disabled = false;
-
-    // Auto-switch to login after 2s
-    setTimeout(() => showLoginForm(new Event('click')), 2500);
   }
 
-  // ======== FORGOT PASSWORD ========
   async function showForgotPassword(e) {
     e.preventDefault();
-    const email = document.getElementById('email').value.trim() || prompt('Digite seu e-mail para redefinir a senha:');
-    if (!email) return;
-
+    var emailValue = document.getElementById('email').value.trim();
+    if (!emailValue) { emailValue = prompt('Digite seu e-mail para redefinir a senha:'); }
+    if (!emailValue) return;
     hide('login');
     show('login','info','Enviando link de redefinição...');
-
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/login.html?reset=true'
-    });
-
-    if (error) {
-      show('login','error','Erro ao enviar. Verifique o e-mail digitado.');
-    } else {
-      show('login','success','Link de redefinição enviado! Verifique seu e-mail.');
+    try {
+      var result = await supabase.auth.resetPasswordForEmail(emailValue, {
+        redirectTo: window.location.origin + '/login.html?reset=true'
+      });
+      if (result.error) {
+        show('login','error','Erro ao enviar. Verifique o e-mail digitado.');
+      } else {
+        show('login','success','Link de redefinição enviado! Verifique seu e-mail.');
+      }
+    } catch(err) {
+      show('login','error','Erro de conexão. Tente novamente.');
     }
   }
 
-  // ======== ENTER KEY ========
-  document.addEventListener('keydown', e => {
+  document.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
       if (document.getElementById('registerForm').classList.contains('active')) {
         handleRegister();
