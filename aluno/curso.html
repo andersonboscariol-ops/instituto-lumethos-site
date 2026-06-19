@@ -324,21 +324,7 @@
     document.getElementById('topbarTitle').textContent = course.title;
     document.title = course.title + ' · Lumethos';
 
-    // Auto-enroll (upsert, idempotent)
-    try {
-      await supabase.from('enrollments').upsert({
-        user_id: user.id, course_id: courseId,
-        status: 'active', updated_at: new Date().toISOString()
-      }, { onConflict: 'user_id,course_id', ignoreDuplicates: false });
-    } catch(e) { /* table may not exist yet */ }
-    // Also try API bridge
-    try {
-      await fetch('/api/aluno/matricular', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': '***' + session.access_token },
-        body: JSON.stringify({ course_id: courseId })
-      });
-    } catch(e) { /* bridge offline */ }
+
 
     const { data: mods } = await supabase
       .from('modules').select('id,title,position,lessons(id,title,content_type,video_url,content_body,duration_minutes,position,is_free)')
@@ -362,6 +348,18 @@
       .eq('user_id', user.id).eq('completed', true)
       .in('lesson_id', allLessonIds);
     completedLessons = new Set((progress || []).map(p => p.lesson_id));
+
+    // Auto-enroll: create started record if first time opening this course
+    if (progress && progress.length === 0 && modules[0]?.lessons[0]) {
+      try {
+        await supabase.from('lesson_progress').upsert({
+          user_id: user.id,
+          lesson_id: modules[0].lessons[0].id,
+          completed: false,
+          started_at: new Date().toISOString()
+        }, { onConflict: 'user_id,lesson_id', ignoreDuplicates: true });
+      } catch(e) { /* table may not exist */ }
+    }
 
     renderSidebar();
     openModule(modules[0].id);

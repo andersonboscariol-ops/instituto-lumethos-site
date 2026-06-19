@@ -328,50 +328,66 @@
     document.getElementById('userName').textContent = displayName;
     document.getElementById('userAvatar').textContent = displayName.charAt(0).toUpperCase();
 
-    // Fetch user's courses — try enrollments table, fallback to API bridge
+    // Fetch user's courses — derive from lesson_progress + lessons → modules → courses
     let enrollments = [];
     let completedLessons = 0;
 
     try {
-      // Try Supabase enrollments (needs migration 001_enrollments.sql)
-      const { data: supEnr, error: enrErr } = await supabase
-        .from('enrollments')
-        .select('id,status,progress_pct,course_id,courses!inner(id,title,slug,image,color,hours)')
-        .eq('user_id', user.id)
-        .order('enrolled_at', { ascending: false });
-
-      if (!enrErr && supEnr && supEnr.length > 0) {
-        enrollments = supEnr;
-      }
-    } catch(e) { console.log('Enrollments table not available yet'); }
-
-    // Fallback: API bridge (legacy JSON enrollments)
-    if (enrollments.length === 0) {
-      try {
-        const resp = await fetch('/api/aluno/cursos', {
-          headers: { 'Authorization': '***' + session.access_token }
-        });
-        if (resp.ok) {
-          const data = await resp.json();
-          if (Array.isArray(data)) {
-            enrollments = data.map(c => ({
-              courses: { id: c.id, title: c.titulo || c.name || c.curso, slug: c.slug, image: c.imagem, color: null, hours: c.carga_horaria || c.hours },
-              status: 'active',
-              progress_pct: c.progresso || c.progress_pct || 0
-            }));
-          }
-        }
-      } catch(e) { console.log('API bridge offline'); }
-    }
-
-    // Get lesson progress for stats
-    try {
-      const { data: progress } = await supabase
+      // Get all lesson progress for this user
+      const { data: allProgress } = await supabase
         .from('lesson_progress')
-        .select('id,completed')
+        .select('lesson_id,completed')
         .eq('user_id', user.id);
-      completedLessons = (progress || []).filter(p => p.completed).length;
-    } catch(e) { console.log('lesson_progress error:', e); }
+
+      if (allProgress && allProgress.length > 0) {
+        completedLessons = allProgress.filter(p => p.completed).length;
+        const lessonIds = [...new Set(allProgress.map(p => p.lesson_id))];
+
+        // Get lessons → modules → courses
+        const { data: lessons } = await supabase
+          .from('lessons')
+          .select('id,module_id,modules!inner(id,course_id,courses!inner(id,title,slug,image,color,hours))')
+          .in('id', lessonIds);
+
+        if (lessons && lessons.length > 0) {
+          // Group by course
+          const courseMap = new Map();
+          lessons.forEach(l => {
+            const course = l.modules?.courses;
+            if (!course) return;
+            if (!courseMap.has(course.id)) {
+              courseMap.set(course.id, {
+                courses: course,
+                totalLessons: 0,
+                completed: 0
+              });
+            }
+            const entry = courseMap.get(course.id);
+            entry.totalLessons++;
+            if (allProgress.find(p => p.lesson_id === l.id && p.completed)) entry.completed++;
+          });
+
+          // Get total lesson counts per course for accurate progress
+          const courseIds = [...courseMap.keys()];
+          const { data: allMods } = await supabase
+            .from('modules')
+            .select('id,course_id,lessons(id)')
+            .in('course_id', courseIds);
+
+          enrollments = [...courseMap.entries()].map(([cid, data]) => {
+            const totalInCourse = (allMods || [])
+              .filter(m => m.course_id === cid)
+              .reduce((sum, m) => sum + (m.lessons?.length || 0), 0);
+            const pct = totalInCourse > 0 ? Math.round((data.completed / totalInCourse) * 100) : 0;
+            return {
+              courses: data.courses,
+              status: pct >= 100 ? 'completed' : 'active',
+              progress_pct: pct
+            };
+          });
+        }
+      }
+    } catch(e) { console.log('Progress load error:', e); }
 
     // Build dashboard HTML
     const main = document.getElementById('mainContent');
