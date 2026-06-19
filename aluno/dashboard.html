@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Área do Aluno · Instituto Lumethos</title>
+  <meta name="description" content="Sua jornada de formação ministerial">
+  <link rel="icon" href="../img/favicon.ico">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --bg-primary: #0D1B2A;
+      --bg-secondary: #152238;
+      --bg-card: #1a2d45;
+      --gold: #C79A2E;
+      --gold-light: #e0b84c;
+      --white: #ffffff;
+      --text-secondary: rgba(255,255,255,0.7);
+      --text-muted: rgba(255,255,255,0.45);
+      --border: rgba(255,255,255,0.06);
+      --radius: 12px;
+      --sidebar-width: 260px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--white);
+      min-height: 100vh;
+    }
+
+    /* ======== TOP BAR ======== */
+    .topbar {
+      position: fixed; top:0; left:0; right:0; z-index:100;
+      height:52px; background:rgba(13,27,42,0.94);
+      backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 20px;
+    }
+    .topbar .logo {
+      font-family:'Libre Baskerville',serif; font-size:15px; color:var(--gold);
+      text-decoration:none; letter-spacing:.3px;
+    }
+    .topbar .user-area { display:flex; align-items:center; gap:12px; }
+    .topbar .user-name { font-size:13px; color:var(--text-secondary); }
+    .topbar .avatar {
+      width:32px; height:32px; border-radius:50%;
+      background:var(--gold); color:var(--bg-primary);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:14px; cursor:pointer;
+    }
+    .topbar .logout-btn {
+      background:none; border:1px solid rgba(255,255,255,.12);
+      color:var(--text-muted); padding:5px 12px; border-radius:6px;
+      font-size:12px; cursor:pointer; transition:all .2s;
+      font-family:'Inter',sans-serif;
+    }
+    .topbar .logout-btn:hover { color:var(--white); border-color:rgba(255,255,255,.25); }
+
+    /* ======== SIDEBAR ======== */
+    .layout { display:flex; padding-top:52px; min-height:100vh; }
+    .sidebar {
+      width:var(--sidebar-width); min-width:var(--sidebar-width);
+      background:var(--bg-secondary);
+      border-right:1px solid var(--border);
+      position:fixed; top:52px; left:0; bottom:0;
+      overflow-y:auto; z-index:50;
+      padding:16px 0;
+    }
+    .sidebar-section {
+      padding:8px 16px; margin-bottom:4px;
+    }
+    .sidebar-section .section-label {
+      font-size:10px; text-transform:uppercase; letter-spacing:1.2px;
+      color:var(--text-muted); padding:0 12px; margin-bottom:8px;
+    }
+    .sidebar-link {
+      display:flex; align-items:center; gap:12px;
+      padding:10px 12px; border-radius:8px;
+      color:var(--text-secondary); text-decoration:none;
+      font-size:14px; transition:all .2s;
+      font-weight:400;
+    }
+    .sidebar-link:hover { background:rgba(255,255,255,.04); color:var(--white); }
+    .sidebar-link.active { background:rgba(199,154,46,.1); color:var(--gold); font-weight:600; }
+    .sidebar-link .icon { font-size:18px; width:22px; text-align:center; flex-shrink:0; }
+    .sidebar-link .badge {
+      margin-left:auto; background:var(--gold); color:var(--bg-primary);
+      font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px;
+    }
+
+    /* ======== MAIN CONTENT ======== */
+    .main-content {
+      flex:1; margin-left:var(--sidebar-width);
+      padding:32px; max-width:calc(100% - var(--sidebar-width));
+    }
+    .page-header { margin-bottom:32px; }
+    .page-header h1 {
+      font-family:'Libre Baskerville',serif;
+      font-size:28px; margin-bottom:6px;
+    }
+    .page-header p { color:var(--text-secondary); font-size:14px; }
+
+    /* ======== STATS CARDS ======== */
+    .stats-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:16px; margin-bottom:32px;
+    }
+    .stat-card {
+      background:var(--bg-card); border-radius:var(--radius);
+      padding:20px; border:1px solid var(--border);
+    }
+    .stat-card .stat-icon { font-size:24px; margin-bottom:8px; }
+    .stat-card .stat-num { font-size:28px; font-weight:700; }
+    .stat-card .stat-num.gold { color:var(--gold); }
+    .stat-card .stat-label { font-size:12px; color:var(--text-muted); margin-top:4px; }
+
+    /* ======== COURSE CARDS ======== */
+    .section-title {
+      font-family:'Libre Baskerville',serif;
+      font-size:20px; margin-bottom:16px;
+    }
+    .courses-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+      gap:16px;
+    }
+    .enrolled-card {
+      background:var(--bg-card); border-radius:var(--radius);
+      border:1px solid var(--border); overflow:hidden;
+      transition:all .3s; text-decoration:none; color:var(--white); display:block;
+    }
+    .enrolled-card:hover {
+      transform:translateY(-4px);
+      border-color:rgba(199,154,46,.25);
+      box-shadow:0 12px 32px rgba(0,0,0,.3);
+    }
+    .enrolled-card .card-top {
+      padding:20px 20px 12px; display:flex; gap:16px; align-items:flex-start;
+    }
+    .enrolled-card .course-icon {
+      width:48px; height:48px; border-radius:10px;
+      background:var(--bg-secondary); display:flex; align-items:center;
+      justify-content:center; font-size:22px; flex-shrink:0;
+    }
+    .enrolled-card .course-info { flex:1; }
+    .enrolled-card .course-info h3 { font-size:16px; margin-bottom:4px; }
+    .enrolled-card .course-info .course-meta {
+      font-size:12px; color:var(--text-muted);
+    }
+    .enrolled-card .progress-bar {
+      height:4px; background:rgba(255,255,255,.08);
+      margin:0 20px; border-radius:2px; overflow:hidden;
+    }
+    .enrolled-card .progress-bar .fill {
+      height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light));
+      border-radius:2px; transition:width .5s;
+    }
+    .enrolled-card .card-bottom {
+      padding:12px 20px 16px; display:flex; justify-content:space-between;
+      align-items:center;
+    }
+    .enrolled-card .progress-text {
+      font-size:12px; font-weight:600; color:var(--gold);
+    }
+    .enrolled-card .continue-btn {
+      font-size:12px; font-weight:600; color:var(--gold);
+      display:flex; align-items:center; gap:4px;
+    }
+
+    /* ======== QUICK ACTIONS ======== */
+    .quick-actions {
+      display:flex; gap:12px; margin-bottom:32px; flex-wrap:wrap;
+    }
+    .quick-action {
+      padding:12px 20px; background:var(--bg-card);
+      border:1px solid var(--border); border-radius:50px;
+      color:var(--text-secondary); text-decoration:none;
+      font-size:13px; font-weight:500; transition:all .2s;
+      display:flex; align-items:center; gap:8px;
+    }
+    .quick-action:hover { border-color:var(--gold); color:var(--gold); }
+
+    /* ======== EMPTY STATE ======== */
+    .empty-state {
+      text-align:center; padding:60px 20px;
+      background:var(--bg-card); border-radius:var(--radius);
+      border:1px solid var(--border);
+    }
+    .empty-state .empty-icon { font-size:48px; margin-bottom:12px; }
+    .empty-state h3 { font-size:18px; margin-bottom:6px; }
+    .empty-state p { color:var(--text-muted); font-size:14px; margin-bottom:20px; }
+    .empty-state .cta-btn {
+      display:inline-block; padding:10px 24px; background:var(--gold);
+      color:var(--bg-primary); border-radius:50px; text-decoration:none;
+      font-weight:600; font-size:14px;
+    }
+
+    /* ======== MOBILE ======== */
+    @media(max-width:768px) {
+      .sidebar {
+        width:100%; min-width:100%; position:relative; top:auto;
+        bottom:auto; height:auto; border-right:none; border-bottom:1px solid var(--border);
+        padding:8px 0;
+      }
+      .sidebar .sidebar-section { padding:4px 16px; }
+      .sidebar-links-scroll { display:flex; overflow-x:auto; gap:4px; padding:4px 12px; }
+      .sidebar-links-scroll .sidebar-link { white-space:nowrap; font-size:12px; padding:8px 10px; }
+      .sidebar-links-scroll .sidebar-link .icon { display:none; }
+      .sidebar .section-label { display:none; }
+      .layout { flex-direction:column; }
+      .main-content { margin-left:0; max-width:100%; padding:20px 16px; }
+      .stats-grid { grid-template-columns:repeat(2,1fr); }
+      .courses-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ======== TOP BAR ======== -->
+<nav class="topbar">
+  <a href="/aluno/dashboard.html" class="logo">INSTITUTO LUMETHOS</a>
+  <div class="user-area">
+    <span class="user-name" id="userName">Carregando...</span>
+    <div class="avatar" id="userAvatar">?</div>
+    <button class="logout-btn" onclick="logout()">Sair</button>
+  </div>
+</nav>
+
+<!-- ======== LAYOUT ======== -->
+<div class="layout">
+
+  <!-- ======== SIDEBAR ======== -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="section-label">Principal</div>
+      <a href="/aluno/dashboard.html" class="sidebar-link active">
+        <span class="icon">🏠</span> Dashboard
+      </a>
+      <a href="/biblioteca.html" class="sidebar-link">
+        <span class="icon">📚</span> Biblioteca de Cursos
+      </a>
+      <a href="/aluno/curso.html" class="sidebar-link">
+        <span class="icon">🎓</span> Meus Cursos
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-label">Ferramentas</div>
+      <a href="/scriba.html" class="sidebar-link">
+        <span class="icon">📝</span> Scriba
+        <span class="badge">Escrever</span>
+      </a>
+      <a href="/centelhaz.html" class="sidebar-link">
+        <span class="icon">🔥</span> Centelhaz
+        <span class="badge">CRM</span>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-label">Conta</div>
+      <a href="/verificacao.html" class="sidebar-link">
+        <span class="icon">🔍</span> Verificar MIRC
+      </a>
+      <a href="#" onclick="logout()" class="sidebar-link">
+        <span class="icon">🚪</span> Sair
+      </a>
+    </div>
+  </aside>
+
+  <!-- ======== MAIN ======== -->
+  <main class="main-content" id="mainContent">
+    <!-- Loading -->
+    <div style="text-align:center;padding:60px;color:var(--text-muted);">
+      Carregando...
+    </div>
+  </main>
+</div>
+
+<!-- Supabase SDK -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://xplqghmhslfpyyqhwvkp.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_sQPtweum0Qbml5zK3vd4Yg_tbdnxJ-o";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // ======== AUTH ========
+  async function checkAuth() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      window.location.href = '/login.html?redirect=' + encodeURIComponent(location.pathname);
+      return null;
+    }
+    return session;
+  }
+
+  async function logout() {
+    await supabase.auth.signOut();
+    window.location.href = '/login.html';
+  }
+
+  // ======== RENDER ========
+  async function loadDashboard() {
+    const session = await checkAuth();
+    if (!session) return;
+
+    const user = session.user;
+    const email = user.email || '';
+    const nameFromMeta = user.user_metadata?.full_name || user.user_metadata?.name || email.split('@')[0] || 'Aluno';
+
+    // Update topbar
+    document.getElementById('userName').textContent = displayName;
+    document.getElementById('userAvatar').textContent = displayName.charAt(0).toUpperCase();
+
+    // Fetch profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role,avatar_url,name,mirc_code,mirc_status')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    const role = profile?.role || 'aluno';
+    const displayName = profile?.name || name;
+
+    // Fetch user's courses from Supabase (via module_progress to detect enrolled)
+    let enrollments = [];
+    let completedLessons = 0;
+
+    try {
+      // Get all active courses
+      const { data: courses } = await supabase
+        .from('courses')
+        .select('id,title,slug,image,color,hours')
+        .eq('active', true)
+        .limit(10);
+
+      // Get lesson progress for this user
+      const { data: progress } = await supabase
+        .from('lesson_progress')
+        .select('id,completed')
+        .eq('user_id', user.id);
+
+      completedLessons = (progress || []).filter(p => p.completed).length;
+
+      // Get module progress for this user
+      const { data: modProgress } = await supabase
+        .from('module_progress')
+        .select('module_id,completed')
+        .eq('user_id', user.id);
+
+      // Build enrollment-like objects from module progress
+      if (modProgress && modProgress.length > 0 && courses) {
+        const moduleIds = modProgress.map(m => m.module_id);
+        const { data: modules } = await supabase
+          .from('modules')
+          .select('id,course_id')
+          .in('id', moduleIds);
+        
+        if (modules) {
+          const courseIds = [...new Set(modules.map(m => m.course_id))];
+          enrollments = courses
+            .filter(c => courseIds.includes(c.id))
+            .map(c => ({
+              courses: c,
+              status: 'active',
+              progress_pct: 0
+            }));
+        }
+      }
+    } catch (e) {
+      console.log('Erro ao carregar progresso:', e);
+    }
+
+    // Build dashboard HTML
+    const main = document.getElementById('mainContent');
+
+    let coursesHTML = '';
+    const activeCourses = enrollments?.filter(e => e.status === 'active') || [];
+    const completedCourses = enrollments?.filter(e => e.status === 'completed') || [];
+
+    if (activeCourses.length === 0 && completedCourses.length === 0) {
+      coursesHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📚</div>
+          <h3>Nenhum curso ainda</h3>
+          <p>Explore nossa biblioteca e comece sua jornada ministerial</p>
+          <a href="/biblioteca.html" class="cta-btn">Ver Cursos</a>
+        </div>`;
+    } else {
+      // Active courses
+      if (activeCourses.length > 0) {
+        coursesHTML += '<div class="section-title">📖 Em Andamento</div><div class="courses-grid">';
+        activeCourses.forEach(enr => {
+          const course = enr.courses;
+          coursesHTML += `
+            <a href="/aluno/curso.html?id=${course.id}" class="enrolled-card">
+              <div class="card-top">
+                <div class="course-icon">📖</div>
+                <div class="course-info">
+                  <h3>${course.title}</h3>
+                  <div class="course-meta">${course.hours || 0}h</div>
+                </div>
+              </div>
+              <div class="progress-bar">
+                <div class="fill" style="width:${enr.progress_pct || 0}%"></div>
+              </div>
+              <div class="card-bottom">
+                <span class="progress-text">${enr.progress_pct || 0}% concluído</span>
+                <span class="continue-btn">Continuar →</span>
+              </div>
+            </a>`;
+        });
+        coursesHTML += '</div>';
+      }
+
+      // Completed
+      if (completedCourses.length > 0) {
+        coursesHTML += '<div class="section-title" style="margin-top:32px;">✅ Concluídos</div><div class="courses-grid">';
+        completedCourses.forEach(enr => {
+          const course = enr.courses;
+          coursesHTML += `
+            <a href="/aluno/curso.html?id=${course.id}" class="enrolled-card">
+              <div class="card-top">
+                <div class="course-icon">✅</div>
+                <div class="course-info">
+                  <h3>${course.title}</h3>
+                  <div class="course-meta">Completo</div>
+                </div>
+              </div>
+              <div class="progress-bar"><div class="fill" style="width:100%"></div></div>
+              <div class="card-bottom">
+                <span class="progress-text">100%</span>
+                <span class="continue-btn">Revisar →</span>
+              </div>
+            </a>`;
+        });
+        coursesHTML += '</div>';
+      }
+    }
+
+    main.innerHTML = `
+      <div class="page-header">
+        <h1>Olá, ${displayName.split(' ')[0]} 👋</h1>
+        <p>Continue sua formação ministerial</p>
+      </div>
+
+      <div class="quick-actions">
+        <a href="/biblioteca.html" class="quick-action">📚 Explorar Cursos</a>
+        <a href="/scriba.html" class="quick-action">📝 Scriba</a>
+        <a href="/centelhaz.html" class="quick-action">🔥 Centelhaz</a>
+        ${role === 'admin' ? '<a href="/admin/index.html" class="quick-action">⚙️ Admin</a>' : ''}
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📚</div>
+          <div class="stat-num">${activeCourses.length + completedCourses.length}</div>
+          <div class="stat-label">Cursos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-num gold">${completedLessons}</div>
+          <div class="stat-label">Aulas concluídas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-num">${completedCourses.length}</div>
+          <div class="stat-label">Certificados</div>
+        </div>
+      </div>
+
+      ${coursesHTML}
+    `;
+  }
+
+  // Init
+  loadDashboard();
+</script>
+
+</body>
+</html>

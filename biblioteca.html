@@ -1,327 +1,468 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	<title>Instituto Lumethos — Formação em Capelania Cristã</title>
-	<link rel="icon" type="image/x-icon" href="img/favicon.ico">
-	<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-	<link media="all" rel="stylesheet" href="css/main.f4f2f5ba.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca de Cursos · Instituto Lumethos</title>
+  <meta name="description" content="Formação ministerial com certificação MIRC. Capelania, Teologia, Pastoral, Diaconia e mais.">
+  <link rel="icon" href="favicon.ico">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
 
+    :root {
+      --bg-primary: #0D1B2A;
+      --bg-secondary: #152238;
+      --bg-card: #1a2d45;
+      --gold: #C79A2E;
+      --gold-light: #e0b84c;
+      --white: #ffffff;
+      --text-secondary: rgba(255,255,255,0.7);
+      --radius: 12px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--white);
+      min-height: 100vh;
+      padding-top: 48px;
+      overflow-x: hidden;
+    }
+
+    /* ── Navbar ── */
+    .nav-top {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: 48px;
+      background: rgba(13,27,42,0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(199,154,46,0.15);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px;
+    }
+    .nav-top a { color: var(--white); text-decoration: none; }
+    .nav-top .nav-logo {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 14px; color: var(--gold);
+      letter-spacing: 0.5px;
+    }
+    .nav-top .nav-links { display: flex; gap: 16px; align-items: center; }
+    .nav-top .nav-links a {
+      font-size: 13px; color: var(--text-secondary);
+      transition: color var(--transition);
+    }
+    .nav-top .nav-links a:hover { color: var(--gold); }
+    .nav-btn {
+      background: var(--gold); color: var(--bg-primary) !important;
+      padding: 6px 16px; border-radius: 20px;
+      font-weight: 600 !important; font-size: 12px !important;
+      transition: all var(--transition);
+    }
+    .nav-btn:hover { background: var(--gold-light) !important; }
+
+    /* ── Hero Section ── */
+    .hero {
+      position: relative;
+      padding: 60px 24px 48px;
+      text-align: center;
+      background: linear-gradient(135deg, #0D1B2A 0%, #152238 50%, #1a2d45 100%);
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(199,154,46,0.08) 0%, transparent 70%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+    .hero-content h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: clamp(32px, 6vw, 56px);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .hero-content h1 .gold { color: var(--gold); }
+    .hero-content p {
+      font-size: 16px; color: var(--text-secondary);
+      line-height: 1.6; margin-bottom: 28px;
+      max-width: 500px; margin-left: auto; margin-right: auto;
+    }
+    .search-box {
+      display: flex; align-items: center; gap: 0;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 50px;
+      padding: 4px 4px 4px 20px;
+      max-width: 480px; margin: 0 auto;
+      transition: border-color var(--transition);
+    }
+    .search-box:focus-within { border-color: var(--gold); }
+    .search-box input {
+      flex: 1; background: none; border: none; outline: none;
+      color: var(--white); font-size: 15px; padding: 10px 0;
+      font-family: 'Inter', sans-serif;
+    }
+    .search-box input::placeholder { color: rgba(255,255,255,0.35); }
+    .search-box button {
+      background: var(--gold); border: none; border-radius: 50px;
+      padding: 10px 24px; color: var(--bg-primary);
+      font-weight: 600; font-size: 14px; cursor: pointer;
+      transition: background var(--transition);
+    }
+    .search-box button:hover { background: var(--gold-light); }
+    .hero-stats {
+      display: flex; gap: 32px; justify-content: center;
+      margin-top: 28px; flex-wrap: wrap;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat .num { font-size: 24px; font-weight: 700; color: var(--gold); }
+    .hero-stat .label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+    /* ── Main Content ── */
+    .main-content { padding: 0 24px 60px; max-width: 1280px; margin: 0 auto; }
+    .category-section { margin-bottom: 48px; }
+    .category-header {
+      display: flex; align-items: baseline; gap: 12px;
+      margin-bottom: 16px;
+    }
+    .category-header h2 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 22px; font-weight: 600;
+    }
+    .category-header .cat-count {
+      font-size: 13px; color: var(--text-secondary);
+    }
+    .category-header .cat-divider {
+      flex: 1; height: 1px;
+      background: rgba(255,255,255,0.06);
+      margin-left: 12px;
+    }
+
+    /* ── Course Row (horizontal scroll) ── */
+    .course-row {
+      display: flex; gap: 16px;
+      overflow-x: auto; scroll-behavior: smooth;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+    }
+    .course-row::-webkit-scrollbar { height: 6px; }
+    .course-row::-webkit-scrollbar-track { background: transparent; }
+    .course-row::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1); border-radius: 3px;
+    }
+
+    /* ── Course Card ── */
+    .course-card {
+      flex: 0 0 280px;
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all var(--transition);
+      border: 1px solid rgba(255,255,255,0.04);
+      text-decoration: none; color: var(--white); display: block;
+    }
+    .course-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(199,154,46,0.3);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    }
+    .course-card .card-img {
+      width: 100%; aspect-ratio: 16/10;
+      background: var(--bg-secondary);
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .course-card .card-img svg { width: 64px; height: 64px; opacity: 0.6; }
+    .course-card .card-img .card-hours {
+      position: absolute; bottom: 8px; right: 8px;
+      background: rgba(0,0,0,0.7); color: var(--gold);
+      font-size: 11px; font-weight: 600; padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .course-card .card-body { padding: 14px 16px 16px; }
+    .course-card .card-body h3 {
+      font-size: 15px; font-weight: 600; margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .course-card .card-body p {
+      font-size: 13px; color: var(--text-secondary);
+      line-height: 1.4; margin-bottom: 12px;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .course-card .card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .course-card .card-price {
+      font-weight: 700; font-size: 16px; color: var(--gold);
+    }
+    .course-card .card-price.free { color: #4ade80; }
+    .course-card .card-tag {
+      font-size: 11px; padding: 3px 8px; border-radius: 12px;
+      background: rgba(199,154,46,0.12); color: var(--gold);
+      font-weight: 500;
+    }
+
+    /* ── Grid Fallback ── */
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .course-grid .course-card { flex: none; }
+
+    /* ── No Results ── */
+    .no-results {
+      text-align: center; padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+    .no-results .icon { font-size: 48px; margin-bottom: 12px; }
+    .no-results h3 { font-size: 18px; margin-bottom: 6px; color: var(--white); }
+
+    /* ── Loading ── */
+    .loading-skeleton {
+      display: flex; gap: 16px; overflow: hidden;
+    }
+    .skeleton-card {
+      flex: 0 0 280px; height: 280px;
+      background: var(--bg-card); border-radius: var(--radius);
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.7; }
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 768px) {
+      .hero { padding: 40px 16px 32px; }
+      .hero-content h1 { font-size: 28px; }
+      .hero-stats { gap: 20px; }
+      .main-content { padding: 0 12px 40px; }
+      .category-header h2 { font-size: 18px; }
+      .course-card { flex: 0 0 240px; }
+      .course-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+      .nav-top .nav-links a:not(.nav-btn) { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .course-row { gap: 12px; }
+      .course-card { flex: 0 0 200px; }
+      .course-grid { grid-template-columns: 1fr; gap: 12px; }
+      .search-box { padding-left: 14px; }
+      .search-box button { padding: 10px 16px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="nav-top">
+  <a href="/" class="nav-logo">INSTITUTO LUMETHOS</a>
+  <div class="nav-links">
+    <a href="/">Início</a>
+    <a href="/biblioteca.html" style="color:var(--gold)">Cursos</a>
+    <a href="/verificacao.html">Verificar MIRC</a>
+    <a href="/login.html" class="nav-btn">Entrar</a>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Sua <span class="gold">jornada ministerial</span> começa aqui</h1>
+    <p>Cursos completos com certificação MIRC. Estude no seu ritmo, de onde estiver.</p>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Buscar cursos...">
+      <button onclick="filterCourses()">Buscar</button>
+    </div>
+    <div class="hero-stats" id="heroStats">
+      <div class="hero-stat"><div class="num">...</div><div class="label">Cursos</div></div>
+      <div class="hero-stat"><div class="num">...</div><div class="label">Horas de conteúdo</div></div>
+      <div class="hero-stat"><div class="num">...</div><div class="label">Alunos</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Main ── -->
+<div class="main-content">
+  <div id="coursesContainer">
+    <!-- Loading skeleton -->
+    <div class="loading-skeleton" id="loadingSkeleton">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+    <div id="noResults" class="no-results" style="display:none">
+      <div class="icon">🔍</div>
+      <h3>Nenhum curso encontrado</h3>
+      <p>Tente outros termos de busca</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── Supabase SDK ── -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
-// Forçar header escuro permanentemente - desativa troca de classes do tema
-(function() {
-  // Observer que mantém as classes corretas no header
-  const observer = new MutationObserver(function(mutations) {
-    const header = document.querySelector('header');
-    if (!header) return;
-    
-    // Sempre manter header--secondary, remover header--primary se aparecer
-    if (header.classList.contains('header--primary')) {
-      header.classList.remove('header--primary');
+  // Config
+  const SUPABASE_URL = "https://xplqghmhslfpyyqhwvkp.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_sQPtweum0Qbml5zK3vd4Yg_tbdnxJ-o";
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // SVG icons per course category/theme
+  const courseIcons = {
+    'capelania-crista': `<svg viewBox="0 0 48 48" fill="none"><path d="M24 4L6 14v10c0 11.05 7.68 21.37 18 24 10.32-2.63 18-12.95 18-24V14L24 4z" stroke="#C79A2E" stroke-width="2" fill="none"/><path d="M16 24l6 6 10-10" stroke="#C79A2E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    'teologia': `<svg viewBox="0 0 48 48" fill="none"><path d="M8 8h32v32H8z" stroke="#C79A2E" stroke-width="2" fill="none"/><path d="M16 16h16M16 24h16M16 32h8" stroke="#C79A2E" stroke-width="2" stroke-linecap="round"/></svg>`,
+    'ministerio-pastoral': `<svg viewBox="0 0 48 48" fill="none"><path d="M24 6l-8 10h16L24 6z" stroke="#C79A2E" stroke-width="2" fill="none"/><rect x="14" y="16" width="20" height="26" rx="2" stroke="#C79A2E" stroke-width="2" fill="none"/><path d="M18 42V32h12v10" stroke="#C79A2E" stroke-width="2"/></svg>`,
+    'diaconia': `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="18" r="8" stroke="#C79A2E" stroke-width="2" fill="none"/><path d="M14 34c0-5.5 4.5-10 10-10s10 4.5 10 10" stroke="#C79A2E" stroke-width="2" stroke-linecap="round"/><path d="M10 44h28" stroke="#C79A2E" stroke-width="2"/></svg>`,
+    'musica-louvor': `<svg viewBox="0 0 48 48" fill="none"><path d="M18 36V14l16-4v22" stroke="#C79A2E" stroke-width="2"/><circle cx="14" cy="36" r="4" stroke="#C79A2E" stroke-width="2" fill="none"/><circle cx="30" cy="32" r="4" stroke="#C79A2E" stroke-width="2" fill="none"/></svg>`,
+    'jovens': `<svg viewBox="0 0 48 48" fill="none"><circle cx="18" cy="16" r="6" stroke="#C79A2E" stroke-width="2" fill="none"/><circle cx="32" cy="14" r="4" stroke="#C79A2E" stroke-width="2" fill="none"/><path d="M8 34c0-5.5 4.5-10 10-10s10 4.5 10 10M22 30c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#C79A2E" stroke-width="2"/></svg>`,
+    'infantil': `<svg viewBox="0 0 48 48" fill="none"><path d="M24 8l4 8 9 1-7 6 2 9-8-4-8 4 2-9-7-6 9-1 4-8z" stroke="#C79A2E" stroke-width="2" fill="none"/></svg>`,
+    default: `<svg viewBox="0 0 48 48" fill="none"><path d="M6 8h36v32H6z" stroke="#C79A2E" stroke-width="2" fill="none"/><circle cx="24" cy="22" r="4" stroke="#C79A2E" stroke-width="2" fill="none"/><path d="M16 36c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="#C79A2E" stroke-width="2"/></svg>`
+  };
+
+  function getIcon(slug) {
+    return courseIcons[slug] || courseIcons.default;
+  }
+
+  function formatPrice(cents) {
+    if (!cents || cents === 0) return 'Grátis';
+    return 'R$ ' + (cents / 100).toFixed(2).replace('.', ',');
+  }
+
+  function formatHours(h) {
+    return h ? h + 'h' : '';
+  }
+
+  // Map Supabase slugs to actual page URLs
+  const slugToUrl = {
+    'capelania-crista': '/cursos/capelania.html',
+    'teologia': '/cursos/teologia.html',
+    'ministerio-pastoral': '/cursos/pastoral.html',
+    'diaconia': '/cursos/diaconal.html',
+    'musica-louvor': '/cursos/hinologia.html',
+    'jovens': '/cursos/jovens.html',
+    'infantil': '/cursos/infantil.html'
+  };
+
+  function getCourseUrl(course) {
+    return slugToUrl[course.slug] || '/cursos/' + (course.slug || course.id) + '.html';
+  }
+
+  let allCourses = [];
+
+  async function loadCourses() {
+    try {
+      const { data, error } = await supabase
+        .from('courses')
+        .select('id,title,slug,subtitle,description,image,color,hours,price_cents,active')
+        .eq('active', true)
+        .order('title');
+
+      if (error) throw error;
+      allCourses = data || [];
+      renderCourses(allCourses);
+    } catch (err) {
+      console.error('Erro ao carregar cursos:', err);
+      document.getElementById('loadingSkeleton').style.display = 'none';
+      document.getElementById('noResults').style.display = 'block';
+      document.getElementById('noResults').querySelector('h3').textContent = 'Erro ao carregar';
+      document.getElementById('noResults').querySelector('p').textContent = 'Tente recarregar a página';
     }
-    if (!header.classList.contains('header--secondary')) {
-      header.classList.add('header--secondary');
+  }
+
+  function renderCourses(courses) {
+    const container = document.getElementById('coursesContainer');
+    document.getElementById('loadingSkeleton').style.display = 'none';
+
+    if (!courses.length) {
+      document.getElementById('noResults').style.display = 'block';
+      container.querySelector('.category-section')?.remove();
+      return;
     }
-    
-    // Forçar estilos inline de fundo escuro
-    header.style.backgroundColor = '';
-    header.style.background = '';
-    
-    // Forçar logo light visível
-    document.querySelectorAll('.header-inner__logo--light').forEach(el => {
-      el.style.opacity = '1';
-      el.style.display = 'block';
-    });
-    document.querySelectorAll('.header-inner__logo--dark').forEach(el => {
-      el.style.opacity = '0';
-      el.style.display = 'none';
-    });
-    
-    // Links da navbar sempre brancos
-    document.querySelectorAll('.menu__link').forEach(el => {
-      el.style.color = '#fff';
-    });
-  });
-  
-  // Observar o header e o body para mudanças de classe
-  observer.observe(document.documentElement, { 
-    attributes: true, 
-    attributeFilter: ['class'],
-    subtree: true
-  });
-  
-  // Também observar especificamente o header
-  const headerObserver = new MutationObserver(function() {
-    const header = document.querySelector('header');
-    if (header) {
-      header.style.backgroundColor = '';
-      header.style.background = '';
-    }
-  });
-  
-  if (document.querySelector('header')) {
-    headerObserver.observe(document.querySelector('header'), {
-      attributes: true,
-      attributeFilter: ['class', 'style']
+
+    document.getElementById('noResults').style.display = 'none';
+
+    // Update hero stats
+    const totalHours = courses.reduce((sum, c) => sum + (c.hours || 0), 0);
+    document.querySelectorAll('.hero-stat .num')[0].textContent = courses.length;
+    document.querySelectorAll('.hero-stat .num')[1].textContent = totalHours + '+';
+    document.querySelectorAll('.hero-stat .num')[2].textContent = '200+';
+
+    // Build categories
+    const newContent = document.createElement('div');
+
+    // Featured section (all courses in one row)
+    newContent.innerHTML = `
+      <div class="category-section">
+        <div class="category-header">
+          <h2>Todos os Cursos</h2>
+          <span class="cat-count">${courses.length} cursos</span>
+          <span class="cat-divider"></span>
+        </div>
+        <div class="course-grid" id="coursesGrid"></div>
+      </div>
+    `;
+
+    // Remove old sections, add new
+    const oldSections = container.querySelectorAll('.category-section');
+    oldSections.forEach(s => s.remove());
+    container.appendChild(newContent);
+
+    const grid = document.getElementById('coursesGrid');
+
+    courses.forEach(course => {
+      const price = formatPrice(course.price_cents);
+      const isFree = !course.price_cents || course.price_cents === 0;
+      const href = getCourseUrl(course);
+
+      const card = document.createElement('a');
+      card.href = href;
+      card.className = 'course-card';
+      card.innerHTML = `
+        <div class="card-img" style="background:${course.color || '#152238'}">
+          ${getIcon(course.slug)}
+          ${course.hours ? `<span class="card-hours">${formatHours(course.hours)}</span>` : ''}
+        </div>
+        <div class="card-body">
+          <h3>${course.title}</h3>
+          <p>${course.description || course.subtitle || 'Curso completo com certificação'}</p>
+          <div class="card-footer">
+            <span class="card-price ${isFree ? 'free' : ''}">${price}</span>
+            <span class="card-tag">Saiba mais →</span>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
     });
   }
-  
-  // Fechar nav-drop ao clicar em qualquer link do menu
-  document.addEventListener('click', function(e) {
-    const link = e.target.closest('.menu__link, .nav-drop a');
-    if (link) {
-      document.body.classList.remove('nav-active');
-      const header = document.querySelector('header');
-      if (header && header.classList.contains('header--primary')) {
-        header.classList.remove('header--primary');
-      }
-      if (header && !header.classList.contains('header--secondary')) {
-        header.classList.add('header--secondary');
-      }
+
+  function filterCourses() {
+    const query = document.getElementById('searchInput').value.toLowerCase().trim();
+    if (!query) {
+      renderCourses(allCourses);
+      return;
     }
+    const filtered = allCourses.filter(c =>
+      c.title.toLowerCase().includes(query) ||
+      (c.description && c.description.toLowerCase().includes(query)) ||
+      (c.subtitle && c.subtitle.toLowerCase().includes(query))
+    );
+    renderCourses(filtered);
+  }
+
+  // Search on Enter
+  document.getElementById('searchInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') filterCourses();
   });
-  
-  // Rodar após carregamento completo
-  window.addEventListener('load', function() {
-    const header = document.querySelector('header');
-    if (header) {
-      // Garantir que header é header--secondary
-      if (header.classList.contains('header--primary')) {
-        header.classList.remove('header--primary');
-      }
-      if (!header.classList.contains('header--secondary')) {
-        header.classList.add('header--secondary');
-      }
-      header.style.backgroundColor = '';
-      header.style.background = '';
-    }
-    
-    // Garantir links brancos
-    document.querySelectorAll('.menu__link').forEach(el => {
-      el.style.color = '#fff';
-    });
-    
-    // Logo light visível
-    document.querySelectorAll('.header-inner__logo--light').forEach(el => {
-      el.style.opacity = '1';
-      el.style.display = 'block';
-    });
-  });
-})();
+
+  // Load on mount
+  loadCourses();
 </script>
-<style>.bib-card{background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:25px 30px;border-radius:8px;border-left:3px solid #C79A2E;transition:border-color 0.3s;margin-bottom:15px}.bib-card:hover{border-color:#fff}</style>
-<style>.nav-top{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(13,27,42,0.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;align-items:center;padding:8px 20px;gap:12px;border-bottom:1px solid rgba(199,154,46,0.1)}.nav-top a{display:inline-flex;align-items:center;gap:5px;text-decoration:none;font-size:12px;font-weight:500;color:rgba(255,255,255,0.7);padding:5px 12px;border-radius:8px;transition:all 0.15s}.nav-top a:hover{background:rgba(255,255,255,0.1);color:#C79A2E}.nav-top a svg{width:16px;height:16px;fill:currentColor}.nav-top .spacer{flex:1}.nav-top .logo-mini{height:20px;opacity:0.35}body{padding-top:44px}</style>
-</head></head>
-<body>
-  <div class="nav-top"><a href="javascript:history.back()" title="Voltar"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg> Voltar</a><a href="/" title="Página Inicial"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> Início</a><span class="spacer"></span><img class="logo-mini" src="img/logo-lumethos-correto.png" alt="Lumethos"></div>
-<div class="wrapper wrapper--offset-0">
-<header class="header header--secondary">
-			<div class="container">
-				<div class="header-under">
-					<div class="header-inner">
-						<a href="/" class="header-inner__logo">
-							<img class="header-inner__logo--light" src="img/logo-lumethos-correto.png"  alt="Instituto Lumethos">
-						</a>
-						
-						
-					</div>
-					<span class="header-divider"></span>
-					<div class="nav-drop">
-						<nav class="nav">
-							<ul class="menu">
-								<li><a class="menu__link" href="#home">Início</a></li>
-								<li><a class="menu__link" href="#capelania">Capelania</a></li>
-								<li><a class="menu__link" href="#escolas">Escolas</a></li>
-								<li><a class="menu__link" href="#biblioteca">Biblioteca</a></li>
-								<li><a class="menu__link" href="#centelhaz">Centelhaz</a></li>
-								<li><a class="menu__link" href="#studio">Studio</a></li>
-								<li><a class="menu__link" href="#sobre">Sobre</a></li>
-								<li><a class="menu__link" href="#contato">Contato</a></li>
-							</ul>
-						</nav>
-					</div>
-					<span class="nav-opener"><span></span></span>
-				</div>
-			</div>
-		</header><section class="section" style="padding-top:150px;padding-bottom:60px;background:linear-gradient(135deg,#0D1B2A 0%,#142D4C 100%)">
-				<div class="container">
-					<div class="section-headline text--center">
-						<h4 class="sub-title" style="color:#C79A2E">Acervo Ministerial</h4>
-						<h1 class="headline" style="font-size:38px;color:#fff">Biblioteca do Capelão</h1>
-						<p style="color:rgba(255,255,255,0.7);max-width:650px;margin:20px auto 0">Recursos práticos para utilização imediata no ministério. Um dos maiores diferenciais do Instituto Lumethos.</p>
-					</div>
-				</div>
-			</section>
-
-			<section class="section" style="border-top:1px solid rgba(199,154,46,0.1)">
-				<div class="container">
-					<div class="section-headline text--center">
-						<h4 class="sub-title" style="color:#C79A2E">Seção 1</h4>
-						<h3 class="headline">Manuais</h3>
-					</div>
-					<div style="max-width:700px;margin:30px auto 0">
-						<div class="bib-card"><strong style="color:#C79A2E">Manual de Capelania Hospitalar</strong></div>
-						<div class="bib-card"><strong style="color:#C79A2E">Manual de Capelania Escolar</strong></div>
-						<div class="bib-card"><strong style="color:#C79A2E">Manual de Capelania Prisional</strong></div>
-						<div class="bib-card"><strong style="color:#C79A2E">Manual de Capelania Empresarial</strong></div>
-						<div class="bib-card"><strong style="color:#C79A2E">Manual de Visitação Cristã</strong></div>
-					</div>
-				</div>
-			</section>
-
-			<section class="section" style="border-top:1px solid rgba(199,154,46,0.1)">
-				<div class="container">
-					<div class="section-headline text--center">
-						<h4 class="sub-title" style="color:#C79A2E">Seção 2</h4>
-						<h3 class="headline">Formulários</h3>
-					</div>
-					<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:30px">
-						<div class="bib-card" style="margin:0"><strong style="color:#C79A2E">Ficha de Atendimento</strong></div>
-						<div class="bib-card" style="margin:0"><strong style="color:#C79A2E">Ficha de Visitação</strong></div>
-						<div class="bib-card" style="margin:0"><strong style="color:#C79A2E">Registro de Acompanhamento</strong></div>
-						<div class="bib-card" style="margin:0"><strong style="color:#C79A2E">Relatório Ministerial</strong></div>
-					</div>
-				</div>
-			</section>
-
-			<section class="section" style="border-top:1px solid rgba(199,154,46,0.1)">
-				<div class="container">
-					<div class="section-headline text--center">
-						<h4 class="sub-title" style="color:#C79A2E">Seção 3</h4>
-						<h3 class="headline">Devocionais</h3>
-					</div>
-					<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:30px">
-						<div class="bib-card" style="margin:0;text-align:center;border-left:none;border-bottom:3px solid #C79A2E">Devocional<br>de Luto</div>
-						<div class="bib-card" style="margin:0;text-align:center;border-left:none;border-bottom:3px solid #C79A2E">Devocional<br>de Enfermidades</div>
-						<div class="bib-card" style="margin:0;text-align:center;border-left:none;border-bottom:3px solid #C79A2E">Devocional<br>de Ansiedade</div>
-						<div class="bib-card" style="margin:0;text-align:center;border-left:none;border-bottom:3px solid #C79A2E">Devocional<br>de Esperança</div>
-						<div class="bib-card" style="margin:0;text-align:center;border-left:none;border-bottom:3px solid #C79A2E">Devocional<br>de Consolo</div>
-					</div>
-				</div>
-			</section>
-
-			<section class="section" style="border-top:1px solid rgba(199,154,46,0.1)">
-				<div class="container">
-					<div class="section-headline text--center">
-						<h4 class="sub-title" style="color:#C79A2E">Seção 4</h4>
-						<h3 class="headline">Recursos Bíblicos</h3>
-					</div>
-					<div style="max-width:700px;margin:30px auto 0">
-						<ul style="list-style:none;padding:0">
-							<li class="bib-card"><strong style="color:#C79A2E">✓ </strong>Guia de Estudos Bíblicos</li>
-							<li class="bib-card"><strong style="color:#C79A2E">✓ </strong>Planos de Leitura Bíblica</li>
-							<li class="bib-card"><strong style="color:#C79A2E">✓ </strong>Concordância Bíblica Temática</li>
-							<li class="bib-card"><strong style="color:#C79A2E">✓ </strong>Mapas e Linhas do Tempo</li>
-							<li class="bib-card"><strong style="color:#C79A2E">✓ </strong>Dicionário de Termos Teológicos</li>
-						</ul>
-					</div>
-				</div>
-			</section><div class="btn-holder text--center" style="margin-top:20px;margin-bottom:40px"><a href="/" class="btn btn--outline">Voltar ao Início</a></div></div>
-<footer class="footer">
-			<div class="container">
-				<div class="footer-upper">
-					<div class="footer-upper__col col--4">
-						<div class="footer-selo">
-							<img src="img/logo-selo.webp" alt="Selo Lumethos">
-						</div>
-					</div>
-					<div class="footer-upper__col col--2">
-						<h4 class="footer-upper__title">Links Rápidos</h4>
-						<ul class="footer-list">
-							<li><a href="#home" class="footer-list__link">Início</a></li>
-							<li><a href="#cursos" class="footer-list__link">Serviços</a></li>
-							<li><a href="#home" class="footer-list__link">Sobre Nós</a></li>
-							<li><a href="#cursos" class="footer-list__link">Cursos</a></li>
-							<li><a href="#home" class="footer-list__link">Notícias</a></li>
-							<li><a href="#home" class="footer-list__link">Páginas</a></li>
-							<li><a href="#contato" class="footer-list__link">Contato</a></li>
-						</ul>
-					</div>
-					<div class="footer-upper__col col--2">
-						<h4 class="footer-upper__title">Conteúdo</h4>
-						<ul class="footer-list">
-							<li><a href="#home" class="footer-list__link">Notícias</a></li>
-							<li><a href="#cursos" class="footer-list__link">Eventos</a></li>
-							<li><a href="#contato" class="footer-list__link">Comunicados</a></li>
-							<li><a href="#cursos" class="footer-list__link">Webinars</a></li>
-							<li><a href="#home" class="footer-list__link">Artigos</a></li>
-							<li><a href="#contato" class="footer-list__link">Newsletter</a></li>
-							<li><a href="#home" class="footer-list__link">Publicações</a></li>
-						</ul>
-					</div>
-					<div class="footer-upper__col col--2">
-						<h4 class="footer-upper__title">Áreas</h4>
-						<ul class="footer-list">
-							<li><a href="#capelania" class="footer-list__link">Capelania</a></li>
-							<li><a href="#capelania" class="footer-list__link">Capelania</a></li>
-							<li><a href="#biblioteca" class="footer-list__link">Biblioteca</a></li>
-							<li><a href="#credenciais" class="footer-list__link">Credenciais</a></li>
-							<li><a href="#cursos" class="footer-list__link">Escola Bíblica</a></li>
-							<li><a href="#cursos" class="footer-list__link">História da Igreja</a></li>
-							<li><a href="#cursos" class="footer-list__link">Missões</a></li>
-							<li><a href="#studio" class="footer-list__link">Studio</a></li>
-						</ul>
-					</div>
-					<div class="footer-upper__col col--2">
-						<h4 class="footer-upper__title">Programas</h4>
-						<ul class="footer-list">
-							<li><a href="#capelania" class="footer-list__link">Capelania</a></li>
-							<li><a href="#biblioteca" class="footer-list__link">Biblioteca</a></li>
-							<li><a href="#centelhaz" class="footer-list__link">Centelhaz</a></li>
-							<li><a href="#credenciais" class="footer-list__link">Credenciais</a></li>
-							<li><a href="#cursos" class="footer-list__link">Escola Bíblica</a></li>
-							<li><a href="#escolas" class="footer-list__link">Escolas</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="footer-contact">
-					<div class="footer-contact__item">
-						<ul class="info-list">
-							<li class="info-list__item">
-								<span class="info-list__text">Sede</span>
-								<a class="info-list__link" href="https://maps.google.com/?q=São+Paulo+SP" target="_blank">São Paulo, SP, Brasil</a>
-							</li>
-							<li class="info-list__item">
-								<span class="info-list__text">E-mail</span>
-								<a class="info-list__link" href="mailto:instituto.lumethos@gmail.com">instituto.lumethos@gmail.com</a>
-							</li>
-							<li class="info-list__item">
-								<span class="info-list__text">Telefone</span>
-								<a class="info-list__link" href="tel:13105001234">(11) 99999-9999</a>
-							</li>
-						</ul>
-					</div>
-					<div class="footer-contact__item">
-						
-						<a href="#cursos" class="btn btn--white">
-							Quero me Matricular
-							<svg class="icon" width="21" height="12" viewBox="0 0 21 12">
-								<path fill-rule="evenodd" clip-rule="evenodd" d="M15 6.75L0 6.75L0 5.25L15 5.25V6.75Z"/>
-								<path d="M21 5.99986L14.25 11.196L14.25 0.803711L21 5.99986Z"/>
-							</svg>
-						</a>
-					</div>
-				</div>
-				<div class="footer-under">
-					<ul class="footer-list footer-list--row">
-						<li><a href="#home" class="footer-list__link">Termos e Condições</a></li>
-						<li><a href="#home" class="footer-list__link">Política de Privacidade</a></li>
-						<li><a href="#contato" class="footer-list__link" style="font-weight:700;color:#C79A2E">Fale Conosco</a></li>
-						<li>&copy; 2026 Instituto Lumethos &mdash; SAPIENTIA AD MINISTERIUM. Todos os direitos reservados.</li>
-					</ul>
-				</div>
-			</div>
-			<div class="bg-stretch">
-				<img src="img/image-2.jpg" alt="Instituto Lumethos">
-			</div>
-		</footer>
-<script src="js/all.js"></script>
 
 </body>
 </html>

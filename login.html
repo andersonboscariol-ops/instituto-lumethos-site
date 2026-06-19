@@ -1,438 +1,352 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Área do Aluno — Instituto Lumethos</title>
-  <meta name="description" content="Acesse sua área do aluno no Instituto Lumethos. Cursos, certificados, biblioteca e mais.">
-  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar · Instituto Lumethos</title>
+  <meta name="description" content="Acesse sua área do aluno no Instituto Lumethos">
+  <link rel="icon" href="favicon.ico">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #0D1B2A 0%, #142D4C 50%, #1a2a4a 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      padding-top: 64px;
-    }
-    .nav-top {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      background: rgba(13,27,42,0.7);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      padding: 10px 20px;
-      gap: 12px;
-    }
-    .nav-top a {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 500;
-      color: rgba(255,255,255,0.7);
-      padding: 6px 12px;
-      border-radius: 8px;
-      transition: all 0.15s;
-    }
-    .nav-top a:hover { background: rgba(255,255,255,0.1); color: #C79A2E; }
-    .nav-top a svg {
-      width: 18px; height: 18px;
-      fill: currentColor;
-    }
-    .nav-top .spacer { flex: 1; }
-    .nav-top .logo-mini { height: 22px; opacity: 0.4; }
-    .login-wrapper {
-      display: flex;
-      max-width: 960px;
-      width: 100%;
-      min-height: 560px;
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      background: #fff;
-    }
-    .login-left {
-      flex: 1;
-      background: linear-gradient(135deg, #0D1B2A 0%, #142D4C 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 40px;
-      color: #fff;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .login-left::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 30% 50%, rgba(199,154,46,0.06) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .login-left .badge {
-      display: inline-block;
-      background: rgba(199,154,46,0.15);
-      color: #C79A2E;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2.5px;
-      padding: 6px 16px;
-      border-radius: 20px;
-      margin-bottom: 24px;
-    }
-    .login-left img {
-      max-width: 180px;
-      margin-bottom: 24px;
-      filter: brightness(1.1);
-    }
-    .login-left h1 {
-      font-family: 'Libre Baskerville', serif;
-      font-size: 22px;
-      margin-bottom: 10px;
-      line-height: 1.3;
-    }
-    .login-left p {
-      color: rgba(255,255,255,0.5);
-      font-size: 13px;
-      line-height: 1.7;
-      max-width: 260px;
-    }
-    .login-right {
-      flex: 1;
-      padding: 60px 50px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      background: #fff;
-    }
-    .login-right h2 {
-      font-family: 'Libre Baskerville', serif;
-      color: #1a1a2e;
-      font-size: 26px;
-      margin-bottom: 4px;
-    }
-    .login-right .sub {
-      color: #8888aa;
-      font-size: 14px;
-      margin-bottom: 30px;
-    }
-    .form-group {
-      margin-bottom: 18px;
-    }
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: #1a1a2e;
-      margin-bottom: 6px;
-    }
-    .form-group input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 1.5px solid #e0e0e0;
-      border-radius: 10px;
-      font-size: 14px;
-      font-family: 'Roboto', sans-serif;
-      transition: all 0.25s;
-      background: #f8f9fa;
-      color: #1a1a2e;
-    }
-    .form-group input:focus {
-      outline: none;
-      border-color: #C79A2E;
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(199,154,46,0.1);
-    }
-    .form-group input.input-error {
-      border-color: #dc2626;
-      background: #fef2f2;
-    }
-    .form-options {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 22px;
-      font-size: 13px;
-    }
-    .form-options label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: #4a4a6a;
-      cursor: pointer;
-    }
-    .form-options label input { width: auto; accent-color: #C79A2E; }
-    .form-options a { color: #C79A2E; text-decoration: none; font-weight: 500; }
-    .form-options a:hover { text-decoration: underline; }
-    .btn-login {
-      width: 100%;
-      padding: 14px;
-      background: #C79A2E;
-      color: #0D1B2A;
-      border: none;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-family: 'Roboto', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .btn-login:hover:not(:disabled) {
-      background: #d4aa3a;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(199,154,46,0.3);
-    }
-    .btn-login:disabled { opacity: 0.7; cursor: not-allowed; }
-    .btn-login .spinner {
-      display: none;
-      width: 18px; height: 18px;
-      border: 2px solid rgba(13,27,42,0.3);
-      border-top-color: #0D1B2A;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-    }
-    .btn-login.loading .spinner { display: inline-block; }
-    .btn-login.loading .btn-text { display: none; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .login-error {
-      display: none;
-      background: #fef2f2;
-      color: #b91c1c;
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-size: 13px;
-      margin-top: 16px;
-      text-align: center;
-      border: 1px solid #fecaca;
-    }
-    .login-error.show { display: block; }
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin: 24px 0;
-      color: #ccc;
-      font-size: 12px;
-    }
-    .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #e8e8e8;
-    }
-    .login-footer {
-      text-align: center;
-      margin-top: 22px;
-      font-size: 13px;
-      color: #8888aa;
-    }
-    .login-footer a { color: #C79A2E; text-decoration: none; font-weight: 600; }
-    .login-footer a:hover { text-decoration: underline; }
-    @media (max-width: 768px) {
-      .login-wrapper { flex-direction: column; min-height: auto; border-radius: 16px; }
-      .login-left { padding: 40px 30px; }
-      .login-left img { max-width: 140px; }
-      .login-left h1 { font-size: 18px; }
-      .login-right { padding: 36px 28px; }
-      .login-right h2 { font-size: 22px; }
-    }
-  
-        /* === PADRAO ICONES MONOCROMATICOS LUMETHOS === */
-        .icon-svg { display: inline-flex; vertical-align: middle; align-items: center; justify-content: center; }
-        .icon-svg svg { display: block; width: 22px; height: 22px; }
-        .icon-svg svg path, .icon-svg svg circle, .icon-svg svg rect { fill: currentColor; transition: fill 0.3s ease; }
-        .icon-mono { filter: grayscale(100%); transition: filter 0.3s ease; }
-        .icon-mono:hover { filter: grayscale(0%); }
-        /* ============================================= */
-</style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
 
+    :root{
+      --bg-primary:#0D1B2A;
+      --bg-secondary:#152238;
+      --gold:#C79A2E;
+      --gold-light:#e0b84c;
+      --white:#fff;
+      --text-secondary:rgba(255,255,255,.7);
+      --danger:#ef4444;
+      --success:#22c55e;
+    }
+
+    body{
+      font-family:'Inter',sans-serif;
+      background:var(--bg-primary);
+      color:var(--white);
+      min-height:100vh;
+      display:flex;align-items:center;justify-content:center;
+      padding:24px;
+    }
+
+    .login-container{
+      width:100%;max-width:420px;
+    }
+
+    .login-header{
+      text-align:center;margin-bottom:32px;
+    }
+    .login-header .logo{
+      font-family:'Libre Baskerville',serif;
+      font-size:24px;color:var(--gold);
+      margin-bottom:8px;
+    }
+    .login-header p{color:var(--text-secondary);font-size:14px;}
+
+    .card{
+      background:var(--bg-secondary);
+      border-radius:16px;padding:32px;
+      border:1px solid rgba(255,255,255,.06);
+    }
+
+    .form-group{margin-bottom:20px;}
+    .form-group label{
+      display:block;font-size:13px;font-weight:500;
+      color:var(--text-secondary);margin-bottom:6px;
+    }
+    .form-group input{
+      width:100%;padding:12px 16px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:10px;color:var(--white);
+      font-size:15px;font-family:'Inter',sans-serif;
+      transition:border-color .2s;
+    }
+    .form-group input:focus{
+      outline:none;border-color:var(--gold);
+    }
+    .form-group input::placeholder{color:rgba(255,255,255,.25);}
+
+    .btn{
+      width:100%;padding:14px;border:none;border-radius:10px;
+      font-size:15px;font-weight:600;cursor:pointer;
+      font-family:'Inter',sans-serif;
+      transition:all .2s;
+    }
+    .btn-primary{
+      background:var(--gold);color:var(--bg-primary);
+    }
+    .btn-primary:hover{background:var(--gold-light);}
+    .btn-primary:disabled{opacity:.6;cursor:not-allowed;}
+
+    .divider{
+      display:flex;align-items:center;gap:12px;
+      margin:24px 0;color:var(--text-secondary);
+      font-size:12px;
+    }
+    .divider::before,.divider::after{
+      content:'';flex:1;height:1px;
+      background:rgba(255,255,255,.08);
+    }
+
+    .social-btn{
+      width:100%;padding:12px;border:1px solid rgba(255,255,255,.12);
+      border-radius:10px;background:transparent;color:var(--white);
+      font-size:14px;font-weight:500;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      transition:background .2s;
+      font-family:'Inter',sans-serif;
+    }
+    .social-btn:hover{background:rgba(255,255,255,.04);}
+
+    .links{
+      text-align:center;margin-top:20px;
+      font-size:13px;color:var(--text-secondary);
+    }
+    .links a{color:var(--gold);text-decoration:none;font-weight:500;}
+    .links a:hover{text-decoration:underline;}
+
+    .alert{
+      padding:12px 16px;border-radius:10px;
+      font-size:13px;margin-bottom:16px;display:none;
+    }
+    .alert-error{
+      background:rgba(239,68,68,.12);color:var(--danger);
+      border:1px solid rgba(239,68,68,.25);display:block;
+    }
+    .alert-success{
+      background:rgba(34,197,94,.12);color:var(--success);
+      border:1px solid rgba(34,197,94,.25);display:block;
+    }
+
+    .back-link{
+      display:block;text-align:center;margin-top:24px;
+      color:var(--text-secondary);text-decoration:none;
+      font-size:13px;
+    }
+    .back-link:hover{color:var(--gold);}
+
+    @media(max-width:480px){
+      .card{padding:24px 20px;}
+      .login-header .logo{font-size:20px;}
+    }
+  </style>
 </head>
 <body>
-  <div class="nav-top">
-    <a href="javascript:history.back()" title="Voltar">
-      <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-      Voltar
-    </a>
-    <a href="/" title="Página Inicial">
-      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-    </a>
-    <span class="spacer"></span>
-    <img class="logo-mini" src="img/logo-lumethos-correto.png" alt="Lumethos">
+
+<div class="login-container">
+  <div class="login-header">
+    <div class="logo">Instituto Lumethos</div>
+    <p>Entre para acessar seus cursos</p>
   </div>
-  <div class="login-wrapper">
-    <div class="login-left">
-      <span class="badge">SAPIENTIA AD MINISTERIUM</span>
-      <img src="img/logo-lumethos-correto.png" alt="Instituto Lumethos">
-      <h1>Área do Aluno</h1>
-      <p>Acesse seus cursos, certificados, biblioteca digital e ferramentas ministeriais.</p>
-    </div>
-    <div class="login-right">
-      <h2>Bem-vindo de volta</h2>
-      <p class="sub">Faça login para acessar sua conta</p>
 
-      <div id="login-error" class="login-error"></div>
+  <div class="card">
+    <div class="alert alert-error" id="errorAlert"></div>
+    <div class="alert alert-success" id="successAlert"></div>
 
+    <form id="loginForm">
       <div class="form-group">
         <label for="email">E-mail</label>
-        <input type="email" id="email" placeholder="seu@email.com" autocomplete="email" onkeydown="if(event.key==='Enter') fazerLogin()">
+        <input type="email" id="email" placeholder="seu@email.com" required autocomplete="email">
       </div>
-      <div class="form-group">
-        <label for="senha">Senha</label>
-        <input type="password" id="senha" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter') fazerLogin()">
-      </div>
-      <div class="form-options">
-        <label><input type="checkbox" id="remember"> Lembrar-me</label>
-        <a href="#" onclick="event.preventDefault(); alert('Envie um email para contato@institutolumethos.online');">Esqueci a senha</a>
-      </div>
-      <button id="btn-login" class="btn-login" onclick="fazerLogin()">
-        <span class="btn-text">Entrar</span>
-        <span class="spinner"></span>
-      </button>
 
-      <div class="login-footer" style="text-align:center;margin-top:22px;">
-        Ainda não tem conta? <a href="https://cursos.institutolumethos.online/register">Cadastre-se</a>
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <input type="password" id="password" placeholder="Sua senha" required autocomplete="current-password">
       </div>
+
+      <button type="submit" class="btn btn-primary" id="loginBtn">
+        Entrar
+      </button>
+    </form>
+
+    <div class="divider">ou continue com</div>
+
+    <button class="social-btn" onclick="loginWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 01-1.8 2.72v2.26h2.92A8.78 8.78 0 0017.64 9.2z"/><path fill="#34A853" d="M9 18c2.48 0 4.56-.82 6.08-2.22l-2.92-2.26c-.8.54-1.84.86-3.16.86-2.44 0-4.5-1.64-5.24-3.86H.84v2.34A8.96 8.96 0 009 18z"/><path fill="#FBBC05" d="M3.76 10.52A5.52 5.52 0 013.46 9c0-.54.1-1.06.3-1.52V5.14H.84A8.96 8.96 0 000 9c0 1.46.34 2.84.84 4.06l2.92-2.54z"/><path fill="#EA4335" d="M9 3.48c1.34 0 2.54.46 3.48 1.36l2.6-2.6C13.54.98 11.46 0 9 0A8.96 8.96 0 00.84 5.14l2.92 2.54C4.5 5.12 6.56 3.48 9 3.48z"/></svg>
+      Google
+    </button>
+
+    <div class="links" style="margin-top:20px;">
+      <a href="#" onclick="showForgotPassword(event)">Esqueceu a senha?</a>
     </div>
   </div>
 
-  <script>
-    async function fazerLogin() {
-      const email = document.getElementById('email').value.trim();
-      const senha = document.getElementById('senha').value;
-      const btn = document.getElementById('btn-login');
-      const errEl = document.getElementById('login-error');
-      const emailInput = document.getElementById('email');
-      const senhaInput = document.getElementById('senha');
+  <div class="links" style="margin-top:16px;">
+    Não tem conta? <a href="#" onclick="showRegister(event)">Criar conta</a>
+  </div>
 
-      errEl.classList.remove('show');
-      emailInput.classList.remove('input-error');
-      senhaInput.classList.remove('input-error');
+  <a href="/" class="back-link">← Voltar para o site</a>
+</div>
 
-      if (!email || !senha) {
-        if (!email) emailInput.classList.add('input-error');
-        if (!senha) senhaInput.classList.add('input-error');
-        errEl.textContent = 'Preencha e-mail e senha.';
-        errEl.classList.add('show');
+<!-- Supabase SDK -->
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://xplqghmhslfpyyqhwvkp.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_sQPtweum0Qbml5zK3vd4Yg_tbdnxJ-o";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const errorAlert = document.getElementById('errorAlert');
+  const successAlert = document.getElementById('successAlert');
+  const loginBtn = document.getElementById('loginBtn');
+
+  function showError(msg) {
+    errorAlert.textContent = msg;
+    errorAlert.style.display = 'block';
+    successAlert.style.display = 'none';
+  }
+
+  function showSuccess(msg) {
+    successAlert.textContent = msg;
+    successAlert.style.display = 'block';
+    errorAlert.style.display = 'none';
+  }
+
+  function hideAlerts() {
+    errorAlert.style.display = 'none';
+    successAlert.style.display = 'none';
+  }
+
+  // Check if already logged in
+  async function checkSession() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      redirectAfterLogin();
+    }
+  }
+
+  function redirectAfterLogin() {
+    const params = new URLSearchParams(location.search);
+    const redirect = params.get('redirect') || '/aluno/dashboard.html';
+    window.location.href = redirect;
+  }
+
+  // Login form
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideAlerts();
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Entrando...';
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        if (error.message.includes('Invalid login')) {
+          showError('E-mail ou senha incorretos');
+        } else if (error.message.includes('Email not confirmed')) {
+          showError('Confirme seu e-mail antes de entrar');
+        } else {
+          showError(error.message);
+        }
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Entrar';
         return;
       }
 
-      btn.classList.add('loading');
-      btn.disabled = true;
-
-      const API = 'https://cursos.institutolumethos.online';
-
-      try {
-        const res = await fetch(`${API}/api/auth/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password: senha })
-        });
-        const data = await res.json();
-
-        if (res.ok && data.token) {
-          localStorage.setItem('lumethos_token', data.token);
-          localStorage.setItem('lumethos_user', JSON.stringify(data.user));
-          window.location.href = `${API}/auth/callback?token=${data.token}`;
-        } else {
-          errEl.textContent = data.error || 'E-mail ou senha incorretos.';
-          errEl.classList.add('show');
-          senhaInput.classList.add('input-error');
-          btn.classList.remove('loading');
-          btn.disabled = false;
-        }
-      } catch(e) {
-        errEl.textContent = 'Erro de conexão. Verifique sua internet e tente novamente.';
-        errEl.classList.add('show');
-        btn.classList.remove('loading');
-        btn.disabled = false;
-      }
+      showSuccess('Login realizado! Redirecionando...');
+      setTimeout(redirectAfterLogin, 800);
+    } catch (err) {
+      showError('Erro de conexão. Tente novamente.');
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Entrar';
     }
-  </script>
-  <!-- ===== FOOTER ===== -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col footer-col--brand">
-          <div class="footer-selo-wrap">
-            <img src="img/logo-selo.webp" alt="Selo Lumethos" class="footer-selo-img">
-          </div>
-          <p class="footer-tagline"></p>
-          <div class="footer-social">
-            <a href="https://instagram.com/instituto.lumethos" target="_blank" aria-label="Instagram" class="social-ring icon-mono"><svg class="social-icon" width="14" height="14" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
-            <a href="https://youtube.com/@institutolumethos" target="_blank" aria-label="YouTube" class="social-ring icon-mono"><svg class="social-icon" width="14" height="14" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-            <a href="https://facebook.com/institutolumethos" target="_blank" aria-label="Facebook" class="social-ring icon-mono"><svg class="social-icon" width="14" height="14" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
-          </div>
-        </div>
+  });
 
-        <div class="footer-col footer-col--links">
-          <h4 class="footer-col-title">Institucional</h4>
-          <nav class="footer-nav">
-            <a href="sobre.html">Quem Somos</a>
-            <a href="cursos/capelania.html">Capelania Cristã</a>
-            <a href="contato.html">Fale Conosco</a>
-            <a href="#">Termos de Uso</a>
-          </nav>
-        </div>
+  // Google OAuth
+  async function loginWithGoogle() {
+    hideAlerts();
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Redirecionando...';
 
-        <div class="footer-col footer-col--contact">
-          <h4 class="footer-col-title">Contato</h4>
-          <ul class="footer-contact-list">
-            <li>
-              <span class="footer-contact-icon icon-mono"><svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-              <a href="mailto:instituto.lumethos@gmail.com">instituto.lumethos@gmail.com</a>
-            </li>
-            <li>
-              <span class="footer-contact-icon icon-mono"><svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3c2.5 3 4 6.5 4 9s-1.5 6-4 9c-2.5-3-4-6.5-4-9s1.5-6 4-9z" stroke="currentColor" stroke-width="2"/></svg></span>
-              <span>Ensino 100% online</span>
-            </li>
-            <li>
-              <span class="footer-contact-icon icon-mono"><svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20"><path d="M21 12a9 9 0 01-4.5 7.8 9 9 0 01-9 0A9 9 0 013 12a9 9 0 014.5-7.8 9 9 0 019 0A9 9 0 0121 12z" stroke="currentColor" stroke-width="2"/><path d="M8 9h8M8 13h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-              <a href="https://wa.me/5511999999999" target="_blank">WhatsApp</a>
-            </li>
-          </ul>
-        </div>
-      </div>
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin + '/aluno/dashboard.html',
+        queryParams: { access_type: 'offline', prompt: 'consent' }
+      }
+    });
 
-      <div class="footer-divider-gold"></div>
+    if (error) {
+      showError('Erro ao iniciar login com Google');
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Entrar';
+    }
+  }
 
-      <div class="footer-bottom">
-        <p>&copy; 2026 Instituto Lumethos &mdash; SAPIENTIA AD MINISTERIUM. Todos os direitos reservados.</p>
-      </div>
-    </div>
-  </footer>
+  // Register
+  window.showRegister = async function(e) {
+    e.preventDefault();
+    const email = prompt('Digite seu e-mail para criar uma conta:');
+    if (!email) return;
 
-  <a href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20vim%20pelo%20site%20do%20Instituto%20Lumethos" target="_blank" rel="noopener" class="whatsapp-float icon-mono" aria-label="Fale conosco">
-    <svg width="30" height="30" viewBox="0 0 24 24">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-    </svg>
-  </a>
+    hideAlerts();
+    const password = prompt('Crie uma senha (mínimo 6 caracteres):');
+    if (!password || password.length < 6) {
+      showError('A senha precisa ter no mínimo 6 caracteres');
+      return;
+    }
 
-  <a href="#" id="btn-topo" aria-label="Voltar ao topo" class="icon-mono" style="position:fixed;bottom:94px;right:24px;z-index:9998;width:44px;height:44px;border-radius:50%;background:rgba(199,154,46,0.9);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.2);transition:all 0.3s;text-decoration:none;opacity:0;pointer-events:none;">
-    <svg width="20" height="20" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M18 15l-6-6-6 6"/></svg>
-  </a>
+    const name = prompt('Seu nome completo:');
+    if (!name) return;
 
-  <script src="js/all.js"></script>
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Criando conta...';
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: name },
+        emailRedirectTo: window.location.origin + '/aluno/dashboard.html'
+      }
+    });
+
+    if (error) {
+      showError(error.message);
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Entrar';
+      return;
+    }
+
+    if (data.user?.identities?.length === 0) {
+      showError('Este e-mail já está cadastrado');
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Entrar';
+      return;
+    }
+
+    showSuccess('Conta criada! Verifique seu e-mail para confirmar.');
+    loginBtn.textContent = 'Entrar';
+    loginBtn.disabled = false;
+  };
+
+  // Forgot password
+  window.showForgotPassword = async function(e) {
+    e.preventDefault();
+    const email = prompt('Digite seu e-mail para redefinir a senha:');
+    if (!email) return;
+
+    hideAlerts();
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/login.html?reset=true'
+    });
+
+    if (error) {
+      showError(error.message);
+      return;
+    }
+
+    showSuccess('E-mail de redefinição enviado! Verifique sua caixa de entrada.');
+  };
+
+  // Init
+  checkSession();
+</script>
 
 </body>
 </html>
