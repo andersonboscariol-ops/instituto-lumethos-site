@@ -70,7 +70,38 @@
     .btn-outline:hover{border-color:#C79A2E;color:#C79A2E}
     @media(max-width:768px){.section-title{font-size:24px}.cta-section h2{font-size:24px}}
 
-    /* === DROPDOWN DARK FIX === */
+        /* === RESPONSIVO TABLET (max 1024px) === */
+    @media(max-width:1024px){
+      .netflix-hero{min-height:65vh;padding:60px 0 40px}
+      .netflix-hero-content{max-width:540px;padding:0 40px}
+      .netflix-hero-content h1{font-size:clamp(32px,5vw,48px)}
+      .section{padding:48px 0}
+      .container{padding:0 32px}
+    }
+    /* === RESPONSIVO PHONE (max 480px) === */
+    @media(max-width:480px){
+      .netflix-hero{min-height:60vh;padding:40px 0 32px}
+      .netflix-hero-content{padding:0 16px}
+      .netflix-hero-content h1{font-size:26px}
+      .netflix-hero-desc{font-size:14px}
+      .netflix-hero-stats{font-size:12px;gap:8px}
+      .netflix-hero-actions{flex-direction:column}
+      .netflix-btn-play,.netflix-btn-info{width:100%;justify-content:center;padding:14px 20px;font-size:15px}
+      .nav-top{padding:6px 12px;gap:8px}
+      .nav-top a{font-size:11px;padding:4px 8px}
+      .nav-top a svg{width:14px;height:14px}
+      .section{padding:36px 0}
+      .container{padding:0 16px}
+      .section-title{font-size:22px}
+      .diferenciais{grid-template-columns:1fr}
+      .modulos-grid{grid-template-columns:1fr}
+      .cta-section{padding:40px 0}
+      .cta-section h2{font-size:22px}
+      .cta-section p{font-size:15px}
+      .btn-outline{margin-left:0;margin-top:10px;display:block;text-align:center}
+    }
+
+/* === DROPDOWN DARK FIX === */
     #dd-menu{background:#0D1B2A!important;border:1px solid rgba(199,154,46,0.2)!important}
     #dd-menu a{color:rgba(255,255,255,0.7)!important}
     #dd-menu a:first-child{color:#C79A2E!important;border-bottom-color:rgba(199,154,46,0.15)!important}
