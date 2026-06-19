@@ -324,6 +324,22 @@
     document.getElementById('topbarTitle').textContent = course.title;
     document.title = course.title + ' · Lumethos';
 
+    // Auto-enroll (upsert, idempotent)
+    try {
+      await supabase.from('enrollments').upsert({
+        user_id: user.id, course_id: courseId,
+        status: 'active', updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id,course_id', ignoreDuplicates: false });
+    } catch(e) { /* table may not exist yet */ }
+    // Also try API bridge
+    try {
+      await fetch('/api/aluno/matricular', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': '***' + session.access_token },
+        body: JSON.stringify({ course_id: courseId })
+      });
+    } catch(e) { /* bridge offline */ }
+
     const { data: mods } = await supabase
       .from('modules').select('id,title,position,lessons(id,title,content_type,video_url,content_body,duration_minutes,position,is_free)')
       .eq('course_id', courseId).order('position');
