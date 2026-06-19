@@ -1,0 +1,24 @@
+# Backups
+backup_*/
+
+# Dependências
+node_modules/
+
+# Secrets & credenciais
+.env
+*.sqlite
+*.db
+*-token.txt
+*secret*
+
+# Cache & uploads
+uploads/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

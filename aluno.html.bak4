@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meus Cursos — Instituto Lumethos</title>
+  <meta name="description" content="Área do Aluno Instituto Lumethos — biblioteca de cursos.">
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/area-do-aluno.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #ffffff;
+      color: #1a1a2e;
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: 240px;
+      background: #0D1B2A;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 100;
+      padding-top: 24px;
+    }
+    .sidebar-logo {
+      padding: 0 20px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 8px;
+    }
+      margin-bottom: 48px;
+    }
+    .sidebar-logo img {
+      height: 48px;
+    }
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 0 12px;
+      overflow-y: auto;
+    }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 400;
+      transition: all 0.2s;
+    }
+    .sidebar-nav a:hover {
+      background: rgba(255,255,255,0.07);
+      color: #ffffff;
+    }
+    .sidebar-nav a.active {
+      background: rgba(199, 154, 46, 0.12);
+      color: #C79A2E;
+    }
+    .sidebar-nav a .icon-svg {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sidebar-nav a .icon-svg svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+    .sidebar-nav .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.06);
+      margin: 8px 0;
+    }
+    .sidebar-nav .section-label {
+      padding: 16px 12px 6px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: rgba(255,255,255,0.2);
+    }
+    .sidebar-user {
+      padding: 14px 20px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sidebar-user .avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: #C79A2E;
+      color: #0D1B2A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .sidebar-user .info {
+      flex: 1;
+    }
+    .sidebar-user .info .name {
+      font-size: 13px;
+      font-weight: 500;
+      color: #fff;
+    }
+    .sidebar-user .info .email {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+    }
+    .btn-logout-sidebar {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.3);
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+    .btn-logout-sidebar:hover {
+      color: #e74c3c;
+    }
+    
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      margin-left: 240px;
+      flex: 1;
+      padding: 36px 48px;
+      min-height: 100vh;
+      background: #ffffff;
+    }
+    
+    .page-header {
+      margin-bottom: 28px;
+    }
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #0D1B2A;
+    }
+    .page-header p {
+      color: #888;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    
+    /* ===== BIBLIOTECA NETFLIX STYLE ===== */
+    .biblioteca-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    
+    .curso-card {
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      position: relative;
+      border: 1px solid #f0f0f0;
+    }
+    .curso-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      border-color: #C79A2E;
+    }
+    .curso-card .card-img {
+      height: 120px;
+      background: linear-gradient(135deg, #0D1B2A, #1a2a4a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .curso-card .card-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+    .card-badge.liberado {
+      background: #C79A2E;
+      color: #fff;
+    }
+    .card-badge.bloqueado {
+      background: #888;
+      color: #fff;
+    }
+    .curso-card .card-body {
+      padding: 16px;
+    }
+    .curso-card .card-body .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      line-height: 1.3;
+      color: #0D1B2A;
+    }
+    .curso-card .card-body .card-desc {
+      font-size: 12px;
+      color: #888;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .curso-card .card-body .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #aaa;
+    }
+    .curso-card .card-body .card-meta .aulas-count {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .curso-card .card-body .progress-bar-container {
+      margin-top: 10px;
+    }
+    .curso-card .card-body .progress-bar-container .progress-bar {
+      height: 3px;
+      background: #eee;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .curso-card .card-body .progress-bar-container .progress-bar .progress-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.4s;
+    }
+    .curso-card .card-body .progress-bar-container .progress-text {
+      font-size: 11px;
+      color: #bbb;
+      margin-top: 4px;
+    }
+    
+    /* Bloqueado overlay */
+    .curso-card.bloqueado {
+      opacity: 0.7;
+    }
+    .curso-card.bloqueado .card-img::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 32px;
+      opacity: 0.5;
+    }
+    .curso-card.bloqueado .card-body .card-title::after {
+      content: ' — Bloqueado';
+      color: #e74c3c;
+      font-size: 11px;
+      font-weight: 400;
+    }
+    .curso-card.bloqueado:hover {
+      transform: none;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      cursor: not-allowed;
+      border-color: #f0f0f0;
+    }
+    
+    /* Loading & Empty */
+    .loading-spinner {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: #bbb;
+    }
+    .loading-spinner .spinner {
+      width: 30px; height: 30px;
+      border: 2px solid #eee;
+      border-top: 2px solid #C79A2E;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+      color: #bbb;
+    }
+    .empty-state h3 { font-size: 16px; margin-bottom: 6px; color: #666; }
+    .empty-state p { font-size: 13px; }
+    
+    @media (max-width: 768px) {
+      .sidebar { width: 60px; }
+      .sidebar .sidebar-logo span,
+      .sidebar .sidebar-nav a span:not(.icon-svg),
+      .sidebar .sidebar-nav .section-label,
+      .sidebar-user .info,
+      .sidebar-user .btn-logout-sidebar { display: none; }
+      .sidebar .sidebar-nav a { justify-content: center; padding: 12px; }
+      .sidebar .sidebar-logo { padding: 0 10px 16px; text-align: center; }
+      .main-content { margin-left: 60px; padding: 20px 16px; }
+      .biblioteca-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+    }</style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="img/logo-lumethos-correto.png" alt="Lumethos" >
+      <span>Plataforma Educacional</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" id="linkPerfil"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span><span>Meu Perfil</span></a>
+      <a href="aluno.html" class="active"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg></span><span>Meus Cursos</span></a>
+      <a href="#"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg></span><span>Certificados</span></a>
+      <a href="#"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM13 16h-2v2h2v-2zm0-6h-2v4h2v-4z"/></svg></span><span>Credenciais</span></a>
+      <a href="#"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg></span><span>Biblioteca</span></a>
+      
+      <div class="divider"></div>
+      <div class="section-label">Sistemas</div>
+      <a href="https://app.centelhaz.com.br" target="_blank"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></span><span>Centelhaz</span></a>
+      <a href="https://scriba.centelhaz.com.br" target="_blank"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg></span><span>Scriba</span></a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="avatar" id="userBadge">A</div>
+      <div class="info">
+        <div class="name" id="userName">Aluno</div>
+        <div class="email" id="userEmail">aluno@lumethos.com</div>
+      </div>
+      <button class="btn-logout-sidebar" id="logoutBtn" title="Sair">⏻</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="page-header">
+      <h1>Meus Cursos</h1>
+      <p id="subtitle">Biblioteca de cursos</p>
+    </div>
+    <div class="biblioteca-grid" id="cursosGrid">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Carregando cursos...</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/api-config.js"></script>
+  <script>
+    const API = window.API;
+    const token = localStorage.getItem('lms_token');
+    const user = JSON.parse(localStorage.getItem('lms_user') || '{}');
+
+    if (!token || !user.id) {
+      window.location.href = '/admin/login.html';
+    }
+
+    // Sidebar user info
+    document.getElementById('userName').textContent = user.nome || user.email;
+    document.getElementById('userEmail').textContent = user.email || '';
+    document.getElementById('userBadge').textContent = user.nome ? user.nome.charAt(0).toUpperCase() : 'A';
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      API.logout();
+      window.location.href = '/admin/login.html';
+    });
+
+    // Verificar matrículas do usuário
+    async function getMatriculas() {
+      try {
+        const res = await fetch('/api/matriculas/aluno/' + user.id, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (res.ok) {
+          const mats = await res.json();
+          return mats.map(m => m.curso_id);
+        }
+      } catch(e) {}
+      // Fallback: se o usuário é admin, libera tudo
+      if (user.papel && user.papel !== 'aluno') return ['*'];
+      return [];
+    }
+
+    // Carregar cursos
+    async function loadCursos() {
+      try {
+        const grid = document.getElementById('cursosGrid');
+        window.subtitleEl = document.getElementById('subtitle');
+        
+        const [cursos, cursosMatriculados] = await Promise.all([
+          API.getCursos(),
+          getMatriculas()
+        ]);
+
+        if (!cursos || cursos.length === 0) {
+          grid.innerHTML = '<div class="empty-state"><div class="icon">📚</div><h3>Nenhum curso disponível</h3><p>Em breve novos cursos serão publicados.</p></div>';
+          return;
+        }
+
+        const temMatricula = cursosMatriculados.length > 0;
+        const adminOuTutor = user.papel === 'admin' || user.papel === 'tutor';
+        const todosLiberados = cursosMatriculados[0] === '*';
+
+        grid.innerHTML = '';
+        let liberados = 0;
+
+        for (const curso of cursos) {
+          const liberado = todosLiberados || adminOuTutor || cursosMatriculados.includes(curso.id);
+          if (liberado) liberados++;
+
+          const progresso = await API.getProgresso(curso.id).catch(() => ({ total: 0, concluidas: 0 }));
+          const perc = progresso.total > 0 ? Math.round((progresso.concluidas / progresso.total) * 100) : 0;
+          const aulasText = progresso.total > 0 
+            ? progresso.concluidas + '/' + progresso.total + ' aulas'
+            : (liberado ? 'Iniciar curso' : 'Curso bloqueado');
+
+          const card = document.createElement('div');
+          card.className = 'curso-card' + (liberado ? '' : ' bloqueado');
+          card.onclick = liberado 
+            ? () => { window.location.href = '/aluno/curso.html?id=' + curso.id; }
+            : null;
+
+          const cor = curso.cor || '#0D1B2A';
+          card.innerHTML = 
+            '<div class="card-img" style="background: linear-gradient(135deg, ' + cor + ', #1B2838)">' +
+              (liberado ? '<span class="card-badge liberado">✅ Liberado</span>' : '<span class="card-badge bloqueado">🔒 Bloqueado</span>') +
+            '</div>' +
+            '<div class="card-body">' +
+              '<div class="card-title">' + curso.titulo + '</div>' +
+              '<div class="card-desc">' + (curso.descricao || '').substring(0, 100) + '</div>' +
+              '<div class="card-meta">' +
+                '<span class="aulas-count">📖 ' + aulasText + '</span>' +
+                (liberado && perc > 0 ? '<span>' + perc + '%</span>' : '') +
+              '</div>' +
+              (liberado && progresso.total > 0 ? 
+                '<div class="progress-bar-container">' +
+                  '<div class="progress-bar"><div class="progress-fill" style="width:' + perc + '%;background:' + (perc >= 80 ? '#27ae60' : '#D4AF37') + '"></div></div>' +
+                  '<div class="progress-text">' + perc + '% concluído</div>' +
+                '</div>' : '') +
+            '</div>';
+
+          grid.appendChild(card);
+        }
+
+        window.subtitleEl.textContent = liberados + ' curso' + (liberados !== 1 ? 's' : '') + ' disponíve' + (liberados !== 1 ? 'is' : 'l');
+
+      } catch (err) {
+        console.error('Erro:', err);
+        document.getElementById('cursosGrid').innerHTML = 
+          '<div class="empty-state"><div class="icon">⚠️</div><h3>Erro ao carregar</h3><p>' + err.message + '</p></div>';
+      }
+    }
+
+    loadCursos();
+  </script>
+  <script src="/js/juju-chat.js"></script>
+</body>
+</html>

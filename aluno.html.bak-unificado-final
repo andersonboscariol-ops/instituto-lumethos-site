@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instituto Lumethos</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #141414;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width: 6px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+
+    /* ===== TOP NAV ===== */
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 0 60px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg,rgba(20,20,20,0.95) 0%,transparent 100%);
+      transition: background 0.3s;
+    }
+    .top-nav.scrolled { background: rgba(20,20,20,1); }
+    .nav-left { display: flex; align-items: center; gap: 32px; }
+    .nav-left .logo { font-size: 20px; font-weight: 800; color: #e50914; letter-spacing: -0.5px; }
+    .nav-left .logo img { height: 32px; display: block; }
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+    .nav-right .user-badge {
+      width: 32px; height: 32px;
+      border-radius: 4px;
+      background: #e50914;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .nav-right .logout-btn {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.6);
+      padding: 4px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+    .nav-right .logout-btn:hover {
+      border-color: #e50914;
+      color: #e50914;
+    }
+
+    /* ===== HERO BANNER ===== */
+    .hero {
+      position: relative;
+      height: 80vh;
+      min-height: 500px;
+      max-height: 700px;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 60px 120px;
+      background: linear-gradient(135deg, #0D1B2A 0%, #1a2a4a 50%, #243b5a 100%);
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 140px;
+      background: linear-gradient(180deg,transparent 0%,#141414 100%);
+    }
+    .hero .hero-gradient {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg,rgba(20,20,20,0.6) 0%,rgba(20,20,20,0.2) 50%,transparent 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 600px;
+    }
+    .hero-content .hero-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      background: #e50914;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .hero-content h1 {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      line-height: 1.1;
+    }
+    .hero-content .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 16px;
+    }
+    .hero-content .hero-meta .match { color: #46d369; font-weight: 700; }
+    .hero-content .hero-meta .ano { font-weight: 500; }
+    .hero-content .hero-meta .tags { color: rgba(255,255,255,0.5); }
+    .hero-content p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 20px;
+    }
+    .hero-buttons { display: flex; gap: 12px; }
+    .hero-buttons button {
+      padding: 10px 28px;
+      border: none;
+      border-radius: 4px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero-buttons .btn-play { background: #fff; color: #000; }
+    .hero-buttons .btn-play:hover { background: rgba(255,255,255,0.8); }
+    .hero-buttons .btn-info {
+      background: rgba(109,109,109,0.7);
+      color: #fff;
+    }
+    .hero-buttons .btn-info:hover { background: rgba(109,109,109,0.5); }
+
+    /* ===== ROWS ===== */
+    .row-section { padding: 0 60px; position: relative; z-index: 2; }
+    .row-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+    .row-header h2 { font-size: 22px; font-weight: 700; color: #fff; }
+    .row-header .see-all { color: rgba(255,255,255,0.4); font-size: 12px; text-decoration: none; font-weight: 600; }
+    .row-header .see-all:hover { color: #fff; }
+
+    .row-container {
+      position: relative;
+      margin: 0 -60px;
+      padding: 0 60px;
+    }
+    .row-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 0 0 20px;
+      scroll-behavior: smooth;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .row-scroll::-webkit-scrollbar { display: none; }
+
+    .card-item {
+      flex: 0 0 220px;
+      transition: transform 0.25s ease;
+      cursor: pointer;
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .card-item:hover {
+      transform: scale(1.12);
+      z-index: 10;
+    }
+    .card-item .card-thumb {
+      width: 220px;
+      height: 124px;
+      background: linear-gradient(135deg, #0D1B2A, #1a2a4a);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .card-item .card-thumb .card-badge {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .card-badge.liberado { background: #e50914; color: #fff; }
+    .card-badge.bloqueado { background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); }
+    .card-item .card-thumb svg { width: 36px; height: 36px; fill: rgba(255,255,255,0.15); }
+    .card-item .card-info {
+      padding: 8px 4px;
+    }
+    .card-item .card-info .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e5e5e5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-item .card-info .card-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 2px;
+    }
+    .card-item.bloqueado { opacity: 0.4; }
+    .card-item.bloqueado:hover { transform: none; cursor: default; }
+
+    /* ===== SECOND ROW COMPACT ===== */
+    .row-section.second { margin-top: 20px; }
+
+    /* ===== LOADING ===== */
+    .loading-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #141414;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    .loading-screen .spin {
+      width: 40px; height: 40px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top: 3px solid #e50914;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 768px) {
+      .top-nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 0 20px 100px; min-height: 400px; height: 60vh; }
+      .hero-content h1 { font-size: 28px; }
+      .hero-content p { font-size: 13px; }
+      .row-section { padding: 0 20px; }
+      .row-container { margin: 0 -20px; padding: 0 20px; }
+      .card-item { flex: 0 0 160px; }
+      .card-item .card-thumb { width: 160px; height: 90px; }
+      .card-item:hover { transform: scale(1.08); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="loading-screen" id="loadingScreen"><div class="spin"></div></div>
+
+  <!-- TOP NAV -->
+  <nav class="top-nav" id="topNav">
+    <div class="nav-left">
+      <div class="logo"><img src="img/logo-lumethos-correto.png" alt="Lumethos" style="height:32px;"></div>
+      <div class="nav-links">
+        <a href="aluno.html" class="active">Início</a>
+        <a href="#">Séries</a>
+        <a href="#">Minha Lista</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="logout-btn" id="logoutBtn">Sair</button>
+      <div class="user-badge" id="userBadge">A</div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="heroSection">
+    <div class="hero-gradient"></div>
+    <div class="hero-content" id="heroContent">
+      <div class="hero-badge" id="heroBadge">CURSO</div>
+      <h1 id="heroTitle">Trilha do Capelão</h1>
+      <div class="hero-meta">
+        <span class="match">98% relevante</span>
+        <span class="ano">2026</span>
+        <span class="tags" id="heroTags">10 módulos • 15 aulas</span>
+      </div>
+      <p id="heroDesc">Formação completa em Capelania. Domine os fundamentos, a história e as práticas do cuidado espiritual institucional.</p>
+      <div class="hero-buttons">
+        <button class="btn-play" id="heroPlayBtn">▶ Assistir</button>
+        <button class="btn-info">ⓘ Mais informações</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROW 1: CONTINUAR ASSISTINDO -->
+  <section class="row-section" id="rowContinuar">
+    <div class="row-header">
+      <h2>Continuar Assistindo</h2>
+      <a href="#" class="see-all">Ver tudo</a>
+    </div>
+    <div class="row-container">
+      <div class="row-scroll" id="rowContinuarScroll"></div>
+    </div>
+  </section>
+
+  <!-- ROW 2: MEUS CURSOS -->
+  <section class="row-section second" id="rowCursos">
+    <div class="row-header">
+      <h2>Meus Cursos</h2>
+      <a href="#" class="see-all">Ver tudo</a>
+    </div>
+    <div class="row-container">
+      <div class="row-scroll" id="rowCursosScroll"></div>
+    </div>
+  </section>
+
+  <div style="height:80px;"></div>
+
+  <script>
+    const token = localStorage.getItem('lms_token');
+    const user = JSON.parse(localStorage.getItem('lms_user') || '{}');
+    if (!token || !user.id) { window.location.href = '/admin/login.html'; }
+
+    const init = user.nome || user.email;
+    document.getElementById('userBadge').textContent = init[0].toUpperCase();
+    document.getElementById('logoutBtn').onclick = function() {
+      localStorage.removeItem('lms_token'); localStorage.removeItem('lms_user');
+      window.location.href = '/admin/login.html';
+    };
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+      document.getElementById('topNav').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    async function apiFetch(path) {
+      const res = await fetch(window.location.origin + '/api' + path, {
+        headers: { 'Content-Type': 'application/json', Authorization: '***' + token }
+      });
+      if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e.error||'Erro ' + res.status); }
+      return res.json();
+    }
+
+    function createCard(curso, liberado, perc, total) {
+      const card = document.createElement('div');
+      card.className = 'card-item' + (liberado ? '' : ' bloqueado');
+      if (liberado) card.onclick = function() { window.location.href = '/aluno/curso.html?id=' + curso.id; };
+      card.innerHTML =
+        '<div class="card-thumb" style="background:linear-gradient(135deg,' + (curso.cor||'#0D1B2A') + ',#1a2a4a)">' +
+          '<span class="card-badge ' + (liberado ? 'liberado' : 'bloqueado') + '">' + (liberado ? 'LIBERADO' : 'BLOQUEADO') + '</span>' +
+          '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>' +
+        '</div>' +
+        '<div class="card-info">' +
+          '<div class="card-title">' + curso.titulo + '</div>' +
+          '<div class="card-sub">' + (total||0) + ' aulas' + (perc > 0 ? ' • ' + perc + '%' : '') + '</div>' +
+        '</div>';
+      return card;
+    }
+
+    async function load() {
+      try {
+        const cursos = await apiFetch('/cursos');
+        const adminOuTutor = user.papel === 'admin' || user.papel === 'tutor';
+
+        if (!cursos || !cursos.length) {
+          document.getElementById('heroContent').innerHTML = '<h1 style="font-size:32px;">Bem-vindo ao Lumethos</h1><p style="color:rgba(255,255,255,0.5);">Nenhum curso disponível ainda.</p>';
+          document.getElementById('rowContinuar').style.display = 'none';
+          document.getElementById('rowCursos').style.display = 'none';
+          document.getElementById('loadingScreen').style.display = 'none';
+          return;
+        }
+
+        const primeiro = cursos[0];
+        const tags = document.getElementById('heroTags');
+        let aulasTotal = 0;
+        let modTotal = 0;
+
+        // Carregar módulos do primeiro curso
+        try {
+          const mods = await apiFetch('/modulos/' + primeiro.id);
+          modTotal = mods.length;
+          for (const m of mods) {
+            try {
+              const as = await apiFetch('/aulas/' + m.id);
+              aulasTotal += as.length;
+            } catch(e) {}
+          }
+        } catch(e) {}
+
+        document.getElementById('heroBadge').textContent = 'CURSO';
+        document.getElementById('heroTitle').textContent = primeiro.titulo;
+        tags.textContent = modTotal + ' módulos • ' + aulasTotal + ' aulas';
+        document.getElementById('heroDesc').textContent = primeiro.descricao || 'Formação completa.';
+
+        const heroSection = document.getElementById('heroSection');
+        heroSection.style.background = 'linear-gradient(135deg, ' + (primeiro.cor||'#0D1B2A') + ' 0%, #1a2a4a 50%, #243b5a 100%)';
+
+        document.getElementById('heroPlayBtn').onclick = function() {
+          window.location.href = '/aluno/curso.html?id=' + primeiro.id;
+        };
+
+        // ROW: Continuar Assistindo (com progresso)
+        const contScroll = document.getElementById('rowContinuarScroll');
+        for (const curso of cursos) {
+          const prog = await apiFetch('/progresso/' + curso.id).catch(()=>({total:0,concluidas:0}));
+          const perc = prog.total > 0 ? Math.round(prog.concluidas/prog.total*100) : 0;
+          const liberado = adminOuTutor;
+          if (liberado && perc > 0) {
+            contScroll.appendChild(createCard(curso, liberado, perc, prog.total));
+          }
+        }
+        if (!contScroll.children.length) {
+          contScroll.innerHTML = '<div style="padding:20px 0;color:rgba(255,255,255,0.3);font-size:14px;">Nenhum curso em andamento.</div>';
+        }
+
+        // ROW: Meus Cursos
+        const scroll = document.getElementById('rowCursosScroll');
+        for (const curso of cursos) {
+          const prog = await apiFetch('/progresso/' + curso.id).catch(()=>({total:0,concluidas:0}));
+          const perc = prog.total > 0 ? Math.round(prog.concluidas/prog.total*100) : 0;
+          const liberado = adminOuTutor;
+          scroll.appendChild(createCard(curso, liberado, perc, prog.total));
+        }
+        document.getElementById('rowCursos').querySelector('h2').textContent = 'Meus Cursos' + (cursos.length > 1 ? ' (' + cursos.length + ')' : '');
+
+        document.getElementById('loadingScreen').style.display = 'none';
+      } catch(e) {
+        document.getElementById('loadingScreen').innerHTML = '<div style="color:rgba(255,255,255,0.5);text-align:center;"><p>Erro ao carregar</p><p style="font-size:12px;margin-top:8px;">' + e.message + '</p></div>';
+      }
+    }
+    load();
+  </script>
+  <script src="/js/juju-chat.js"></script>
+</body>
+</html>

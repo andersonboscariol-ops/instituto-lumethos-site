@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curso — Instituto Lumethos</title>
+  <meta name="description" content="Player de curso do Instituto Lumethos.">
+  <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/area-do-aluno.css">
+  <style>
+    /* === PLAYER LAYOUT === */
+    .player-layout {
+      display: flex;
+      min-height: 100vh;
+      padding-top: 64px;
+    }
+
+    /* === SIDEBAR === */
+    .player-sidebar {
+      width: 340px;
+      min-width: 340px;
+      background: rgba(13, 27, 42, 0.9);
+      border-right: 1px solid var(--border-subtle);
+      overflow-y: auto;
+      max-height: calc(100vh - 64px);
+      position: sticky;
+      top: 64px;
+    }
+
+    .player-sidebar .sidebar-header {
+      padding: 24px 20px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .player-sidebar .sidebar-header h2 {
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    .player-sidebar .sidebar-header .meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .player-sidebar .sidebar-progress {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .sidebar-progress .total-bar {
+      height: 3px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .sidebar-progress .total-bar .fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      transition: width 0.5s ease;
+    }
+
+    .sidebar-progress .perc {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    /* === MODULOS LIST === */
+    .modulos-list {
+      padding: 8px 0;
+    }
+
+    .modulo-item {
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .modulo-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .modulo-header:hover {
+      background: rgba(199, 154, 46, 0.05);
+    }
+
+    .modulo-header.active {
+      background: rgba(199, 154, 46, 0.1);
+      border-left: 3px solid var(--gold);
+    }
+
+    .modulo-header .check {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+      transition: var(--transition);
+    }
+
+    .modulo-header .check.done {
+      background: var(--success);
+      border-color: var(--success);
+      color: white;
+    }
+
+    .modulo-header .modulo-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .modulo-header .modulo-num {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .modulo-header .modulo-titulo {
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .modulo-header .modulo-time {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .modulo-header .toggle-icon {
+      color: var(--text-muted);
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+
+    .modulo-header .toggle-icon.open {
+      transform: rotate(180deg);
+    }
+
+    .modulo-header.locked {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .modulo-header.locked .modulo-titulo::after {
+      content: ' 🔒';
+    }
+
+    /* === AULAS LIST === */
+    .aulas-list {
+      display: none;
+      background: rgba(0,0,0,0.15);
+    }
+
+    .aulas-list.open {
+      display: block;
+    }
+
+    .aula-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px 10px 52px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .aula-item:hover {
+      background: rgba(199, 154, 46, 0.05);
+      color: var(--text-primary);
+    }
+
+    .aula-item.active {
+      color: var(--gold);
+      background: rgba(199, 154, 46, 0.08);
+    }
+
+    .aula-item .aula-check {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      flex-shrink: 0;
+    }
+
+    .aula-item .aula-check.done {
+      background: var(--success);
+      border-color: var(--success);
+      color: white;
+    }
+
+    .aula-item .aula-tipo {
+      font-size: 10px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    /* === CONTENT AREA === */
+    .player-content {
+      flex: 1;
+      padding: 32px 40px 60px;
+      overflow-y: auto;
+      max-height: calc(100vh - 64px);
+      background: #ffffff;
+    }
+
+    .player-content .content-header {
+      margin-bottom: 24px;
+    }
+
+    .player-content .content-header .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .player-content .content-header .back-link:hover {
+      color: var(--gold);
+    }
+
+    .player-content .content-header h1 {
+      font-size: 26px;
+      margin-bottom: 8px;
+      color: #1a1a2e;
+    }
+
+    .player-content .content-header .modulo-label {
+      font-size: 13px;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .player-content .content-header .back-link {
+      color: #556688;
+    }
+
+    .player-content .content-header .back-link:hover {
+      color: var(--gold);
+    }
+
+    /* === MARKDOWN CONTENT === */
+    .content-body {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #333;
+    }
+
+    .content-body h1, .content-body h2, .content-body h3 {
+      font-family: 'Libre Baskerville', serif;
+      margin-top: 32px;
+      margin-bottom: 16px;
+      color: #0D1B2A;
+    }
+
+    .content-body h1 { font-size: 24px; }
+    .content-body h2 { font-size: 20px; color: var(--gold); }
+    .content-body h3 { font-size: 17px; }
+
+    .content-body p {
+      margin-bottom: 16px;
+    }
+
+    .content-body strong {
+      color: #0D1B2A;
+    }
+
+    .content-body blockquote {
+      border-left: 3px solid var(--gold);
+      padding: 12px 20px;
+      margin: 16px 0;
+      background: rgba(199, 154, 46, 0.06);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-style: italic;
+      color: #555;
+    }
+
+    .content-body ul {
+      margin: 12px 0;
+      padding-left: 20px;
+    }
+
+    .content-body li {
+      margin-bottom: 6px;
+    }
+
+    .content-body hr {
+      border: none;
+      border-top: 1px solid var(--border-subtle);
+      margin: 32px 0;
+    }
+
+    .content-body code {
+      background: rgba(0,0,0,0.06);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .content-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+
+    .content-body td {
+      padding: 10px 14px;
+      border: 1px solid var(--border-subtle);
+      font-size: 14px;
+    }
+
+    .content-body tr td:first-child {
+      font-weight: 600;
+      color: var(--gold);
+    }
+
+    /* === VIDEO PLAYER === */
+    .video-container {
+      width: 100%;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 24px;
+      background: #000;
+    }
+
+    .video-container video {
+      width: 100%;
+      display: block;
+      max-height: 480px;
+    }
+
+    /* === QUIZ === */
+    .quiz-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin: 24px 0;
+    }
+
+    .quiz-container h3 {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+
+    .quiz-question {
+      margin-bottom: 20px;
+    }
+
+    .quiz-question .q-text {
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .quiz-question .q-options {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .quiz-question .q-options label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(0,0,0,0.2);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 14px;
+    }
+
+    .quiz-question .q-options label:hover {
+      background: rgba(199, 154, 46, 0.08);
+    }
+
+    .quiz-question .q-options input[type="radio"] {
+      accent-color: var(--gold);
+    }
+
+    .quiz-question .q-options label.correct {
+      background: rgba(34,197,94,0.15);
+      border: 1px solid var(--success);
+    }
+
+    .quiz-question .q-options label.wrong {
+      background: rgba(239,68,68,0.15);
+      border: 1px solid var(--danger);
+    }
+
+    .quiz-result {
+      text-align: center;
+      padding: 24px;
+      margin-top: 16px;
+    }
+
+    .quiz-result .score {
+      font-size: 48px;
+      font-weight: 700;
+      font-family: 'Libre Baskerville', serif;
+      color: var(--gold);
+    }
+
+    .quiz-result .score-label {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* === NAVIGATION === */
+    .content-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .content-nav .btn {
+      padding: 10px 20px;
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 900px) {
+      .player-layout {
+        flex-direction: column;
+      }
+      
+      .player-sidebar {
+        width: 100%;
+        min-width: auto;
+        max-height: none;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+
+      .player-content {
+        padding: 24px 16px;
+        max-height: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .player-content .content-header h1 { font-size: 20px; }
+      .content-body { font-size: 15px; }
+    }
+  </style>
+
+    /* === HEADER SPLIT === */
+    .course-header {
+      position: relative;
+      height: 360px;
+      overflow: hidden;
+      margin: 0;
+      background: #000;
+    }
+    .course-header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(13,27,42,0.8) 0%, rgba(13,27,42,0.4) 50%), 
+                  url('/img/banner-capelania.png') center/cover no-repeat;
+    }
+    .course-header .left-half {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(to right, #0D1B2A, transparent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 30px;
+      color: #fff;
+      z-index: 1;
+    }
+    .course-header .right-half {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      background: url('/img/banner-capelania.png') center/cover no-repeat;
+      z-index: 0;
+    }
+    .course-header h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin: 0;
+      line-height: 1.2;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .course-header p {
+      font-size: 1.1rem;
+      margin-top: 12px;
+      opacity: 0.9;
+      max-width: 280px;
+    }
+    @media (max-width: 768px) {
+      .course-header {
+        height: 260px;
+      }
+      .course-header .left-half, .course-header .right-half {
+        width: 100%;
+        position: relative;
+      }
+      .course-header .left-half {
+        height: 50%;
+        background: linear-gradient(to bottom, #0D1B2A, transparent);
+      }
+      .course-header .right-half {
+        height: 50%;
+      }
+      .course-header h1 {
+        font-size: 1.8rem;
+      }
+    }
+    
+</head>
+<body>
+
+  <!-- Header simplificado -->
+  <header class="header-aluno" id="header">
+    <div class="logo">
+      <img src="../img/logo-lumethos-correto.png" alt="Lumethos">
+      <span>Player</span>
+    </div>
+    <nav>
+      <a href="../aluno.html">Dashboard</a>
+      <a href="#" style="color:var(--gold);font-weight:600;" id="cursoNomeNav">Curso</a>
+    </nav>
+    <button class="btn-sair" onclick="fazerLogout()">Sair</button>
+  </header>
+
+  <!-- Player -->
+  
+    <div class="course-header">
+      <div class="left-half">
+        <div>
+          <h1>Trilha do Capelão</h1>
+          <p>10 módulos • Formação completa em capelania</p>
+        </div>
+      </div>
+      <div class="right-half"></div>
+    </div>
+    
+<div class="player-layout">
+
+    <!-- Sidebar -->
+    <aside class="player-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h2 id="sidebarCursoTitulo">Carregando...</h2>
+        <div class="meta" id="sidebarCursoMeta"></div>
+      </div>
+      <div class="sidebar-progress">
+        <div class="total-bar">
+          <div class="fill" id="sidebarProgressFill" style="width:0%"></div>
+        </div>
+        <div class="perc" id="sidebarProgressText">0% completo</div>
+      </div>
+      <div class="modulos-list" id="modulosList">
+        <!-- Renderizado via JS -->
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <main class="player-content" id="playerContent">
+      <div class="loading-container" id="loadingContainer">
+        <div class="spinner spinner-lg"></div>
+        <p>Carregando curso...</p>
+      </div>
+      <div id="contentArea" style="display:none">
+        <!-- Conteúdo renderizado aqui -->
+      </div>
+    </main>
+
+  </div>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="../js/api-config.js"></script>
+  <script src="../api/cursos.js"></script>
+  <script>
+    // ============================================================
+    // PLAYER DE CURSO
+    // ============================================================
+
+    const API = window.API;
+const token = localStorage.getItem('lms_token');
+const user = JSON.parse(localStorage.getItem('lms_user') || '{}');
+
+if (!token || !user.id) {
+  window.location.href = '/login.html';
+}
+
+// Estado
+let cursoAtual = null;
+let modulosAtuais = [];
+let aulaAtual = null;
+const cursoId = new URLSearchParams(window.location.search).get('id');
+
+// Elementos DOM
+const sidebar = document.getElementById('sidebar');
+const mainContent = document.getElementById('mainContent');
+const contentTitle = document.getElementById('contentTitle');
+const contentBody = document.getElementById('contentBody');
+const progressInfo = document.getElementById('progressInfo');
+const entregasSection = document.getElementById('entregasSection');
+
+// Carregar Curso
+async function loadCurso() {
+  if (!cursoId) {
+    contentBody.innerHTML = '<div class="empty-state"><h2>Curso não encontrado</h2><p>ID do curso não especificado.</p><a href="/aluno.html" class="btn">Voltar</a></div>';
+    return;
+  }
+  
+  try {
+    const cursos = await API.getCursos();
+    cursoAtual = cursos.find(c => c.id === cursoId);
+    if (!cursoAtual) throw new Error('Curso não encontrado');
+    
+    document.getElementById('cursoTitle').textContent = cursoAtual.titulo;
+    
+    const modulos = await API.getModulos(cursoId);
+    modulosAtuais = modulos || [];
+    
+    buildSidebar();
+    updateProgress();
+    
+    if (modulosAtuais.length > 0) {
+      loadAula(modulosAtuais[0].id);
+    }
+  } catch (err) {
+    contentBody.innerHTML = '<div class="empty-state"><h2>Erro</h2><p>' + err.message + '</p></div>';
+  }
+}
+
+// Build Sidebar
+function buildSidebar() {
+  sidebar.innerHTML = '<div class="sidebar-header"><h3>' + (cursoAtual ? cursoAtual.titulo : 'Curso') + '</h3></div>';
+  
+  modulosAtuais.forEach(mod => {
+    const modDiv = document.createElement('div');
+    modDiv.className = 'sidebar-modulo';
+    modDiv.innerHTML = '<div class="modulo-header" data-modulo="' + mod.id + '">' +
+      '<span class="modulo-numero">Módulo ' + mod.ordem + '</span>' +
+      '<span class="modulo-nome">' + mod.titulo + '</span>' +
+      '<span class="modulo-toggle">▼</span></div>' +
+      '<div class="modulo-aulas"></div>';
+    
+    modDiv.querySelector('.modulo-header').addEventListener('click', async () => {
+      const aulasContainer = modDiv.querySelector('.modulo-aulas');
+      if (aulasContainer.innerHTML) {
+        aulasContainer.classList.toggle('open');
+        modDiv.querySelector('.modulo-toggle').textContent = aulasContainer.classList.contains('open') ? '▲' : '▼';
+        return;
+      }
+      
+      try {
+        const aulas = await API.getAulas(mod.id);
+        aulasContainer.innerHTML = aulas.map(a => 
+          '<div class="aula-item" data-aula="' + a.id + '" data-modulo="' + mod.id + '">' +
+          (a.concluida ? '✅' : '📖') + ' ' + a.titulo + '</div>'
+        ).join('');
+        aulasContainer.classList.add('open');
+        modDiv.querySelector('.modulo-toggle').textContent = '▲';
+        
+        aulasContainer.querySelectorAll('.aula-item').forEach(el => {
+          el.addEventListener('click', () => loadAula(mod.id, el.dataset.aula));
+        });
+      } catch (err) {
+        aulasContainer.innerHTML = '<div class="aula-item erro">Erro ao carregar</div>';
+      }
+    });
+    
+    sidebar.appendChild(modDiv);
+  });
+}
+
+// Load Aula
+async function loadAula(moduloId, aulaId) {
+  try {
+    const aulas = await API.getAulas(moduloId);
+    let aula;
+    if (aulaId) {
+      aula = aulas.find(a => a.id === aulaId);
+    } else {
+      aula = aulas[0];
+    }
+    
+    if (!aula) throw new Error('Aula não encontrada');
+    aulaAtual = aula;
+    
+    contentTitle.textContent = aula.titulo;
+    contentBody.innerHTML = '<div class="aula-conteudo formatado">' + 
+      (aula.conteudo || 'Conteúdo em desenvolvimento.').replace(/\n/g, '<br>') + '</div>';
+    
+    // Destacar na sidebar
+    sidebar.querySelectorAll('.aula-item.active').forEach(el => el.classList.remove('active'));
+    const activeItem = sidebar.querySelector('[data-aula="' + aula.id + '"]');
+    if (activeItem) activeItem.classList.add('active');
+    
+    // Marcar concluída
+    if (!aula.concluida) {
+      const btnConcluir = document.createElement('button');
+      btnConcluir.className = 'btn-concluir';
+      btnConcluir.textContent = '✅ Marcar como concluída';
+      btnConcluir.onclick = async () => {
+        try {
+          await API.concluirAula(aula.id);
+          btnConcluir.textContent = '✅ Concluída!';
+          btnConcluir.disabled = true;
+          updateProgress();
+        } catch (err) {
+          alert('Erro: ' + err.message);
+        }
+      };
+      contentBody.appendChild(btnConcluir);
+    }
+    
+    // Verificar entregas do módulo
+    loadEntregas(moduloId);
+    
+  } catch (err) {
+    contentTitle.textContent = 'Erro';
+    contentBody.innerHTML = '<p>' + err.message + '</p>';
+  }
+}
+
+// Entregas do Módulo
+async function loadEntregas(moduloId) {
+  if (!entregasSection) return;
+  
+  try {
+    const entregas = await API.getEntregas().catch(() => []);
+    const entregasModulo = entregas.filter(e => e.modulo_id === moduloId);
+    
+    if (entregasModulo.length === 0) {
+      entregasSection.innerHTML = '<div class="entrega-card"><h4>📝 Entrega do Módulo</h4><textarea id="entregaTexto" placeholder="Cole ou escreva sua resposta aqui..."></textarea><button onclick="enviarEntrega('' + moduloId + '')">Enviar</button></div>';
+    } else {
+      entregasSection.innerHTML = '<h4>📝 Suas Entregas</h4>' + entregasModulo.map(e => 
+        '<div class="entrega-item ' + (e.status || '') + '"><strong>' + (e.status === 'corrigido' ? '✅ Corrigido' : '⏳ Pendente') + '</strong>' +
+        '<p>' + (e.conteudo || '').substring(0, 200) + '</p>' +
+        (e.nota ? '<div class="nota">Nota: ' + e.nota + '/10</div>' : '') +
+        (e.feedback ? '<div class="feedback">Feedback: ' + e.feedback + '</div>' : '') + '</div>'
+      ).join('');
+    }
+  } catch (err) {
+    if (entregasSection) entregasSection.innerHTML = '<p>Entregas indisponíveis.</p>';
+  }
+}
+
+// Enviar Entrega
+window.enviarEntrega = async function(moduloId) {
+  const texto = document.getElementById('entregaTexto');
+  if (!texto || !texto.value.trim()) return alert('Escreva sua resposta.');
+  try {
+    await API.enviarEntrega(moduloId, texto.value);
+    texto.value = '';
+    alert('✅ Entrega enviada!');
+    loadEntregas(moduloId);
+  } catch (err) {
+    alert('Erro: ' + err.message);
+  }
+};
+
+// Progresso
+async function updateProgress() {
+  try {
+    const progresso = await API.getProgresso(cursoId).catch(() => ({ concluidas: 0, total: 0 }));
+    const perc = progresso.total > 0 ? Math.round((progresso.concluidas / progresso.total) * 100) : 0;
+    if (progressInfo) {
+      progressInfo.innerHTML = '<div class="progress-mini-bar"><div class="progress-mini-fill" style="width:' + perc + '%"></div></div><span>' + perc + '% concluído</span>';
+    }
+  } catch (err) {}
+}
+
+// Logout
+document.getElementById('logoutBtn') && document.getElementById('logoutBtn').addEventListener('click', () => {
+  API.logout();
+  window.location.href = '/login.html';
+});
+
+// Iniciar
+loadCurso();
+
+</script>
+  <script src="/js/juju-chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<title>Instituto Lumethos — Formando Ministros para o amanhã</title>
+	<link rel="icon" type="image/x-icon" href="img/favicon.ico">
+	<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+	<link media="all" rel="stylesheet" href="css/main.f4f2f5ba.css">
+
+<script>
+// Forçar header escuro permanentemente - desativa troca de classes do tema
+(function() {
+  // Observer que mantém as classes corretas no header
+  const observer = new MutationObserver(function(mutations) {
+    const header = document.querySelector('header');
+    if (!header) return;
+    
+    // Sempre manter header--secondary, remover header--primary se aparecer
+    if (header.classList.contains('header--primary')) {
+      header.classList.remove('header--primary');
+    }
+    if (!header.classList.contains('header--secondary')) {
+      header.classList.add('header--secondary');
+    }
+    
+    // Forçar estilos inline de fundo escuro
+    header.style.backgroundColor = '';
+    header.style.background = '';
+    
+    // Forçar logo light visível
+    document.querySelectorAll('.header-inner__logo--light').forEach(el => {
+      el.style.opacity = '1';
+      el.style.display = 'block';
+    });
+    document.querySelectorAll('.header-inner__logo--dark').forEach(el => {
+      el.style.opacity = '0';
+      el.style.display = 'none';
+    });
+    
+    // Links da navbar sempre brancos
+    document.querySelectorAll('.menu__link').forEach(el => {
+      el.style.color = '#fff';
+    });
+  });
+  
+  // Observar o header e o body para mudanças de classe
+  observer.observe(document.documentElement, { 
+    attributes: true, 
+    attributeFilter: ['class'],
+    subtree: true
+  });
+  
+  // Também observar especificamente o header
+  const headerObserver = new MutationObserver(function() {
+    const header = document.querySelector('header');
+    if (header) {
+      header.style.backgroundColor = '';
+      header.style.background = '';
+    }
+  });
+  
+  if (document.querySelector('header')) {
+    headerObserver.observe(document.querySelector('header'), {
+      attributes: true,
+      attributeFilter: ['class', 'style']
+    });
+  }
+  
+  // Fechar nav-drop ao clicar em qualquer link do menu
+  document.addEventListener('click', function(e) {
+    const link = e.target.closest('.menu__link, .nav-drop a');
+    if (link) {
+      document.body.classList.remove('nav-active');
+      const header = document.querySelector('header');
+      if (header && header.classList.contains('header--primary')) {
+        header.classList.remove('header--primary');
+      }
+      if (header && !header.classList.contains('header--secondary')) {
+        header.classList.add('header--secondary');
+      }
+    }
+  });
+  
+  // Rodar após carregamento completo
+  window.addEventListener('load', function() {
+    const header = document.querySelector('header');
+    if (header) {
+      // Garantir que header é header--secondary
+      if (header.classList.contains('header--primary')) {
+        header.classList.remove('header--primary');
+      }
+      if (!header.classList.contains('header--secondary')) {
+        header.classList.add('header--secondary');
+      }
+      header.style.backgroundColor = '';
+      header.style.background = '';
+    }
+    
+    // Garantir links brancos
+    document.querySelectorAll('.menu__link').forEach(el => {
+      el.style.color = '#fff';
+    });
+    
+    // Logo light visível
+    document.querySelectorAll('.header-inner__logo--light').forEach(el => {
+      el.style.opacity = '1';
+      el.style.display = 'block';
+    });
+  });
+})();
+</script>
+</head>
+
+<body>
+	<div class="wrapper wrapper--offset-0">
+		<header class="header header--secondary">
+			<div class="container">
+				<div class="header-under">
+					<div class="header-inner">
+						<a href="/" class="header-inner__logo">
+							<img class="header-inner__logo--light" src="img/logo-lumethos-correto.png"  alt="Instituto Lumethos">
+						</a>
+						
+						
+					</div>
+					<span class="header-divider"></span>
+					<div class="nav-drop">
+						<nav class="nav">
+							<ul class="menu">
+								<li><a class="menu__link" href="#home">Início</a></li>
+								<li><a class="menu__link" href="#home">Instituto</a></li>
+								<li><a class="menu__link" href="#cursos">Cursos</a></li>
+								<li><a class="menu__link" href="#cursos">Teologia</a></li>
+								<li><a class="menu__link" href="#cursos">Capelania</a></li>
+								<li><a class="menu__link" href="#cursos">Liderança</a></li>
+								<li><a class="menu__link" href="#credenciais">Certificação</a></li>
+								<li><a class="menu__link" href="#contato">Contato</a></li>
+							</ul>
+						</nav>
+					</div>
+					<span class="nav-opener"><span></span></span>
+				</div>
+			</div>
+		</header>
+		<main class="main">
+			<section id="home">
+				<div class="hero-slider">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<div class="hero-tile">
+								<div class="container">
+									<h2 class="hero-tile__title h1">Formando Ministros<br>para o amanhã</h2>
+									<div class="text-wrap fade-up">
+										<p>Capacitamos ministros para progredir em seus ministérios com ensino teológico de excelência, acessível e transformador. </p>
+									</div>
+									<a href="#cursos" class="btn btn--white text--uppercase fade-up">
+										Conheça os Cursos
+										<svg class="icon" width="21" height="12" viewBox="0 0 21 12">
+											<path fill-rule="evenodd" clip-rule="evenodd" d="M15 6.75L0 6.75L0 5.25L15 5.25V6.75Z"/>
+											<path d="M21 5.99986L14.25 11.196L14.25 0.803711L21 5.99986Z"/>
+										</svg>
+									</a>
+								</div>
+								<div class="bg-stretch">
+									<img src="img/slider4-1.jpg" alt="Instituto Lumethos">
+								</div>
+							</div>
+						</div>
+						<div class="swiper-slide">
+							<div class="hero-tile">
+								<div class="container">
+									<h2 class="hero-tile__title h1">Conhecimento que ilumina.<br>Fé que sustenta.</h2>
+									<div class="text-wrap fade-up">
+										<p>Com excelência acadêmica e espiritual, o Instituto Lumethos forma líderes cristãos preparados para os desafios do ministério contemporâneo.</p>
+									</div>
+									<a href="#cursos" class="btn btn--white text--uppercase fade-up">
+										Conheça os Cursos
+										<svg class="icon" width="21" height="12" viewBox="0 0 21 12">
+											<path fill-rule="evenodd" clip-rule="evenodd" d="M15 6.75L0 6.75L0 5.25L15 5.25V6.75Z"/>
+											<path d="M21 5.99986L14.25 11.196L14.25 0.803711L21 5.99986Z"/>
+										</svg>
+									</a>
+								</div>
+								<div class="bg-stretch">
+									<img src="img/image-66.jpg" alt="Instituto Lumethos">
+								</div>
+							</div>
+						</div>
+						<div class="swiper-slide">
+							<div class="hero-tile">
+								<div class="container">
+									<h2 class="hero-tile__title h1">Liderança que <br> Transforma </h2>
+									<div class="text-wrap fade-up">
+										<p>Nossos programas combinam rigor teológico, formação pastoral e habilidades de liderança para uma igreja em constante transformação.</p>
+									</div>
+									<a href="#cursos" class="btn btn--white text--uppercase fade-up">
+										Conheça os Cursos
+										<svg class="icon" width="21" height="12" viewBox="0 0 21 12">
+											<path fill-rule="evenodd" clip-rule="evenodd" d="M15 6.75L0 6.75L0 5.25L15 5.25V6.75Z"/>
+											<path d="M21 5.99986L14.25 11.196L14.25 0.803711L21 5.99986Z"/>
+										</svg>
+									</a>
+								</div>
+								<div class="bg-stretch">
+									<img src="img/image-67-v3.jpg" alt="Instituto Lumethos">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-pagination"></div>
+				</div>
+			</section>
+			<section id="cursos">
+				<ul class="service-list">
+					<li class="service-list__item">
+						<div class="service-card">
+							<div class="service-card__bg">
+								<img src="img/box_bg_1.jpg" alt="Instituto Lumethos">    
+							</div>
+							<h2 class="service-card__title">Teologia</h2>
+							<a href="#cursos-sidebar" class="btn btn--outline">
+								Conheça os Cursos
+								<svg class="icon" width="21" height="12" viewBox="0 0 21 12">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M15 6.75L0 6.75L0 5.25L15 5.25V6.75Z"/>
+									<path d="M21 5.99986L14.25 11.196L14.25 0.803711L21 5.99986Z"/>
+								</svg>
+							</a>
+						</div>
+					</li>
+					<li class="service-list__item">
+						<div class="service-card">
+							<div class="service-card__bg">
+								<img src="img/box_bg_2.jpg" alt="Instituto Lumethos">    
+							</div>
+							<h2 class="service-card__title">Capelania</h2>
+							<a href="#cursos-sidebar" class="btn btn--outline">
+								Conheça os Cursos
+								<svg class="icon" width="21" height="12" viewBox="0 0 21 12">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M15 6.75L0 6.75L0 5.25L15 5.25V6.75Z"/>
+									<path d="M21 5.99986L14.25 11.196L14.25 0.803711L21 5.99986Z"/>
+								</svg>
+							</a>
+						</div>
+					</li>
+					<li class="service-list__item">
+						<div class="service-card">
+							<div class="service-card__bg">
+								<img src="img/box_bg_3.jpg" alt="Instituto Lumethos">    
+							</div>
+							<h2 class="service-card__title">Liderança Cristã</h2>
+							<a href="#cursos-sidebar" class="btn btn--outline">
+								Conheça os Cursos
+								<svg class="icon" width="21" height="12" viewBox="0 0 21 12">
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M15 6.75L0 6.75L0 5.25L15 5.25V6.75Z"/>
+									<path d="M21 5.99986L14.25 11.196L14.25 0.803711L21 5.99986Z"/>
+								</svg>
+							</a>
+						</div>
+					</li>
+				</ul>
+			</section>
+			<section id="credenciais" class="section section-credenciais">
+				<div class="container">
+					<div class="section-headline text--center">
+						<h2 class="sub-title">Credenciais</h2>
+						<h3 class="headline">Certificado & Credencial de Capelão</h3>
+						<p style="color: rgba(255,255,255,0.75); max-width: 650px; margin: 0 auto 40px;">
+							Ao concluir nossos cursos, você recebe certificado de conclusão reconhecido 
+							e credencial oficial de Capelão, com validade para fins curriculares e eclesiásticos.
+						</p>
+					</div>
+					<div class="credenciais-grid">
+						<div class="credenciais-item">
+							<div class="credenciais-moldura">
+								<img src="img/certificado-modelo.jpg" alt="Certificado Instituto Lumethos" class="credenciais-img">
+							</div>
+							<h4 class="credenciais-label">Certificado de Conclusão</h4>
+						</div>
+						<div class="credenciais-item">
+							<div class="credenciais-moldura">
+								<img src="img/credencial-modelo.jpg" alt="Credencial de Capelão Instituto Lumethos" class="credenciais-img">
+							</div>
+							<h4 class="credenciais-label">Credencial de Capelão</h4>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="section text--center bg--light">
+				<div class="container">
+					<div class="section-headline">
+						<h4>Nossos Áreas</h4>
+					</div>
+					<ul class="row-list gap--1">
+						<li class="row-list__item">
+							<div class="card card--overlay">
+								<div class="card__image">
+									<img src="img/img-11_blue.png" width="39" alt="Instituto Lumethos">
+								</div>
+								<h4 class="card__title">Capelania</h4>
+								<div class="text-wrap">
+									<p>Estudo aprofundado das Escrituras, teologia sistemática e história da igreja para uma base sólida.</p>
+								</div>
+								<a href="#cursos" class="card__link"></a>
+							</div>
+						</li>
+						<li class="row-list__item">
+							<div class="card card--overlay">
+								<div class="card__image">
+									<img src="img/img-12_blue.png" width="40" alt="Instituto Lumethos">
+								</div>
+								<h4 class="card__title">Capelania</h4>
+								<div class="text-wrap">
+									<p>Capacitação para servir com excelência em hospitais, prisões, escolas e comunidades.</p>
+								</div>
+								<a href="#cursos" class="card__link"></a>
+							</div>
+						</li>
+						<li class="row-list__item">
+							<div class="card card--overlay">
+								<div class="card__image">
+									<img src="img/img-13_blue.png" width="39" alt="Instituto Lumethos">
+								</div>
+								<h4 class="card__title">Aconselhamento Bíblico</h4>
+								<div class="text-wrap">
+									<p>Desenvolvimento de líderes com visão estratégica, emocional e espiritual para o ministério.</p>
+								</div>
+								<a href="#cursos" class="card__link"></a>
+							</div>
+						</li>
+						<li class="row-list__item">
+							<div class="card card--overlay">
+								<div class="card__image">
+									<img src="img/img-14_blue.png" width="39" alt="Instituto Lumethos">
+								</div>
+								<h4 class="card__title">Liderança Cristã</h4>
+								<div class="text-wrap">
+									<p>Preparação completa para pastores, missionários e obreiros com fundamentos teológicos e pastorais.</p>
+								</div>
+								<a href="#" class="card__link"></a>
+							</div>
+						</li>
+						<li class="row-list__item">
+							<div class="card card--overlay">
+								<div class="card__image">
+									<img src="img/img-15_blue.png" width="24" alt="Instituto Lumethos">
+								</div>
+								<h4 class="card__title">Escola Bíblica</h4>
+								<div class="text-wrap">
+									<p>Técnicas e fundamentos bíblicos para aconselhamento cristão restaurador.</p>
+								</div>
+								<a href="#" class="card__link"></a>
+							</div>
+						</li>
+						<li class="row-list__item">
+							<div class="card card--overlay">
+								<div class="card__image">
+									<img src="img/img-16_blue.png" width="39" alt="Instituto Lumethos">
+								</div>
+								<h4 class="card__title">História da Igreja</h4>
+								<div class="text-wrap">
+									<p>A trajetória da Igreja Cristã ao longo dos séculos.</p>
+								</div>
+								<a href="#" class="card__link"></a>
+							</div>
+						</li>
+					</ul>
+					<div class="btn-holder">
+						<a href="#cursos-sidebar" class="btn btn--outline-primary">
+							Conheça os Cursos
+							<svg class="icon" width="21" height="12" viewBox="0 0 21 12">
+								<path fill-rule="evenodd" clip-rule="evenodd" d="M15 6.75L0 6.75L0 5.25L15 5.25V6.75Z"/>
+								<path d="M21 5.99986L14.25 11.196L14.25 0.803711L21 5.99986Z"/>
+							</svg>
+						</a>
+					</div>
+				</div>
+			</section>
+			<section class="section">
+				<div class="container">
+					<div class="about-wrap text--center">
+						<h4 class="headtitle">Quem Somos</h4>
+						<h3>Com excelência no ensino teológico e inovação ministerial, formamos líderes que transformam comunidades.</h3>
+						<div class="about-wrap__text">
+							<p>Conheça os profissionais dedicados a formar a próxima geração de líderes cristãos com excelência e amor pela Palavra.</p>
+						</div>
+					</div>
+					<hr class="divider">
+					<div class="text--center">
+						<h4 class="headtitle mb--5">Nossos Valores</h4>
+						<ul class="row-list col--3">
+							<li class="row-list__item">
+								<div class="awards-img">
+									<img src="img/img-1.png" width="183" alt="Instituto Lumethos">
+								</div>
+							</li>
+							<li class="row-list__item">
+								<div class="awards-img">
+									<img src="img/img-2.png" width="131" alt="Instituto Lumethos">
+								</div>
+							</li>
+							<li class="row-list__item">
+								<div class="awards-img">
+									<img src="img/img-3.png" width="182" alt="Instituto Lumethos">
+								</div>
+							</li>
+							<li class="row-list__item">
+								<div class="awards-img">
+									<img src="img/img-4.png" width="200" alt="Instituto Lumethos">
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+			<section id="contato" class="section bg--gradient">
+				<div class="container">
+					<div class="section-headline">
+						<h4>Nossa Equipe</h4>
+						<p>Conheça os profissionais dedicados a formar a próxima geração de líderes cristãos com excelência e amor pela Palavra.</p>
+					</div>
+					<ul class="team">
+						<li class="team__item">
+							<div class="team-member">
+								<div class="team-member__img">
+									<img src="img/law-6-540x654.jpg" alt="Instituto Lumethos">
+								</div>
+								<div class="team-member__expanded">
+									<h3 class="team-title">Docente de Teologia Sistemática</h3>
+									<strong class="team-position">Fundador, SP, Brasil</strong>
+									<ul class="contact-info top--line">
+										<li class="contact-info__item">
+											<span class="contact-info__text">E-mail</span>
+											<a class="contact-info__link" href="mailto:contato@institutolumethos.com.br">contato@institutolumethos.com.br</a>
+										</li>
+										<li class="contact-info__item">
+											<span class="contact-info__text">E-mail</span>
+											<a class="contact-info__link" href="tel:8002369590">(11) 99999-9999</a>
+										</li>
+									</ul>
+								</div>
+								<a href="#contato" class="team-member__link"></a>
+							</div>
+						</li>
+						<li class="team__item">
+							<div class="team-member">
+								<div class="team-member__img">
+									<img src="img/image-43-540x654.jpg" alt="Instituto Lumethos">
+								</div>
+								<div class="team-member__expanded">
+									<h3 class="team-title">Docente de Capelania</h3>
+									<strong class="team-position">Capelania, SP</strong>
+									<ul class="contact-info top--line">
+										<li class="contact-info__item">
+											<span class="contact-info__text">E-mail</span>
+											<a class="contact-info__link" href="mailto:contato@institutolumethos.com.br">contato@institutolumethos.com.br</a>
+										</li>
+										<li class="contact-info__item">
+											<span class="contact-info__text">E-mail</span>
+											<a class="contact-info__link" href="tel:8004367810">(11) 98888-8888</a>
+										</li>
+									</ul>
+								</div>
+								<a href="#contato" class="team-member__link"></a>
+							</div>
+						</li>
+						<li class="team__item">
+							<div class="team-member">
+								<div class="team-member__img">
+									<img src="img/image-44-540x654.jpg" alt="Instituto Lumethos">
+								</div>
+								<div class="team-member__expanded">
+									<h3 class="team-title">Docente de Liderança Cristã</h3>
+									<strong class="team-position">Aconselhamento, SP</strong>
+									<ul class="contact-info top--line">
+										<li class="contact-info__item">
+											<span class="contact-info__text">E-mail</span>
+											<a class="contact-info__link" href="mailto:contato@institutolumethos.com.br">contato@institutolumethos.com.br</a>
+										</li>
+										<li class="contact-info__item">
+											<span class="contact-info__text">E-mail</span>
+											<a class="contact-info__link" href="tel:8004568790">(11) 97777-7777</a>
+										</li>
+									</ul>
+								</div>
+								<a href="#contato" class="team-member__link"></a>
+							</div>
+						</li>
+						<li class="team__item">
+							<div class="team-member">
+								<div class="team-member__img">
+									<img src="img/image-45-540x654.jpg" alt="Instituto Lumethos">
+								</div>
+								<div class="team-member__expanded">
+									<h3 class="team-title">Docente de Aconselhamento</h3>
+									<strong class="team-position">Liderança, SP</strong>
+									<ul class="contact-info top--line">
+										<li class="contact-info__item">
+											<span class="contact-info__text">E-mail</span>
+											<a class="contact-info__link" href="mailto:contato@institutolumethos.com.br">contato@institutolumethos.com.br</a>
+										</li>
+										<li class="contact-info__item">
+											<span class="contact-info__text">E-mail</span>
+											<a class="contact-info__link" href="tel:8003768790">(11) 96666-6666</a>
+										</li>
+									</ul>
+								</div>
+								<a href="#contato" class="team-member__link"></a>
+							</div>
+						</li>
+					</ul>
+					<div class="btn-holder">
+						<a href="#cursos-sidebar" class="btn btn--outline-secondary">
+							Conheça os Cursos
+							<svg class="icon" width="21" height="12" viewBox="0 0 21 12">
+								<path fill-rule="evenodd" clip-rule="evenodd" d="M15 6.75L0 6.75L0 5.25L15 5.25V6.75Z"/>
+								<path d="M21 5.99986L14.25 11.196L14.25 0.803711L21 5.99986Z"/>
+							</svg>
+						</a>
+					</div>
+				</div>
+			</section>
+			<section id="cursos-sidebar" class="section">
+				<div class="container">
+					<div class="section-headline">
+						<h4>Cursos em Destaque</h4>
+					</div>
+					<div class="stories-slider slider">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide">
+								<div class="stories-card">
+									<div class="stories-card__img">
+										<img src="img/image-38-1200x800.jpg" alt="Instituto Lumethos">
+									</div>
+									<div class="stories-card__content">
+										<div class="categories">
+											<span>Capelania</span>
+											<span>Teologia</span>
+										</div>
+										<h3 class="stories-card__title"><a href="#contato">Curso de Capelania — 8 Módulos</a></h3>
+										<a href="#contato" class="btn btn--link">Conheça os Cursos</a>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-slide">
+								<div class="stories-card">
+									<div class="stories-card__img">
+										<img src="img/image-37-800x533.jpg" alt="Instituto Lumethos">
+									</div>
+									<div class="stories-card__content">
+										<div class="categories">
+											<span>Aconselhamento</span>
+											<span>Liderança</span>
+										</div>
+										<h3 class="stories-card__title"><a href="#cursos">Liderança — 8 Módulos</a></h3>
+										<a href="#cursos" class="btn btn--link">Conheça os Cursos</a>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-slide">
+								<div class="stories-card">
+									<div class="stories-card__img">
+										<img src="img/image-36-800x533.jpg" alt="Instituto Lumethos">
+									</div>
+									<div class="stories-card__content">
+										<div class="categories">
+											<span>Capelania</span>
+											<span>Bíblico</span>
+										</div>
+										<h3 class="stories-card__title"><a href="#cursos">Curso de Aconselhamento Bíblico</a></h3>
+										<a href="#contato" class="btn btn--link">Conheça os Cursos</a>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-slide">
+								<div class="stories-card">
+									<div class="stories-card__img">
+										<img src="img/image-35-800x533.jpg" alt="Instituto Lumethos">
+									</div>
+									<div class="stories-card__content">
+										<div class="categories">
+											<span>Aconselhamento</span>
+											<span>Teologia</span>
+										</div>
+										<h3 class="stories-card__title"><a href="#cursos">Curso de Liderança Cristã</a></h3>
+										<a href="#contato" class="btn btn--link">Conheça os Cursos</a>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-slide">
+								<div class="stories-card">
+									<div class="stories-card__img">
+										<img src="img/image-34-800x533.jpg" alt="Instituto Lumethos">
+									</div>
+									<div class="stories-card__content">
+										<div class="categories">
+											<span>Escola Bíblica</span>
+											<span>Teologia</span>
+										</div>
+										<h3 class="stories-card__title"><a href="#cursos">Curso de Escola Bíblica</a></h3>
+										<a href="#contato" class="btn btn--link">Conheça os Cursos</a>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-slide">
+								<div class="stories-card">
+									<div class="stories-card__img">
+										<img src="img/image-33-800x533.jpg" alt="Instituto Lumethos">
+									</div>
+									<div class="stories-card__content">
+										<div class="categories">
+											<span>Bíblico</span>
+											<span>Liderança</span>
+										</div>
+										<h3 class="stories-card__title"><a href="#cursos">Curso de História da Igreja</a></h3>
+										<a href="#contato" class="btn btn--link">Conheça os Cursos</a>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-slide">
+								<div class="stories-card">
+									<div class="stories-card__img">
+										<img src="img/image-32-800x533.jpg" alt="Instituto Lumethos">
+									</div>
+									<div class="stories-card__content">
+										<div class="categories">
+											<span>Capelania</span>
+											<span>Teologia</span>
+										</div>
+										<h3 class="stories-card__title"><a href="#cursos">Curso de Capelania Avançada</a></h3>
+										<a href="#contato" class="btn btn--link">Conheça os Cursos</a>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-slide">
+								<div class="stories-card">
+									<div class="stories-card__img">
+										<img src="img/image-39-800x533.jpg" alt="Instituto Lumethos">
+									</div>
+									<div class="stories-card__content">
+										<div class="categories">
+											<span>Liderança</span>
+											<span>Teologia</span>
+										</div>
+										<h3 class="stories-card__title"><a href="#cursos">Curso de Missões</a></h3>
+										<a href="#contato" class="btn btn--link">Conheça os Cursos</a>
+									</div>
+								</div>
+							</div>
+							<div class="swiper-slide">
+								<div class="stories-card">
+									<div class="stories-card__img">
+										<img src="img/us-court-800x533.jpg" alt="Instituto Lumethos">
+									</div>
+									<div class="stories-card__content">
+										<div class="categories">
+											<span>Aconselhamento</span>
+											<span>Bíblico</span>
+										</div>
+										<h3 class="stories-card__title"><a href="#cursos">Curso de Grego Bíblico</a></h3>
+										<a href="#contato" class="btn btn--link">Conheça os Cursos</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="slider-btn slider-btn__prev"></div>
+						<div class="slider-btn slider-btn__next"></div>
+					</div>
+				</div>
+			</section>
+			<section class="section section-testimonial">
+				<div class="container">
+					<div class="section-headline">
+						<h4>Depoimentos</h4>
+					</div>
+					<div class="testimonial-slider">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide">
+								<blockquote class="testimonial-quote">
+									<p>“O Instituto Lumethos transformou minha forma de enxergar o ministério. Os professores são excelentes e o conteúdo é profundo e relevante.”</p>
+									<span class="testimonial-quote__author">Aluno do Curso de Teologia</span>
+								</blockquote>
+							</div>
+							<div class="swiper-slide">
+								<blockquote class="testimonial-quote">
+									<p>“O Instituto Lumethos transformou minha forma de enxergar o ministério. Os professores são excelentes e o conteúdo é profundo e relevante.”</p>
+									<span class="testimonial-quote__author">Aluno do Curso de Teologia</span>
+								</blockquote>
+							</div>
+							<div class="swiper-slide">
+								<blockquote class="testimonial-quote">
+									<p>“O Instituto Lumethos transformou minha forma de enxergar o ministério. Os professores são excelentes e o conteúdo é profundo e relevante.”</p>
+									<span class="testimonial-quote__author">Aluno do Curso de Teologia</span>
+								</blockquote>
+							</div>
+						</div>
+						<div class="swiper-pagination"></div>
+					</div>
+				</div>
+				<div class="bg-stretch">
+					<img src="img/image-7.jpg" alt="Instituto Lumethos">
+				</div>
+			</section>
+			<section class="section-tile">
+				<div class="section-tile__item bg--gradient">
+					<div class="container">
+						<div class="cta-form">
+							<h2>Entre em Contato</h2>
+							<p>Estamos prontos para te atender. Sua jornada teológica começa aqui.</p>
+							<form action="#">
+								<div class="form-row">
+									<div class="form-row__field">
+										<input type="text" class="form-control" placeholder="Nome*">
+									</div>
+									<div class="form-row__field">
+										<input type="email" class="form-control" placeholder="E-mail*">
+									</div>
+									<div class="form-row__field">
+										<input type="text" class="form-control" placeholder="Assunto">
+									</div>
+									<div class="form-row__field">
+										<textarea placeholder="Mensagem"></textarea>
+									</div>
+									<div class="form-row__field form-row__field--btn">
+										<button class="btn btn--outline-secondary" type="submit">Enviar Mensagem</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="section-tile__item">
+					<div class="container">
+						<h4 class="headtitle">Artigos Recentes</h4>
+						<ul class="post-list">
+							<li class="post-list__item">
+								<div class="post-card">
+									<div class="listing-meta">
+										<span class="listing-meta__item">
+											<a href="#cursos">Capelania</a>
+										</span>
+										<span class="listing-meta__item">
+											<a href="#home">Junho, 2026</a>
+										</span>
+									</div>
+									<h3 class="post-card__title"><a href="#cursos-sidebar">O Papel da Teologia na Igreja Contemporânea</a></h3>
+									<a href="#contato" class="btn btn--link">Saiba Mais</a>
+								</div>
+							</li>
+							<li class="post-list__item">
+								<div class="post-card">
+									<div class="listing-meta">
+										<span class="listing-meta__item">
+											<a href="#cursos">Capelania</a>
+										</span>
+										<span class="listing-meta__item">
+											<a href="#home">Junho, 2026</a>
+										</span>
+									</div>
+									<h3 class="post-card__title"><a href="#cursos-sidebar">O Papel da Teologia na Igreja Contemporânea</a></h3>
+									<a href="#contato" class="btn btn--link">Saiba Mais</a>
+								</div>
+							</li>
+							<li class="post-list__item">
+								<div class="post-card">
+									<div class="listing-meta">
+										<span class="listing-meta__item">
+											<a href="#cursos">Capelania</a>
+										</span>
+										<span class="listing-meta__item">
+											<a href="#home">Junho, 2026</a>
+										</span>
+									</div>
+									<h3 class="post-card__title"><a href="#cursos-sidebar">O Papel da Teologia na Igreja Contemporânea</a></h3>
+									<a href="#contato" class="btn btn--link">Saiba Mais</a>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+		</main>
+		<footer class="footer">
+			<div class="container">
+				<div class="footer-upper">
+					<div class="footer-upper__col col--4">
+						<div class="footer-selo">
+							<img src="img/selo-footer.jpg" alt="Selo Instituto Lumethos">
+						</div>
+					</div>
+					<div class="footer-upper__col col--2">
+						<h4 class="footer-upper__title">Links Rápidos</h4>
+						<ul class="footer-list">
+							<li><a href="#home" class="footer-list__link">Início</a></li>
+							<li><a href="#cursos" class="footer-list__link">Serviços</a></li>
+							<li><a href="#home" class="footer-list__link">Sobre Nós</a></li>
+							<li><a href="#cursos" class="footer-list__link">Cursos</a></li>
+							<li><a href="#home" class="footer-list__link">Notícias</a></li>
+							<li><a href="#home" class="footer-list__link">Páginas</a></li>
+							<li><a href="#contato" class="footer-list__link">Contato</a></li>
+						</ul>
+					</div>
+					<div class="footer-upper__col col--2">
+						<h4 class="footer-upper__title">Conteúdo</h4>
+						<ul class="footer-list">
+							<li><a href="#home" class="footer-list__link">Notícias</a></li>
+							<li><a href="#cursos" class="footer-list__link">Eventos</a></li>
+							<li><a href="#contato" class="footer-list__link">Comunicados</a></li>
+							<li><a href="#cursos" class="footer-list__link">Webinars</a></li>
+							<li><a href="#home" class="footer-list__link">Artigos</a></li>
+							<li><a href="#contato" class="footer-list__link">Newsletter</a></li>
+							<li><a href="#home" class="footer-list__link">Publicações</a></li>
+						</ul>
+					</div>
+					<div class="footer-upper__col col--2">
+						<h4 class="footer-upper__title">Áreas</h4>
+						<ul class="footer-list">
+							<li><a href="#cursos" class="footer-list__link">Capelania</a></li>
+							<li><a href="#cursos" class="footer-list__link">Capelania</a></li>
+							<li><a href="#cursos" class="footer-list__link">Aconselhamento</a></li>
+							<li><a href="#cursos" class="footer-list__link">Liderança</a></li>
+							<li><a href="#cursos" class="footer-list__link">Escola Bíblica</a></li>
+							<li><a href="#cursos" class="footer-list__link">História da Igreja</a></li>
+							<li><a href="#cursos" class="footer-list__link">Missões</a></li>
+							<li><a href="#cursos" class="footer-list__link">Grego Bíblico</a></li>
+						</ul>
+					</div>
+					<div class="footer-upper__col col--2">
+						<h4 class="footer-upper__title">Programas</h4>
+						<ul class="footer-list">
+							<li><a href="#cursos" class="footer-list__link">Capelania</a></li>
+							<li><a href="#cursos" class="footer-list__link">Aconselhamento</a></li>
+							<li><a href="#cursos" class="footer-list__link">Bíblico</a></li>
+							<li><a href="#cursos" class="footer-list__link">Liderança</a></li>
+							<li><a href="#cursos" class="footer-list__link">Escola Bíblica</a></li>
+							<li><a href="#cursos" class="footer-list__link">Teologia</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="footer-contact">
+					<div class="footer-contact__item">
+						<ul class="info-list">
+							<li class="info-list__item">
+								<span class="info-list__text">Sede</span>
+								<a class="info-list__link" href="https://maps.google.com/?q=São+Paulo+SP" target="_blank">São Paulo, SP, Brasil</a>
+							</li>
+							<li class="info-list__item">
+								<span class="info-list__text">E-mail</span>
+								<a class="info-list__link" href="mailto:instituto.lumethos@gmail.com">instituto.lumethos@gmail.com</a>
+							</li>
+							<li class="info-list__item">
+								<span class="info-list__text">Telefone</span>
+								<a class="info-list__link" href="tel:13105001234">(11) 99999-9999</a>
+							</li>
+						</ul>
+					</div>
+					<div class="footer-contact__item">
+						
+						<a href="#cursos" class="btn btn--white">
+							Conheça os Cursos
+							<svg class="icon" width="21" height="12" viewBox="0 0 21 12">
+								<path fill-rule="evenodd" clip-rule="evenodd" d="M15 6.75L0 6.75L0 5.25L15 5.25V6.75Z"/>
+								<path d="M21 5.99986L14.25 11.196L14.25 0.803711L21 5.99986Z"/>
+							</svg>
+						</a>
+					</div>
+				</div>
+				<div class="footer-under">
+					<ul class="footer-list footer-list--row">
+						<li><a href="#home" class="footer-list__link">Termos e Condições</a></li>
+						<li><a href="#home" class="footer-list__link">Política de Privacidade</a></li>
+						<li><a href="#contato" class="footer-list__link" style="font-weight:700;color:#C79A2E">Fale Conosco</a></li>
+						<li>&copy; 2026 Instituto Lumethos &mdash; SAPIENTIA AD MINISTERIUM. Todos os direitos reservados.</li>
+					</ul>
+				</div>
+			</div>
+			<div class="bg-stretch">
+				<img src="img/image-2.jpg" alt="Instituto Lumethos">
+			</div>
+		</footer>
+	</div>
+	<script src="js/all.js"></script>
+</body>
+
+</html>

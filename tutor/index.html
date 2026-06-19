@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tutor — Instituto Lumethos</title>
+<link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0D1B2A;--bg2:#142D4C;--sidebar:#0a1628;--gold:#C79A2E;--gold-hover:#d4aa3a;--card:#1a2744;--card-hover:#1f2f50;--border:rgba(199,154,46,0.15);--text:#f0f0f0;--text2:#8899bb;--text3:#556688;--radius:12px;--danger:#ef4444;--success:#22c55e}
+body{font-family:'Roboto',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex}
+.sidebar{width:220px;background:var(--sidebar);min-height:100vh;display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;border-right:1px solid rgba(255,255,255,0.04)}
+.sidebar-logo{padding:18px 16px;border-bottom:1px solid rgba(255,255,255,0.04)}
+.sidebar-logo h2{font-family:'Libre Baskerville',serif;font-size:14px;color:var(--gold)}
+.sidebar-logo small{color:var(--text3);font-size:9px;text-transform:uppercase;letter-spacing:1px}
+.sidebar-nav{padding:8px 0;flex:1}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 16px;color:var(--text2);font-size:13px;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;font-weight:500}
+.nav-item:hover{color:var(--text);background:rgba(199,154,46,0.04)}
+.nav-item.active{color:var(--gold);border-left-color:var(--gold);background:rgba(199,154,46,0.06)}
+.nav-item .icon{font-size:16px;width:20px;text-align:center}
+.nav-item .badge{margin-left:auto;background:var(--gold);color:var(--bg);font-size:9px;font-weight:700;padding:1px 7px;border-radius:10px}
+.sidebar-footer{padding:12px 16px;border-top:1px solid rgba(255,255,255,0.04)}
+.sidebar-footer .user-info{display:flex;align-items:center;gap:10px}
+.sidebar-footer .avatar{width:28px;height:28px;border-radius:50%;background:var(--gold);color:var(--bg);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px}
+.sidebar-footer .name{font-size:12px;font-weight:500}
+.sidebar-footer .role{font-size:10px;color:var(--text3)}
+.sidebar-footer .logout{color:var(--text3);font-size:11px;cursor:pointer;transition:color 0.2s}
+.sidebar-footer .logout:hover{color:var(--danger)}
+.main{flex:1;margin-left:220px;padding:20px 24px}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.topbar h1{font-size:18px;font-family:'Libre Baskerville',serif}
+.topbar h1 span{color:var(--gold)}
+.page{display:none}.page.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+.card-metric{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.card-metric .num{font-size:28px;font-weight:700;color:var(--gold);font-family:'Libre Baskerville',serif}
+.card-metric .label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.table-wrap{overflow-x:auto;background:var(--card);border-radius:var(--radius);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead{background:rgba(13,27,42,0.5)}
+th{padding:10px 12px;text-align:left;color:var(--text3);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:0.5px}
+td{padding:10px 12px;border-top:1px solid rgba(255,255,255,0.04);color:var(--text2)}
+tr:hover td{background:rgba(199,154,46,0.02)}
+.status{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.status.ativo{background:rgba(34,197,94,0.15);color:#22c55e}
+.status.pendente{background:rgba(234,179,8,0.15);color:#eab308}
+.status.corrigido{background:rgba(59,130,246,0.15);color:#3b82f6}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.25s;font-family:'Roboto',sans-serif}
+.btn-gold{background:var(--gold);color:var(--bg)}
+.btn-gold:hover{background:var(--gold-hover);transform:translateY(-1px)}
+.btn-sm{padding:5px 10px;font-size:11px}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text2)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.btn-success{background:rgba(34,197,94,0.15);color:var(--success)}
+.btn-danger{background:rgba(239,68,68,0.15);color:var(--danger)}
+.search-bar input{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:7px;background:var(--card);color:var(--text);font-size:13px;font-family:'Roboto',sans-serif;margin-bottom:12px}
+.search-bar input::placeholder{color:var(--text3)}
+.search-bar input:focus{outline:none;border-color:var(--gold)}
+.feedback-area{width:100%;min-height:80px;padding:10px;border:1px solid var(--border);border-radius:7px;background:rgba(255,255,255,0.03);color:var(--text);font-family:'Roboto',sans-serif;resize:vertical}
+.feedback-area:focus{outline:none;border-color:var(--gold)}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text3)}
+.empty-state .icon{font-size:36px;margin-bottom:8px}
+.empty-state h3{font-size:15px;color:var(--text2);margin-bottom:4px}
+.progress-bar{height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;margin:4px 0}
+.progress-bar .fill{height:100%;background:var(--gold);border-radius:3px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px}
+.section-header h3{font-size:14px;font-weight:500}
+@media(max-width:768px){.sidebar{width:56px}.sidebar-logo h2,.sidebar-logo small,.nav-item span,.sidebar-footer .name,.sidebar-footer .role{display:none}.nav-item{padding:10px;justify-content:center}.nav-item .icon{font-size:18px;width:auto}.main{margin-left:56px;padding:12px}}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-logo"><h2>Lumethos</h2><small>Tutor</small></div>
+  <div class="sidebar-nav">
+    <div class="nav-item active" data-page="dashboard" onclick="irPara('dashboard')"><span class="icon">📊</span><span>Dashboard</span></div>
+    <div class="nav-item" data-page="alunos" onclick="irPara('alunos')"><span class="icon">👥</span><span>Meus Alunos</span></div>
+    <div class="nav-item" data-page="correcoes" onclick="irPara('correcoes')"><span class="icon">📝</span><span>Correções</span></div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="avatar" id="tutorAvatar">T</div>
+      <div><div class="name" id="tutorNome">Tutor</div><div class="role">Tutor</div></div>
+    </div>
+    <a class="logout" onclick="fazerLogout()">Sair</a>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar"><h1 id="pageTitle">📊 <span>Dashboard</span></h1></div>
+
+  <div class="page active" id="pageDashboard">
+    <div class="card-grid" id="metricasTutor">
+      <div class="card-metric"><div class="num" id="tMeusAlunos">0</div><div class="label">Meus Alunos</div></div>
+      <div class="card-metric"><div class="num" id="tPendencias">0</div><div class="label">Pendências</div></div>
+      <div class="card-metric"><div class="num" id="tCorrecoes">0</div><div class="label">Correções</div></div>
+    </div>
+    <div class="card"><h3 style="font-size:14px;margin-bottom:8px">📈 Atividades Recentes</h3><div id="tAtividades"><div class="empty-state"><div class="icon">📋</div><h3>Nenhuma atividade</h3></div></div></div>
+  </div>
+
+  <div class="page" id="pageAlunos">
+    <div class="section-header"><h3>👥 Meus Alunos</h3></div>
+    <div class="search-bar"><input type="text" id="buscaAlunosTutor" placeholder="Buscar aluno..." oninput="renderMeusAlunos()"></div>
+    <div class="table-wrap"><table><thead><tr><th>Nome</th><th>Email</th><th>Cursos</th><th>Progresso</th><th>Ações</th></tr></thead><tbody id="meusAlunosLista"></tbody></table></div>
+  </div>
+
+  <div class="page" id="pageCorrecoes">
+    <div class="section-header"><h3>📝 Correções Pendentes</h3></div>
+    <div id="correcoesLista"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)fecharModal()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:200;align-items:center;justify-content:center">
+  <div class="modal" id="modalContent" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);width:90%;max-width:500px;max-height:90vh;overflow-y:auto;padding:20px;color:var(--text)"></div>
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://iykaedhvtfitenzrhxom.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbG…D9Js';
+const supabase=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+
+let userInfo=null, alunosTutor=[], entregas=[], cursos=[];
+
+function fazerLogout(){localStorage.removeItem('lumethos_token');localStorage.removeItem('lumethos_user');window.location.href='../admin/login.html'}
+function toast(msg,tipo){const t=document.getElementById('toast')||criarToast();t.textContent=msg;t.className='toast show '+tipo;setTimeout(()=>t.classList.remove('show'),3000)}
+function criarToast(){const t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:20px;right:20px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 18px;color:var(--text);font-size:13px;z-index:300;box-shadow:0 8px 30px rgba(0,0,0,0.4);display:none;animation:slideUp 0.3s ease';document.body.appendChild(t);return t}
+function fecharModal(){document.getElementById('modalOverlay').style.display='none'}
+function abrirModal(h){document.getElementById('modalContent').innerHTML=h;document.getElementById('modalOverlay').style.display='flex'}
+
+function irPara(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page'+p.charAt(0).toUpperCase()+p.slice(1)).classList.add('active');
+  document.querySelector('.nav-item[data-page="'+p+'"]').classList.add('active');
+  document.getElementById('pageTitle').innerHTML={dashboard:'📊 Dashboard',alunos:'👥 Meus Alunos',correcoes:'📝 Correções'}[p];
+  if(p==='dashboard')carregarDashboard();
+  if(p==='alunos')carregarMeusAlunos();
+  if(p==='correcoes')carregarCorrecoes();
+}
+
+async function supabaseFetch(t,o={}){
+  const token=localStorage.getItem('lumethos_token');
+  const h={'apikey':SUPABASE_ANON_KEY,'Content-Type':'application/json'};
+  if(token)h['Authorization']='Bearer '+token;
+  let url=SUPABASE_URL+'/rest/v1/'+t+'?select='+(o.select||'*');
+  if(o.filter)url+='&'+o.filter;
+  if(o.order)url+='&order='+o.order;
+  return (await fetch(url,{headers:h})).json();
+}
+
+function init(){
+  userInfo=JSON.parse(localStorage.getItem('lumethos_user'));
+  if(!userInfo||!localStorage.getItem('lumethos_token')){window.location.href='../admin/login.html';return}
+  document.getElementById('tutorNome').textContent=userInfo.nome||'Tutor';
+  document.getElementById('tutorAvatar').textContent=(userInfo.nome||'T')[0];
+  carregarDashboard();
+}
+
+async function carregarDashboard(){
+  try{
+    const a=await supabaseFetch('alunos',{filter:'role=eq.aluno'+(userInfo.aluno_id?'&tutor_id=eq.'+userInfo.aluno_id:'')});
+    alunosTutor=a||[];
+    const es=await supabaseFetch('entregas')||[];
+    const pends=es.filter(e=>e.status==='pendente');
+    document.getElementById('tMeusAlunos').textContent=alunosTutor.length;
+    document.getElementById('tPendencias').textContent=pends.length;
+    document.getElementById('tCorrecoes').textContent=es.filter(e=>e.status==='pendente'||e.status==='corrigido').length;
+  }catch(e){console.error(e)}
+}
+
+async function carregarMeusAlunos(){
+  try{
+    const a=await supabaseFetch('alunos',{filter:'role=eq.aluno'+(userInfo.aluno_id?'&tutor_id=eq.'+userInfo.aluno_id:'')});
+    alunosTutor=a||[];
+    const mats=await supabaseFetch('matriculas')||[];
+    const crs=await supabaseFetch('cursos')||[];
+    cursos=crs;
+    renderMeusAlunos(mats);
+  }catch(e){console.error(e)}
+}
+
+function renderMeusAlunos(mats){
+  const q=(document.getElementById('buscaAlunosTutor')?.value||'').toLowerCase();
+  const f=alunosTutor.filter(a=>(a.nome||'').toLowerCase().includes(q));
+  const lista=document.getElementById('meusAlunosLista');
+  if(f.length===0){lista.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text3)">Nenhum aluno</td></tr>';return}
+  let html='';
+  for(const a of f){
+    const matsAluno=mats?.filter(m=>m.aluno_id===a.id)||[];
+    html+='<tr><td><strong>'+a.nome+'</strong></td><td>'+a.email+'</td><td>'+matsAluno.length+'</td>';
+    const pct=matsAluno.length>0?Math.round(matsAluno.reduce((s,m)=>s+(m.progresso||0),0)/matsAluno.length):0;
+    html+='<td><div class="progress-bar" style="width:100px"><div class="fill" style="width:'+pct+'%"></div></div><small>'+pct+'%</small></td>';
+    html+='<td><button class="btn btn-sm btn-outline" onclick="verProgressoAluno(\''+a.id+'\',\''+a.nome+'\',\''+a.email+'\')">👁️</button></td></tr>';
+  }
+  lista.innerHTML=html;
+}
+
+async function verProgressoAluno(id,nome,email){
+  const mats=await supabaseFetch('matriculas',{filter:'aluno_id=eq.'+id});
+  const crs=cursos;
+  let html='<h2>👤 '+nome+'</h2><p style="color:var(--text3);margin-bottom:16px">'+email+'</p>';
+  if(mats.length===0)html+='<div class="empty-state"><h3>Nenhum curso</h3></div>';
+  else for(const m of mats){
+    const curso=crs.find(c=>c.id===m.curso_id);
+    html+='<div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:12px;margin-bottom:8px">'+
+      '<div style="display:flex;justify-content:space-between;margin-bottom:4px"><strong>'+(curso?.titulo||'Curso')+'</strong><span style="color:var(--gold)">'+(m.progresso||0)+'%</span></div>'+
+      '<div class="progress-bar"><div class="fill" style="width:'+(m.progresso||0)+'%"></div></div>'+
+      '<small style="color:var(--text3)">Status: '+(m.status||'ativo')+'</small></div>';
+  }
+  html+='<div class="modal-actions" style="margin-top:12px"><button class="btn btn-outline" onclick="fecharModal()">Fechar</button></div>';
+  abrirModal(html);
+}
+
+async function carregarCorrecoes(){
+  try{
+    const es=await supabaseFetch('entregas',{order:'data_entrega.desc'});
+    entregas=es||[];
+    renderCorrecoes();
+  }catch(e){console.error(e)}
+}
+
+function renderCorrecoes(){
+  const pends=entregas.filter(e=>e.status==='pendente');
+  const lista=document.getElementById('correcoesLista');
+  if(pends.length===0){lista.innerHTML='<div class="empty-state"><div class="icon">✅</div><h3>Nenhuma correção pendente</h3><p>Todas as entregas foram corrigidas.</p></div>';return}
+  let html='';
+  for(const e of pends){
+    html+='<div class="card">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">'+
+      '<div><strong>Entrega pendente</strong><br><small style="color:var(--text3)">'+
+      new Date(e.data_entrega).toLocaleString('pt-BR')+'</small></div>'+
+      '<span class="status pendente">'+e.status+'</span></div>'+
+      '<div style="margin-top:10px"><strong style="font-size:12px;color:var(--text2)">Resposta do aluno:</strong>'+
+      '<p style="margin-top:4px;font-size:13px;white-space:pre-wrap">'+(e.conteudo||'---')+'</p></div>'+
+      '<div style="margin-top:10px"><label style="font-size:11px;color:var(--text2)">Nota (0-10):</label>'+
+      '<input type="number" id="nota_'+e.id+'" min="0" max="10" step="0.5" style="width:80px;padding:6px;margin-left:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:5px;color:var(--text)">'+
+      '<div style="margin-top:8px"><textarea id="feedback_'+e.id+'" placeholder="Escreva seu feedback..." class="feedback-area"></textarea></div>'+
+      '<button class="btn btn-gold btn-sm" onclick="corrigir(\''+e.id+'\')" style="margin-top:8px">✅ Corrigir</button></div>'+
+      '</div>';
+  }
+  lista.innerHTML=html;
+}
+
+async function corrigir(id){
+  const nota=parseFloat(document.getElementById('nota_'+id).value);
+  const feedback=document.getElementById('feedback_'+id).value;
+  if(isNaN(nota)){toast('Defina uma nota','error');return}
+  try{
+    const token=localStorage.getItem('lumethos_token');
+    await fetch(SUPABASE_URL+'/rest/v1/entregas?id=eq.'+id,{
+      method:'PATCH',
+      headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+      body:JSON.stringify({nota,feedback,status:'corrigido',data_correcao:new Date().toISOString()})
+    });
+    toast('✅ Corrigido!','success');
+    carregarCorrecoes();
+  }catch(e){toast('Erro','error')}
+}
+
+init();
+</script>
+</body>
+</html>

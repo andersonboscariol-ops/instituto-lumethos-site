@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<title>Instituto Lumethos — Formação em Capelania Cristã</title>
+	<link rel="icon" type="image/x-icon" href="img/favicon.ico">
+	<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+	<link media="all" rel="stylesheet" href="css/main.f4f2f5ba.css">
+
+<script>
+// Forçar header escuro permanentemente - desativa troca de classes do tema
+(function() {
+  // Observer que mantém as classes corretas no header
+  const observer = new MutationObserver(function(mutations) {
+    const header = document.querySelector('header');
+    if (!header) return;
+    
+    // Sempre manter header--secondary, remover header--primary se aparecer
+    if (header.classList.contains('header--primary')) {
+      header.classList.remove('header--primary');
+    }
+    if (!header.classList.contains('header--secondary')) {
+      header.classList.add('header--secondary');
+    }
+    
+    // Forçar estilos inline de fundo escuro
+    header.style.backgroundColor = '';
+    header.style.background = '';
+    
+    // Forçar logo light visível
+    document.querySelectorAll('.header-inner__logo--light').forEach(el => {
+      el.style.opacity = '1';
+      el.style.display = 'block';
+    });
+    document.querySelectorAll('.header-inner__logo--dark').forEach(el => {
+      el.style.opacity = '0';
+      el.style.display = 'none';
+    });
+    
+    // Links da navbar sempre brancos
+    document.querySelectorAll('.menu__link').forEach(el => {
+      el.style.color = '#fff';
+    });
+  });
+  
+  // Observar o header e o body para mudanças de classe
+  observer.observe(document.documentElement, { 
+    attributes: true, 
+    attributeFilter: ['class'],
+    subtree: true
+  });
+  
+  // Também observar especificamente o header
+  const headerObserver = new MutationObserver(function() {
+    const header = document.querySelector('header');
+    if (header) {
+      header.style.backgroundColor = '';
+      header.style.background = '';
+    }
+  });
+  
+  if (document.querySelector('header')) {
+    headerObserver.observe(document.querySelector('header'), {
+      attributes: true,
+      attributeFilter: ['class', 'style']
+    });
+  }
+  
+  // Fechar nav-drop ao clicar em qualquer link do menu
+  document.addEventListener('click', function(e) {
+    const link = e.target.closest('.menu__link, .nav-drop a');
+    if (link) {
+      document.body.classList.remove('nav-active');
+      const header = document.querySelector('header');
+      if (header && header.classList.contains('header--primary')) {
+        header.classList.remove('header--primary');
+      }
+      if (header && !header.classList.contains('header--secondary')) {
+        header.classList.add('header--secondary');
+      }
+    }
+  });
+  
+  // Rodar após carregamento completo
+  window.addEventListener('load', function() {
+    const header = document.querySelector('header');
+    if (header) {
+      // Garantir que header é header--secondary
+      if (header.classList.contains('header--primary')) {
+        header.classList.remove('header--primary');
+      }
+      if (!header.classList.contains('header--secondary')) {
+        header.classList.add('header--secondary');
+      }
+      header.style.backgroundColor = '';
+      header.style.background = '';
+    }
+    
+    // Garantir links brancos
+    document.querySelectorAll('.menu__link').forEach(el => {
+      el.style.color = '#fff';
+    });
+    
+    // Logo light visível
+    document.querySelectorAll('.header-inner__logo--light').forEach(el => {
+      el.style.opacity = '1';
+      el.style.display = 'block';
+    });
+  });
+})();
+</script>
+</head></head>
+<body>
+<div class="wrapper wrapper--offset-0">
+<header class="header header--secondary">
+			<div class="container">
+				<div class="header-under">
+					<div class="header-inner">
+						<a href="/" class="header-inner__logo">
+							<img class="header-inner__logo--light" src="img/logo-lumethos-correto.png"  alt="Instituto Lumethos">
+						</a>
+						
+						
+					</div>
+					<span class="header-divider"></span>
+					<div class="nav-drop">
+						<nav class="nav">
+							<ul class="menu">
+								<li><a class="menu__link" href="index.html">Início</a></li>
+								<li><a class="menu__link" href="capelania.html">Capelania</a></li>
+								<li><a class="menu__link" href="escolas.html">Escolas</a></li>
+								<li><a class="menu__link" href="biblioteca.html">Biblioteca</a></li>
+								<li><a class="menu__link" href="centelhaz.html">Centelhaz</a></li>
+								<li><a class="menu__link" href="studio.html">Studio</a></li>
+								<li><a class="menu__link" href="sobre.html">Sobre</a></li>
+								<li><a class="menu__link" href="contato.html">Contato</a></li>
+							</ul>
+						</nav>
+					</div>
+					<span class="nav-opener"><span></span></span>
+				</div>
+			</div>
+		</header><section class="section" style="padding-top:150px;padding-bottom:60px;background:linear-gradient(135deg,#0D1B2A 0%,#142D4C 100%)">
+				<div class="container">
+					<div class="section-headline text--center">
+						<h4 class="sub-title" style="color:#C79A2E">Curso</h4>
+						<h1 class="headline" style="font-size:38px;color:#fff">Formação em Capelania Cristã</h1>
+						<p style="color:rgba(255,255,255,0.7);max-width:650px;margin:20px auto 0">Prepare-se para oferecer assistência espiritual em hospitais, escolas, presídios, empresas e projetos sociais.</p>
+					</div>
+				</div>
+			</section><section class="section" style="border-top:1px solid rgba(199,154,46,0.1)">
+				<div class="container">
+					<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;text-align:center;margin-bottom:50px">
+						<div><div style="font-size:28px;font-weight:700;color:#C79A2E">150h</div><div style="font-size:13px;color:rgba(255,255,255,0.5)">Carga Horária</div></div>
+						<div><div style="font-size:28px;font-weight:700;color:#C79A2E">Online</div><div style="font-size:13px;color:rgba(255,255,255,0.5)">Modalidade EAD</div></div>
+						<div><div style="font-size:28px;font-weight:700;color:#C79A2E">R$ 297</div><div style="font-size:13px;color:rgba(255,255,255,0.5)">Investimento</div></div>
+						<div><div style="font-size:28px;font-weight:700;color:#C79A2E">Autoinstrucional</div><div style="font-size:13px;color:rgba(255,255,255,0.5)">Estude no seu ritmo</div></div>
+					</div>
+				</div>
+			</section><section class="section">
+				<div class="container">
+					<div class="section-headline text--center">
+						<h4 class="sub-title" style="color:#C79A2E">Entrega</h4>
+						<h3 class="headline">O que você recebe ao concluir</h3>
+					</div>
+					<ul style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;list-style:none;padding:0;margin-top:30px">
+						<li><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E"><div style="color:#C79A2E;font-weight:700">✓ Certificado de Conclusão</div><div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px">Digital com verificação online</div></div></li>
+						<li><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E"><div style="color:#C79A2E;font-weight:700">✓ Credencial Digital</div><div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px">Identificação oficial do capelão</div></div></li>
+						<li><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E"><div style="color:#C79A2E;font-weight:700">✓ Biblioteca do Capelão</div><div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px">Manuais e recursos ministeriais</div></div></li>
+						<li><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E"><div style="color:#C79A2E;font-weight:700">✓ Matrícula Institucional</div><div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px">Número único LUM-2026-XXXX</div></div></li>
+						<li><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E"><div style="color:#C79A2E;font-weight:700">✓ QR Code de Validação</div><div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px">Verificação instantânea</div></div></li>
+					</ul>
+				</div>
+			</section><section class="section" style="border-top:1px solid rgba(199,154,46,0.1)">
+				<div class="container">
+					<div class="section-headline text--center">
+						<h4 class="sub-title" style="color:#C79A2E">Conteúdo Programático</h4>
+						<h3 class="headline">10 Módulos de Formação</h3>
+					</div>
+					<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:15px;margin-top:30px"><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E">
+							<div style="color:#C79A2E;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Módulo 01</div>
+							<div style="color:#fff;font-weight:600;margin-top:5px">Fundamentos Bíblicos da Capelania</div>
+							<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:3px">Base bíblica para o ministério de capelania</div>
+						</div><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E">
+							<div style="color:#C79A2E;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Módulo 02</div>
+							<div style="color:#fff;font-weight:600;margin-top:5px">Ética Ministerial</div>
+							<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:3px">Princípios éticos no cuidado espiritual</div>
+						</div><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E">
+							<div style="color:#C79A2E;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Módulo 03</div>
+							<div style="color:#fff;font-weight:600;margin-top:5px">Legislação da Capelania</div>
+							<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:3px">Aspectos legais e direitos do capelão</div>
+						</div><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E">
+							<div style="color:#C79A2E;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Módulo 04</div>
+							<div style="color:#fff;font-weight:600;margin-top:5px">Capelania Hospitalar</div>
+							<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:3px">Assistência espiritual em ambiente hospitalar</div>
+						</div><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E">
+							<div style="color:#C79A2E;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Módulo 05</div>
+							<div style="color:#fff;font-weight:600;margin-top:5px">Capelania Escolar</div>
+							<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:3px">Atuação do capelão em instituições de ensino</div>
+						</div><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E">
+							<div style="color:#C79A2E;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Módulo 06</div>
+							<div style="color:#fff;font-weight:600;margin-top:5px">Capelania Prisional</div>
+							<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:3px">Ministério em sistemas prisionais</div>
+						</div><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E">
+							<div style="color:#C79A2E;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Módulo 07</div>
+							<div style="color:#fff;font-weight:600;margin-top:5px">Capelania Empresarial</div>
+							<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:3px">Capelania no ambiente corporativo</div>
+						</div><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E">
+							<div style="color:#C79A2E;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Módulo 08</div>
+							<div style="color:#fff;font-weight:600;margin-top:5px">Aconselhamento Pastoral</div>
+							<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:3px">Fundamentos do aconselhamento cristão</div>
+						</div><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E">
+							<div style="color:#C79A2E;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Módulo 09</div>
+							<div style="color:#fff;font-weight:600;margin-top:5px">Comunicação e Escuta Ativa</div>
+							<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:3px">Técnicas de comunicação ministerial</div>
+						</div><div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;border-left:3px solid #C79A2E">
+							<div style="color:#C79A2E;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Módulo 10</div>
+							<div style="color:#fff;font-weight:600;margin-top:5px">Projeto Final</div>
+							<div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:3px">Aplicação prática dos conhecimentos</div>
+						</div></div>
+					<div class="btn-holder text--center" style="margin-top:40px">
+						<a href="https://cursos.institutolumethos.online" class="btn btn--outline-primary">Quero me Matricular</a>
+						<a href="/" class="btn btn--outline" style="margin-left:10px">Voltar ao Início</a>
+					</div>
+				</div>
+			</section><section class="section" style="border-top:1px solid rgba(199,154,46,0.1)">
+				<div class="container">
+					<div class="section-headline text--center">
+						<h4 class="sub-title" style="color:#C79A2E">FAQ</h4>
+						<h3 class="headline">Perguntas Frequentes</h3>
+					</div>
+					<div style="max-width:700px;margin:30px auto 0">
+						<div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;margin-bottom:10px">
+							<div style="color:#C79A2E;font-weight:600">Quanto tempo tenho para concluir o curso?</div>
+							<div style="color:rgba(255,255,255,0.6);font-size:14px;margin-top:5px">O curso é autoinstrucional e você tem acesso vitalício ao conteúdo.</div>
+						</div>
+						<div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;margin-bottom:10px">
+							<div style="color:#C79A2E;font-weight:600">O certificado é reconhecido?</div>
+							<div style="color:rgba(255,255,255,0.6);font-size:14px;margin-top:5px">Sim. O certificado possui QR Code de validação e matrícula institucional exclusiva.</div>
+						</div>
+						<div style="background:linear-gradient(135deg,#0D1B2A,#142D4C);padding:20px 25px;border-radius:8px;margin-bottom:10px">
+							<div style="color:#C79A2E;font-weight:600">Como funciona a Credencial Digital?</div>
+							<div style="color:rgba(255,255,255,0.6);font-size:14px;margin-top:5px">Após a conclusão, você recebe sua credencial com número de matrícula e QR Code, podendo ser verificada online.</div>
+						</div>
+					</div>
+				</div>
+			</section></div>
+<footer class="footer">
+			<div class="container">
+				<div class="footer-upper">
+					<div class="footer-upper__col col--4">
+						<div class="footer-selo">
+							<img src="img/logo-selo.png" alt="Selo Lumethos">
+						</div>
+					</div>
+					<div class="footer-upper__col col--2">
+						<h4 class="footer-upper__title">Links Rápidos</h4>
+						<ul class="footer-list">
+							<li><a href="index.html" class="footer-list__link">Início</a></li>
+							<li><a href="index.html" class="footer-list__link">Serviços</a></li>
+							<li><a href="index.html" class="footer-list__link">Sobre Nós</a></li>
+							<li><a href="index.html" class="footer-list__link">Cursos</a></li>
+							<li><a href="index.html" class="footer-list__link">Notícias</a></li>
+							<li><a href="index.html" class="footer-list__link">Páginas</a></li>
+							<li><a href="contato.html" class="footer-list__link">Contato</a></li>
+						</ul>
+					</div>
+					<div class="footer-upper__col col--2">
+						<h4 class="footer-upper__title">Conteúdo</h4>
+						<ul class="footer-list">
+							<li><a href="index.html" class="footer-list__link">Notícias</a></li>
+							<li><a href="index.html" class="footer-list__link">Eventos</a></li>
+							<li><a href="contato.html" class="footer-list__link">Comunicados</a></li>
+							<li><a href="index.html" class="footer-list__link">Webinars</a></li>
+							<li><a href="index.html" class="footer-list__link">Artigos</a></li>
+							<li><a href="contato.html" class="footer-list__link">Newsletter</a></li>
+							<li><a href="index.html" class="footer-list__link">Publicações</a></li>
+						</ul>
+					</div>
+					<div class="footer-upper__col col--2">
+						<h4 class="footer-upper__title">Áreas</h4>
+						<ul class="footer-list">
+							<li><a href="capelania.html" class="footer-list__link">Capelania</a></li>
+							<li><a href="capelania.html" class="footer-list__link">Capelania</a></li>
+							<li><a href="biblioteca.html" class="footer-list__link">Biblioteca</a></li>
+							<li><a href="index.html" class="footer-list__link">Credenciais</a></li>
+							<li><a href="index.html" class="footer-list__link">Escola Bíblica</a></li>
+							<li><a href="index.html" class="footer-list__link">História da Igreja</a></li>
+							<li><a href="index.html" class="footer-list__link">Missões</a></li>
+							<li><a href="studio.html" class="footer-list__link">Studio</a></li>
+						</ul>
+					</div>
+					<div class="footer-upper__col col--2">
+						<h4 class="footer-upper__title">Programas</h4>
+						<ul class="footer-list">
+							<li><a href="capelania.html" class="footer-list__link">Capelania</a></li>
+							<li><a href="biblioteca.html" class="footer-list__link">Biblioteca</a></li>
+							<li><a href="centelhaz.html" class="footer-list__link">Centelhaz</a></li>
+							<li><a href="index.html" class="footer-list__link">Credenciais</a></li>
+							<li><a href="index.html" class="footer-list__link">Escola Bíblica</a></li>
+							<li><a href="escolas.html" class="footer-list__link">Escolas</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="footer-contact">
+					<div class="footer-contact__item">
+						<ul class="info-list">
+							<li class="info-list__item">
+								<span class="info-list__text">Sede</span>
+								<a class="info-list__link" href="https://maps.google.com/?q=São+Paulo+SP" target="_blank">São Paulo, SP, Brasil</a>
+							</li>
+							<li class="info-list__item">
+								<span class="info-list__text">E-mail</span>
+								<a class="info-list__link" href="mailto:instituto.lumethos@gmail.com">instituto.lumethos@gmail.com</a>
+							</li>
+							<li class="info-list__item">
+								<span class="info-list__text">Telefone</span>
+								<a class="info-list__link" href="tel:13105001234">(11) 99999-9999</a>
+							</li>
+						</ul>
+					</div>
+					<div class="footer-contact__item">
+						
+						<a href="index.html" class="btn btn--white">
+							Quero me Matricular
+							<svg class="icon" width="21" height="12" viewBox="0 0 21 12">
+								<path fill-rule="evenodd" clip-rule="evenodd" d="M15 6.75L0 6.75L0 5.25L15 5.25V6.75Z"/>
+								<path d="M21 5.99986L14.25 11.196L14.25 0.803711L21 5.99986Z"/>
+							</svg>
+						</a>
+					</div>
+				</div>
+				<div class="footer-under">
+					<ul class="footer-list footer-list--row">
+						<li><a href="index.html" class="footer-list__link">Termos e Condições</a></li>
+						<li><a href="index.html" class="footer-list__link">Política de Privacidade</a></li>
+						<li><a href="contato.html" class="footer-list__link" style="font-weight:700;color:#C79A2E">Fale Conosco</a></li>
+						<li>&copy; 2026 Instituto Lumethos &mdash; SAPIENTIA AD MINISTERIUM. Todos os direitos reservados.</li>
+					</ul>
+				</div>
+			</div>
+			<div class="bg-stretch">
+				<img src="img/image-2.jpg" alt="Instituto Lumethos">
+			</div>
+		</footer>
+<script src="js/all.js"></script>
+
+</body>
+</html>

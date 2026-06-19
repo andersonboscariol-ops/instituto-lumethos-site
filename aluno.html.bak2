@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Instituto Lumethos</title>
+  <meta name="description" content="Área do Aluno Instituto Lumethos — seus cursos e progresso.">
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/area-do-aluno.css">
+  <style>
+    .aluno-dashboard {
+      padding-top: 88px;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+      padding-bottom: 60px;
+    }
+    .boas-vindas {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .boas-vindas h1 {
+      font-size: 28px;
+    }
+    .boas-vindas h1 span {
+      color: var(--gold);
+    }
+    .boas-vindas p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-card .num {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--gold);
+      font-family: 'Libre Baskerville', serif;
+    }
+    .stat-card .label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .aluno-dashboard { padding-left: 12px; padding-right: 12px; padding-top: 76px; }
+      .boas-vindas h1 { font-size: 22px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header-aluno" id="header">
+    <div class="logo">
+      <img src="img/logo-lumethos-correto.png" alt="Lumethos">
+      <span>Aluno</span>
+    </div>
+    <nav>
+      <a href="aluno.html" class="active">Dashboard</a>
+      <a href="biblioteca.html">Biblioteca</a>
+      <a href="index.html">Site</a>
+    </nav>
+    <div class="user-menu" id="userMenu" onclick="toggleDropdown(event)">
+      <div class="user-avatar" id="userAvatar">A</div>
+      <span class="user-name" id="userName">Aluno</span>
+      <button class="btn-sair" onclick="fazerLogout(event)">Sair</button>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="aluno-dashboard">
+
+    <!-- Boas-vindas -->
+    <div class="boas-vindas">
+      <div>
+        <h1>Olá, <span id="nomeAluno">Aluno</span> 👋</h1>
+        <p>Continue seus estudos de onde parou</p>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card">
+        <div class="num" id="totalCursos">0</div>
+        <div class="label">Cursos</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="totalConcluidos">0</div>
+        <div class="label">Concluídos</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="progressoGeral">0%</div>
+        <div class="label">Progresso Geral</div>
+      </div>
+      <div class="stat-card">
+        <div class="num" id="modulosConcluidos">0</div>
+        <div class="label">Módulos</div>
+      </div>
+    </div>
+
+    <!-- Entregas Pendentes -->
+    <div class="section-title" style="margin-top:32px;">
+      <span>📤 Minhas Entregas</span>
+    </div>
+    <div class="curso-card" style="padding: 20px; margin-bottom: 24px;" id="entregasPendentes">
+      <div style="text-align:center;padding:20px;color:var(--text-muted)">
+        <div class="spinner"></div>
+        <p style="font-size:13px;margin-top:8px">Carregando entregas...</p>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="section-title">
+      <span>Meus Cursos</span>
+      <span class="count" id="cursosCount"></span>
+    </div>
+    <div class="filtro-categorias" id="filtroCategorias">
+      <button class="btn-categoria active" data-cat="all">Todos</button>
+    </div>
+
+    <!-- Cursos Grid -->
+    <div class="cursos-grid" id="cursosGrid">
+      <!-- Renderizado via JS -->
+    </div>
+
+  </main>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="api/config.js"></script>
+  <script src="api/cursos.js"></script>
+  <script>
+    // ============================================================
+    // DASHBOARD — Área do Aluno
+    // ============================================================
+
+    const SUPABASE_URL = 'https://iykaedhvtfitenzrhxom.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5a2FlZGh2dGZpdGVuenJoeG9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMzYwMTQsImV4cCI6MjA5MzcxMjAxNH0.0cTNXvsVvYOxrxt5iYr6vvM6r8oMJLsNWysRSkoD9Js';
+
+    // Inicializa Supabase client
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let userData = null;
+    let alunoId = null;
+    let cursos = [];
+    let categorias = [];
+    let matriculas = [];
+    let progressoGeral = {};
+
+    // === AUTH CHECK ===
+    async function init() {
+      // Check if user is logged in
+      const token = localStorage.getItem('lumethos_token');
+      const userStr = localStorage.getItem('lumethos_user');
+      
+      if (!token || !userStr) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      try {
+        userData = JSON.parse(userStr);
+        document.getElementById('nomeAluno').textContent = userData.nome || userData.email?.split('@')[0] || 'Aluno';
+        
+        const initial = (userData.nome || userData.email || 'A')[0].toUpperCase();
+        document.getElementById('userAvatar').textContent = initial;
+        document.getElementById('userName').textContent = userData.nome || userData.email || 'Aluno';
+
+        // Set auth for supabase
+        await supabaseClient.auth.setSession({
+          access_token: token,
+          refresh_token: token
+        });
+
+        await carregarDados();
+      } catch(e) {
+        console.error('Erro ao carregar dashboard:', e);
+        document.getElementById('cursosGrid').innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1">
+            <div class="icon">📚</div>
+            <h3>Erro ao carregar dados</h3>
+            <p>Não foi possível conectar ao servidor. Tente novamente mais tarde.</p>
+          </div>`;
+      }
+    }
+
+    async function carregarDados() {
+      try {
+        // Busca categorias
+        categorias = await API.listarCategorias() || [];
+        
+        // Busca cursos publicados
+        cursos = await API.listarCursos({ status: 'publicado' }) || [];
+        
+        // Tenta encontrar o aluno
+        const { data: { user } } = await supabaseClient.auth.getUser().catch(() => ({ data: { user: null } }));
+        
+        if (user) {
+          const aluno = await API.getAlunoByAuth(user.id);
+          if (aluno) {
+            alunoId = aluno.id;
+            // Busca matrículas
+            matriculas = await API.getMatriculas(alunoId) || [];
+          }
+        }
+
+        renderizarFiltros();
+        renderizarCursos();
+        renderizarStats();
+        await carregarEntregasPendentes();
+        
+        // Cache
+        API.salvarDados('dashboard_cursos', cursos);
+        API.salvarDados('dashboard_matriculas', matriculas);
+        API.salvarDados('dashboard_categorias', categorias);
+        
+      } catch(e) {
+        console.error('Erro carregarDados:', e);
+        // Tenta cache
+        cursos = API.carregarDados('dashboard_cursos') || [];
+        categorias = API.carregarDados('dashboard_categorias') || [];
+        matriculas = API.carregarDados('dashboard_matriculas') || [];
+        renderizarFiltros();
+        renderizarCursos();
+        renderizarStats();
+      }
+    }
+
+    function getMatricula(cursoId) {
+      return matriculas.find(m => {
+        if (typeof m.curso_id === 'object') return m.curso_id?.id === cursoId;
+        return m.curso_id === cursoId;
+      });
+    }
+
+    function getProgresso(cursoId) {
+      const mat = getMatricula(cursoId);
+      return mat ? (mat.progresso || 0) : 0;
+    }
+
+    function renderizarFiltros() {
+      const container = document.getElementById('filtroCategorias');
+      let html = '<button class="btn-categoria active" data-cat="all">Todos</button>';
+      
+      categorias.forEach(cat => {
+        html += `<button class="btn-categoria" data-cat="${cat.id}">${cat.nome}</button>`;
+      });
+      
+      container.innerHTML = html;
+      
+      // Event listeners
+      container.querySelectorAll('.btn-categoria').forEach(btn => {
+        btn.addEventListener('click', () => {
+          container.querySelectorAll('.btn-categoria').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderizarCursos(btn.dataset.cat);
+        });
+      });
+    }
+
+    function renderizarCursos(filtroCategoria = 'all') {
+      const grid = document.getElementById('cursosGrid');
+      
+      let filtered = cursos;
+      if (filtroCategoria !== 'all') {
+        filtered = cursos.filter(c => {
+          const catId = typeof c.categoria_id === 'object' ? c.categoria_id?.id : c.categoria_id;
+          return catId === filtroCategoria;
+        });
+      }
+
+      if (!filtered || filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1">
+            <div class="icon">📖</div>
+            <h3>Nenhum curso encontrado</h3>
+            <p>Você ainda não tem cursos nesta categoria.</p>
+          </div>`;
+        document.getElementById('cursosCount').textContent = '';
+        return;
+      }
+
+      document.getElementById('cursosCount').textContent = `(${filtered.length})`;
+
+      grid.innerHTML = filtered.map(curso => {
+        const progresso = getProgresso(curso.id);
+        const mat = getMatricula(curso.id);
+        const catNome = typeof curso.categoria_id === 'object' ? curso.categoria_id?.nome || '' : '';
+        
+        return `
+          <div class="curso-card" onclick="abrirCurso('${curso.id}')">
+            <div class="card-img">
+              ${curso.imagem_card 
+                ? `<img src="${curso.imagem_card}" alt="${curso.titulo}" loading="lazy">`
+                : `<span style="opacity:0.3">📚</span>`}
+            </div>
+            <div class="card-body">
+              ${catNome ? `<div class="card-categoria">${catNome}</div>` : ''}
+              <div class="card-title">${curso.titulo}</div>
+              ${curso.descricao_curta ? `<div class="card-desc">${curso.descricao_curta}</div>` : ''}
+              <div class="card-meta">
+                <span class="meta-item">⏱ ${curso.carga_horaria || '150h'}</span>
+                <span class="meta-item">${curso.nivel === 'iniciante' ? '🌱' : curso.nivel === 'intermediario' ? '📗' : '🎯'} ${capitalize(curso.nivel || 'Iniciante')}</span>
+                ${mat ? '<span class="meta-item" style="color:var(--success)">✅ Inscrito</span>' : ''}
+              </div>
+              ${mat ? `
+                <div class="progress-bar-container">
+                  <div class="progress-bar">
+                    <div class="progress-bar-fill" style="width:${progresso}%"></div>
+                  </div>
+                  <div class="progress-text">
+                    <span>Progresso</span>
+                    <span>${progresso}%</span>
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    async function carregarEntregasPendentes() {
+      if (!alunoId) return;
+      try {
+        const token = localStorage.getItem('lumethos_token');
+        const res = await fetch(SUPABASE_URL + '/rest/v1/entregas?aluno_id=eq.' + alunoId + '&order=data_entrega.desc', {
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + token }
+        });
+        const entregas = await res.json();
+        const container = document.getElementById('entregasPendentes');
+        if (!container) return;
+        const pends = entregas.filter(e => e.status === 'pendente');
+        const corrigidas = entregas.filter(e => e.status === 'corrigido');
+        if (entregas.length === 0) {
+          container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted)"><div style="font-size:36px;margin-bottom:8px">📤</div><h3 style="font-size:16px">Nenhuma entrega</h3><p style="font-size:13px">Suas atividades aparecerão aqui.</p></div>';
+        } else {
+          let html = '';
+          if (pends.length > 0) {
+            html += '<h4 style="color:var(--warning);font-size:13px;margin-bottom:8px">⏳ Pendentes (' + pends.length + ')</h4>';
+            pends.forEach(e => {
+              html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border-subtle)"><span style="font-size:13px">' + (e.tipo || 'Atividade') + '</span><span class="status-badge pending">Pendente</span></div>';
+            });
+          }
+          if (corrigidas.length > 0) {
+            html += '<h4 style="color:var(--success);font-size:13px;margin:12px 0 8px">✅ Corrigidas (' + corrigidas.length + ')</h4>';
+            corrigidas.slice(0, 5).forEach(e => {
+              html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border-subtle)"><span style="font-size:13px">' + (e.tipo || 'Atividade') + '</span><span style="font-size:12px;color:var(--success)">Nota: ' + (e.nota || '---') + '</span></div>';
+            });
+          }
+          container.innerHTML = html;
+        }
+      } catch(e) { console.error('Erro entregas:', e); }
+    }
+
+    function renderizarStats() {
+      const total = cursos.length;
+      const ativos = matriculas.length;
+      const concluidos = matriculas.filter(m => m.progresso >= 100).length;
+      const progressoTotal = ativos > 0 
+        ? Math.round(matriculas.reduce((sum, m) => sum + (m.progresso || 0), 0) / ativos)
+        : 0;
+
+      document.getElementById('totalCursos').textContent = total;
+      document.getElementById('totalConcluidos').textContent = concluidos;
+      document.getElementById('progressoGeral').textContent = `${progressoTotal}%`;
+      document.getElementById('modulosConcluidos').textContent = ativos;
+    }
+
+    function abrirCurso(cursoId) {
+      window.location.href = `aluno/curso.html?id=${cursoId}`;
+    }
+
+    function toggleDropdown(e) {
+      e.stopPropagation();
+      // Simple logout action
+    }
+
+    function fazerLogout(e) {
+      e.stopPropagation();
+      localStorage.removeItem('lumethos_token');
+      localStorage.removeItem('lumethos_user');
+      localStorage.removeItem('lumethos_user_data');
+      API.limparCache();
+      window.location.href = 'login.html';
+    }
+
+    function capitalize(s) {
+      if (!s) return '';
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    // Dropdown click outside
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.user-dropdown').forEach(d => d.classList.remove('show'));
+    });
+
+    // Init
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+  <script src="/js/juju-chat.js"></script>
+</body>
+</html>

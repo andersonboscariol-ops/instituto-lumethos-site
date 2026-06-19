@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centelhaz — CRM Ministerial | Instituto Lumethos</title>
+  <meta name="description" content="Centelhaz: o CRM ministerial com IA para capelães e pastores. Gerencie visitas, aconselhamentos, sermões e agenda em um só lugar.">
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link media="all" rel="stylesheet" href="css/main.1781808844.css">
+  <style>
+    .inst-page { background: #fff; }
+    .inst-hero {
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 140px 20px 100px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #0D1B2A 0%, #142D4C 50%, #1a2a4a 100%);
+      color: #fff;
+      text-align: center;
+    }
+    .inst-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(199,154,46,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(255,255,255,0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .inst-hero .hero-content { position: relative; z-index: 2; max-width: 720px; }
+    .inst-hero .badge {
+      display: inline-block;
+      background: rgba(199,154,46,0.15);
+      color: #C79A2E;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      padding: 8px 20px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+      border: 1px solid rgba(199,154,46,0.2);
+    }
+    .inst-hero h1 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 48px;
+      line-height: 1.12;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+    .inst-hero h1 span { color: #C79A2E; }
+    .inst-hero p {
+      font-size: 17px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0 auto 36px;
+    }
+    .inst-section {
+      padding: 90px 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .inst-section h2 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 32px;
+      color: #0D1B2A;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .inst-section h2 span { color: #C79A2E; }
+    .inst-section .subtitle {
+      text-align: center;
+      color: #6b7280;
+      font-size: 16px;
+      line-height: 1.7;
+      max-width: 640px;
+      margin: 0 auto 60px;
+    }
+    .inst-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .inst-card {
+      background: #fff;
+      border: 1px solid #e8eaed;
+      border-radius: 16px;
+      padding: 36px 28px;
+      transition: all 0.25s;
+    }
+    .inst-card:hover {
+      box-shadow: 0 12px 32px rgba(13,27,42,0.06);
+      transform: translateY(-3px);
+      border-color: rgba(199,154,46,0.2);
+    }
+    .inst-card .card-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      color: #C79A2E;
+      background: rgba(199,154,46,0.08);
+      font-size: 24px;
+    }
+    .inst-card h3 { font-size: 18px; color: #0D1B2A; margin-bottom: 10px; }
+    .inst-card p { font-size: 14px; color: #6b7280; line-height: 1.7; }
+    .inst-mockups {
+      background: #f8f9fa;
+      padding: 90px 20px;
+    }
+    .inst-mockups .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .mockup-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .mockup-screen {
+      background: linear-gradient(180deg, #0D1B2A 0%, #142D4C 100%);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(13,27,42,0.15);
+      border: 1px solid rgba(199,154,46,0.1);
+    }
+    .mockup-topbar {
+      background: rgba(255,255,255,0.05);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .mockup-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .mockup-dot:nth-child(1) { background: #ff5f57; }
+    .mockup-dot:nth-child(2) { background: #febc2e; }
+    .mockup-dot:nth-child(3) { background: #28c840; }
+    .mockup-title {
+      flex: 1;
+      text-align: center;
+      font-size: 10px;
+      color: rgba(255,255,255,0.25);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+    .mockup-body {
+      padding: 20px 16px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .mockup-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+    .mockup-row--gold { background: rgba(199,154,46,0.08); color: #C79A2E; }
+    .mockup-row--white { background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.7); }
+    .mockup-row--gray { background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.4); }
+    .mockup-row .emoji { font-size: 18px; flex-shrink: 0; }
+    .inst-cta-section {
+      background: linear-gradient(135deg, #0D1B2A 0%, #142D4C 100%);
+      padding: 100px 20px;
+      text-align: center;
+      color: #fff;
+    }
+    .inst-cta-section h2 {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 36px;
+      margin-bottom: 16px;
+    }
+    .inst-cta-section h2 span { color: #C79A2E; }
+    .inst-cta-section p {
+      color: rgba(255,255,255,0.5);
+      font-size: 16px;
+      max-width: 520px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+    .inst-cta-section .note {
+      display: inline-block;
+      background: rgba(199,154,46,0.1);
+      color: rgba(199,154,46,0.8);
+      border: 1px solid rgba(199,154,46,0.15);
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 14px;
+    }
+    .inst-back {
+      text-align: center;
+      padding: 0 20px 60px;
+    }
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      background: #0D1B2A;
+      color: #fff;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-back:hover { background: #C79A2E; }
+    .btn-back svg { width: 16px; height: 16px; fill: currentColor; }
+    @media (max-width: 768px) {
+      .inst-hero h1 { font-size: 28px; }
+      .inst-hero { padding: 120px 20px 60px; }
+      .inst-section { padding: 60px 20px; }
+      .inst-grid-3 { grid-template-columns: 1fr; }
+      .mockup-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="inst-page">
+
+<!-- HEADER IGUAL AO SCRIBA -->
+<header class="header header--secondary">
+    <div class="container">
+      <div class="header-under">
+        <div class="header-inner">
+          <a href="/" class="header-inner__logo">
+            <img class="header-inner__logo--light" src="img/logo-lumethos-correto.png" alt="Instituto Lumethos">
+          </a>
+        </div>
+        <span class="header-divider"></span>
+        <div class="nav-drop">
+          <nav class="nav">
+            <ul class="menu">
+              <li><a class="menu__link" href="index.html">Início</a></li>
+              <li><a class="menu__link" href="cursos/capelania.html">Capelania</a></li>
+              <li style="position:relative">
+                <a href="cursos.html" class="menu__link" style="padding-right:20px">Cursos <span id="dd-arrow" style="font-size:10px;display:inline-block;transition:transform .2s">▾</span></a>
+                <ul id="dd-menu" style="display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid rgba(13,27,42,0.08);border-radius:12px;padding:8px;min-width:230px;box-shadow:0 12px 40px rgba(0,0,0,0.12);z-index:99999;list-style:none">
+                  <li style="margin:0;padding:0;border:none"><a href="cursos.html" style="display:block;padding:10px 14px;color:#C79A2E;font-size:13.5px;font-weight:700;text-decoration:none;border-bottom:1px solid rgba(13,27,42,0.06);margin-bottom:4px;padding-bottom:12px;border-radius:8px">Ver Todos os Cursos</a></li>
+                  <li style="margin:0;padding:0;border:none"><a href="/cursos/capelania.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Capelania Cristã</a></li>
+                  <li style="margin:0;padding:0;border:none"><a href="/cursos/teologia.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Teologia</a></li>
+                  <li style="margin:0;padding:0;border:none"><a href="/cursos/pastoral.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Ministério Pastoral</a></li>
+                  <li style="margin:0;padding:0;border:none"><a href="/cursos/diaconal.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Ministério Diaconal</a></li>
+                  <li style="margin:0;padding:0;border:none"><a href="/cursos/hinologia.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Hinologia Cristã</a></li>
+                  <li style="margin:0;padding:0;border:none"><a href="/cursos/jovens.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Ministério dos Jovens</a></li>
+                  <li style="margin:0;padding:0;border:none"><a href="/cursos/infantil.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Ministério Infantil</a></li>
+                  <li style="margin:0;padding:0;border:none"><a href="/cursos/patristica.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">Patrística</a></li>
+                  <li style="margin:0;padding:0;border:none"><a href="/cursos/historia-igreja.html" style="display:block;padding:10px 14px;color:#0D1B2A;font-size:13.5px;font-weight:500;text-decoration:none;border-radius:8px">História da Igreja</a></li>
+                </ul>
+              </li>
+              <li><a class="menu__link" href="biblioteca.html">Biblioteca</a></li>
+              <li><a class="menu__link" href="centelhaz.html">Centelhaz</a></li>
+              <li><a class="menu__link" href="scriba.html">Scriba</a></li>
+              <li><a class="menu__link" href="login.html">Área do Aluno</a></li>
+              <li><a class="menu__link" href="verificacao.html">Verificação</a></li>
+            </ul>
+          </nav>
+        </div>
+        <span class="nav-opener"><span></span></span>
+      </div>
+    </div>
+  </header>
+
+<script>
+// Dropdown JS robusto (padrão do site)
+(function(){
+  var menu = document.getElementById('dd-menu'), arrow = document.getElementById('dd-arrow');
+  if(!menu) return;
+  function isMob(){ return window.innerWidth < 1024; }
+  var li = menu.parentElement, link = li.querySelector('a.menu__link');
+  function open(){ menu.style.display='block'; if(arrow) arrow.style.transform='rotate(180deg)'; }
+  function close(){ menu.style.display='none'; if(arrow) arrow.style.transform=''; }
+  li.addEventListener('mouseenter',function(){ if(!isMob()) open(); });
+  li.addEventListener('mouseleave',function(){ if(!isMob()) close(); });
+  if(link){ link.addEventListener('click',function(e){ if(isMob()){ e.preventDefault(); menu.style.display==='block'?close():open(); } }); }
+  document.addEventListener('click',function(e){
+    if(isMob() && menu.style.display==='block' && !e.target.closest('#dd-menu') && e.target!==link && (!link||!link.contains(e.target))) close();
+  });
+  window.addEventListener('resize',function(){ if(!isMob()) close(); });
+})();
+</script>
+
+<!-- HERO -->
+<section class="inst-hero">
+  <div class="hero-content">
+    <div class="badge">FERRAMENTA MINISTERIAL</div>
+    <h1>Centelhaz — <span>CRM Ministerial</span> com IA</h1>
+    <p>O sistema inteligente que organiza, automatiza e potencializa cada aspecto do seu ministério. De sermões a visitas, de aconselhamentos a relatórios — tudo integrado em uma plataforma que entende a rotina pastoral.</p>
+  </div>
+</section>
+
+<!-- MODULOS -->
+<section class="inst-section">
+  <h2>O que você encontra no <span>Centelhaz</span>?</h2>
+  <p class="subtitle">Ferramentas projetadas especificamente para a realidade do ministro cristão — não é um CRM genérico adaptado.</p>
+  <div class="inst-grid-3">
+    <div class="inst-card">
+      <div class="card-icon">📖</div>
+      <h3>Gerador de Sermões</h3>
+      <p>Criação de sermões baseados em perícopes bíblicas, com estrutura homilética completa: introdução, pontos, aplicação e conclusão.</p>
+    </div>
+    <div class="inst-card">
+      <div class="card-icon">📝</div>
+      <h3>Estudos Bíblicos</h3>
+      <p>Roteiros de estudo para grupos pequenos, células e EBD com abordagem expositiva e aplicação contextualizada.</p>
+    </div>
+    <div class="inst-card">
+      <div class="card-icon">🙏</div>
+      <h3>Devocionais Diários</h3>
+      <p>Devocionais personalizados por tema, livro bíblico ou público-alvo. Ideal para redes sociais, boletins e grupos de WhatsApp.</p>
+    </div>
+    <div class="inst-card">
+      <div class="card-icon">💡</div>
+      <h3>Ilustrações & Exemplos</h3>
+      <p>Banco de ilustrações categorizadas para enriquecer pregações com exemplos contemporâneos e teologicamente sólidos.</p>
+    </div>
+    <div class="inst-card">
+      <div class="card-icon">⛪</div>
+      <h3>Planejamento de Cultos</h3>
+      <p>Organize liturgia, escala de ministérios, leituras bíblicas e momentos especiais. Exporte o boletim em PDF com um clique.</p>
+    </div>
+    <div class="inst-card">
+      <div class="card-icon">📅</div>
+      <h3>Séries de Pregações</h3>
+      <p>Planeje séries temáticas de 4 a 12 semanas com sinopses, textos-base, objetivos e sugestões de aplicação congregacional.</p>
+    </div>
+    <div class="inst-card">
+      <div class="card-icon">📋</div>
+      <h3>Agenda Ministerial</h3>
+      <p>Visitas, reuniões, aconselhamentos e compromissos — organize sua semana ministerial com lembretes inteligentes.</p>
+    </div>
+    <div class="inst-card">
+      <div class="card-icon">📈</div>
+      <h3>Planejamento Anual</h3>
+      <p>Calendário litúrgico, datas comemorativas e planejamento estratégico ministerial integrado em uma linha do tempo.</p>
+    </div>
+    <div class="inst-card">
+      <div class="card-icon">🏥</div>
+      <h3>Área do Capelão</h3>
+      <p>Registro de visitas hospitalares, prontuário de aconselhamento pastoral, relatórios de atendimento e controle de encaminhamentos.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MOCKUPS — simulando prints do sistema -->
+<section class="inst-mockups">
+  <div class="container">
+    <h2 style="font-family:'Libre Baskerville',serif;font-size:28px;color:#0D1B2A;margin-bottom:40px;text-align:center;">Visão da <span style="color:#C79A2E;">Plataforma</span></h2>
+    <div class="mockup-grid">
+      <div class="mockup-screen">
+        <div class="mockup-topbar">
+          <span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span>
+          <span class="mockup-title">Centelhaz — Sermões</span>
+        </div>
+        <div class="mockup-body">
+          <div class="mockup-row mockup-row--gold"><span class="emoji">📖</span> Sermão: A Graça que Transforma</div>
+          <div class="mockup-row mockup-row--white"><span class="emoji">✍️</span> Texto: Efésios 2:8-10</div>
+          <div class="mockup-row mockup-row--gray"><span class="emoji">🎯</span> Introdução gerada</div>
+          <div class="mockup-row mockup-row--gray"><span class="emoji">📌</span> 3 pontos + aplicação</div>
+          <div class="mockup-row mockup-row--gold"><span class="emoji">✅</span> Exportar PDF / Copiar</div>
+        </div>
+      </div>
+      <div class="mockup-screen">
+        <div class="mockup-topbar">
+          <span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span>
+          <span class="mockup-title">Agenda Semanal</span>
+        </div>
+        <div class="mockup-body">
+          <div class="mockup-row mockup-row--gold"><span class="emoji">🗓️</span> Seg — Visita H. Municipal 14h</div>
+          <div class="mockup-row mockup-row--white"><span class="emoji">🙏</span> Ter — Aconselhamento 10h</div>
+          <div class="mockup-row mockup-row--gray"><span class="emoji">⛪</span> Qua — Culto de Oração 19h30</div>
+          <div class="mockup-row mockup-row--gray"><span class="emoji">📝</span> Qui — Preparar sermão domingo</div>
+          <div class="mockup-row mockup-row--gold"><span class="emoji">➕</span> Novo compromisso</div>
+        </div>
+      </div>
+      <div class="mockup-screen">
+        <div class="mockup-topbar">
+          <span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span>
+          <span class="mockup-title">Área do Capelão</span>
+        </div>
+        <div class="mockup-body">
+          <div class="mockup-row mockup-row--gold"><span class="emoji">🏥</span> H. Municipal — 23 visitas/mês</div>
+          <div class="mockup-row mockup-row--white"><span class="emoji">📋</span> Prontuário: João S. atualizado</div>
+          <div class="mockup-row mockup-row--gray"><span class="emoji">📊</span> Relatório mensal pronto</div>
+          <div class="mockup-row mockup-row--gray"><span class="emoji">📅</span> 4 aconselhamentos esta semana</div>
+          <div class="mockup-row mockup-row--gold"><span class="emoji">📤</span> Exportar relatório pastoral</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFERENCIAIS -->
+<section class="inst-section">
+  <h2>Por que o <span>Centelhaz</span> é diferente?</h2>
+  <p class="subtitle">Não é um app genérico de produtividade. É um sistema pensado para a realidade de quem vive o ministério 24 horas por dia.</p>
+  <div class="inst-grid-3">
+    <div class="inst-card">
+      <h3>🧠 IA Generativa Ministerial</h3>
+      <p>Inteligência artificial treinada para conteúdo teológico. Gera sermões, estudos e devocionais com profundidade bíblica — sem alucinações doutrinárias.</p>
+    </div>
+    <div class="inst-card">
+      <h3>📱 Acesso de Qualquer Lugar</h3>
+      <p>Plataforma 100% web. Use no computador da igreja, no tablet na visita ou no celular durante o aconselhamento. Nada para instalar.</p>
+    </div>
+    <div class="inst-card">
+      <h3>🔄 Integração com o Ecossistema</h3>
+      <p>Conectado à Biblioteca Teológica Lumethos e ao Scriba. Seus sermões viram referências, suas anotações viram conteúdo publicável.</p>
+    </div>
+    <div class="inst-card">
+      <h3>🔒 Privacidade Ministerial</h3>
+      <p>Prontuários de aconselhamento, registros de visita e relatórios pastorais são criptografados. Sigilo pastoral levado a sério.</p>
+    </div>
+    <div class="inst-card">
+      <h3>📊 Relatórios Inteligentes</h3>
+      <p>Dashboard com indicadores do seu ministério: visitas realizadas, aconselhamentos, sermões produzidos. Dados para sua prestação de contas.</p>
+    </div>
+    <div class="inst-card">
+      <h3>🏆 Exclusivo para Alunos</h3>
+      <p>O Centelhaz é parte do ecossistema Lumethos. Disponível para todos os alunos matriculados — sem custo adicional. Não vendemos separado.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="inst-cta-section">
+  <h2>O Centelhaz é <span style="color:#C79A2E;">seu</span> como aluno Lumethos</h2>
+  <p>Ao se matricular em qualquer curso do Instituto, você recebe acesso completo ao Centelhaz. Não é um extra — é parte da formação.</p>
+  <p class="note">✨ Acessado diretamente pela Área do Aluno, sem login adicional</p>
+</section>
+
+<div class="inst-back">
+  <a href="/" class="btn-back">
+    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    Voltar para o Instituto Lumethos
+  </a>
+</div>
+
+<footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col footer-col--brand">
+          <div class="footer-selo-wrap">
+            <img src="img/logo-selo.png" alt="Selo Lumethos" class="footer-selo-img">
+          </div>
+          <div class="footer-social">
+            <a href="https://instagram.com/instituto.lumethos" target="_blank" aria-label="Instagram" class="social-ring icon-mono"><svg class="social-icon" width="14" height="14" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+            <a href="https://youtube.com/@institutolumethos" target="_blank" aria-label="YouTube" class="social-ring icon-mono"><svg class="social-icon" width="14" height="14" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+            <a href="https://facebook.com/institutolumethos" target="_blank" aria-label="Facebook" class="social-ring icon-mono"><svg class="social-icon" width="14" height="14" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-col footer-col--links">
+          <h4 class="footer-col-title">Institucional</h4>
+          <nav class="footer-nav">
+            <a href="sobre.html">Quem Somos</a>
+            <a href="cursos/capelania.html">Capelania Cristã</a>
+            <a href="contato.html">Fale Conosco</a>
+            <a href="#">Termos de Uso</a>
+          </nav>
+        </div>
+        <div class="footer-col footer-col--contact">
+          <h4 class="footer-col-title">Contato</h4>
+          <ul class="footer-contact-list">
+            <li><span class="footer-contact-icon icon-mono"><svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span> <a href="mailto:instituto.lumethos@gmail.com">instituto.lumethos@gmail.com</a></li>
+            <li><span class="footer-contact-icon icon-mono"><svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3c2.5 3 4 6.5 4 9s-1.5 6-4 9c-2.5-3-4-6.5-4-9s1.5-6 4-9z" stroke="currentColor" stroke-width="2"/></svg></span> <span>Ensino 100% online</span></li>
+            <li><span class="footer-contact-icon icon-mono"><svg class="icon-svg" viewBox="0 0 24 24" width="20" height="20"><path d="M21 12a9 9 0 01-4.5 7.8 9 9 0 01-9 0A9 9 0 013 12a9 9 0 014.5-7.8 9 9 0 019 0A9 9 0 0121 12z" stroke="currentColor" stroke-width="2"/><path d="M8 9h8M8 13h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span> <a href="https://wa.me/5511999999999" target="_blank">WhatsApp</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-divider-gold"></div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Instituto Lumethos &mdash; SAPIENTIA AD MINISTERIUM. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+<script src="js/all.js"></script>
+</body>
+</html>
