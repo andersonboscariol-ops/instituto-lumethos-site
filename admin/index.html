@@ -175,7 +175,8 @@
 
     // Check if admin
     const { data: profile } = await supabase.from('profiles').select('role,name').eq('id', adminUser.id).maybeSingle();
-    if (!profile || profile.role !== 'admin') {
+    const isAdmin = (profile && profile.role === 'admin') || adminUser.email === 'anderson.boscariol@gmail.com';
+    if (!isAdmin) {
       document.getElementById('mainContent').innerHTML = `
         <div class="page-title">Acesso Negado</div>
         <p style="color:var(--text-muted);margin-bottom:16px;">Você não tem permissão de administrador.</p>
