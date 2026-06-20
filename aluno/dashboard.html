@@ -558,15 +558,6 @@
       transition: transform 0.6s ease;
     }
     .course-card:hover .card-thumb-img { transform: scale(1.12); }
-    .course-card .card-thumb-icon {
-      font-size: 16px; position: absolute; bottom: 8px; right: 10px;
-      opacity: 0.5; transition: all 0.4s ease; z-index: 2;
-      filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
-    }
-    .course-card:hover .card-thumb-icon {
-      transform: scale(1.15);
-      opacity: 0.85;
-    }
     .course-card .card-badge {
       position: absolute; top: 12px; right: 12px;
       font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 6px;
@@ -604,25 +595,10 @@
     }
     .course-card:hover .card-play-btn { opacity: 1; }
     .course-card:hover .card-play-circle { transform: scale(1); }
-    .course-card .card-body { padding: 18px 20px; position: relative; z-index: 1; }
+    .course-card .card-body { padding: 14px 16px; position: relative; z-index: 1; }
     .course-card .card-body h4 {
-      font-size: 14.5px; font-weight: 700; margin-bottom: 6px;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .course-card .card-body .card-meta {
-      font-size: 11px; color: var(--gold);
-      font-family: 'JetBrains Mono', monospace;
-      opacity: 0.8;
-    }
-    .course-card .card-glow-bar {
-      height: 2px; margin: 0 20px; border-radius: 1px;
-      background: rgba(255,255,255,0.04); overflow: hidden;
-    }
-    .course-card .card-glow-bar .fill {
-      height: 100%; border-radius: 1px;
-      background: linear-gradient(90deg, var(--gold), var(--gold));
-      box-shadow: 0 0 10px var(--gold-light);
-      transition: width 0.8s ease;
+      font-size: 14px; font-weight: 600; margin: 0;
+      line-height: 1.3;
     }
 
     /* ── Card Purchase Footer Bar ── */
@@ -1064,13 +1040,11 @@
       html += `<div class="course-card${purchased ? '' : ' card-locked'}" ${purchased ? `onclick="location.href='/aluno/curso.html?slug=${c.slug}'"` : `onclick="alert('🔒 Curso não adquirido.\n\nAdquira este curso para acessar o conteúdo completo.\n\nEntre em contato: contato@institutolumethos.online')"`}>
         <div class="card-thumb">
           ${img ? `<img src="${img}" alt="${c.title}" class="card-thumb-img" loading="lazy" onerror="this.style.display='none'">` : ''}
-          <span class="card-thumb-icon">${getIcon(c.slug)}</span>
           ${purchased ? '<span class="card-badge new">SEU CURSO</span>' : '<span class="card-badge available">DISPONÍVEL</span>'}
           <div class="card-play-btn"><div class="card-play-circle">${purchased ? '▶' : '🔒'}</div></div>
         </div>
         <div class="card-body">
           <h4>${c.title}</h4>
-          <div class="card-meta">${c.hours || '?'}h · ${c.total_modules || '?'} módulos</div>
         </div>
         <div class="${purchased ? 'card-bar-purchased' : 'card-bar-locked'}"></div>
       </div>`;
@@ -1158,19 +1132,15 @@
 
   function enrolledCard(c, badgeType) {
     const badgeLabel = badgeType === 'new' ? 'NOVO' : badgeType === 'done' ? '100%' : `${c.progress_pct}%`;
-    const hasBar = badgeType === 'progress';
     return `<a href="/aluno/curso.html?slug=${c.slug}" class="course-card">
       <div class="card-thumb">
         ${c.image_url ? `<img src="${c.image_url}" alt="${c.title}" class="card-thumb-img" loading="lazy" onerror="this.style.display='none'">` : ''}
-        <span class="card-thumb-icon">${getIcon(c.slug)}</span>
         <span class="card-badge ${badgeType}">${badgeLabel}</span>
         <div class="card-play-btn"><div class="card-play-circle">${badgeType === 'done' ? '↻' : '▶'}</div></div>
       </div>
       <div class="card-body">
         <h4>${c.title}</h4>
-        <div class="card-meta">${c.modules_completed}/${c.total_modules} módulos</div>
       </div>
-      ${hasBar ? `<div class="card-glow-bar"><div class="fill" style="width:${c.progress_pct}%"></div></div>` : ''}
       <div class="card-bar-purchased"></div>
     </a>`;
   }
