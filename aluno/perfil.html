@@ -754,7 +754,11 @@ document.getElementById('userAvatar').textContent = displayName.charAt(0).toUppe
 
   function closeCrop() {
     document.getElementById("cropModal").classList.add("hidden");
+    if (window._cropMouseMove) { document.removeEventListener('mousemove', window._cropMouseMove); document.removeEventListener('touchmove', window._cropMouseMove); }
+    if (window._cropMouseUp) { document.removeEventListener('mouseup', window._cropMouseUp); document.removeEventListener('touchend', window._cropMouseUp); }
     cropFile = null;
+    cropImgEl = null;
+    cropContainer = null;
   }
 
   async function confirmCrop() {
@@ -808,43 +812,79 @@ document.getElementById('userAvatar').textContent = displayName.charAt(0).toUppe
     } catch(ex) { showToast("Erro ao enviar foto", true); }
   }
 
-  async function handlePhotoSelect(e) {
+  function handlePhotoSelect(e) {
     const file = e.target.files[0];
     if (!file) return;
     if (file.size > 5 * 1024 * 1024) { showToast('Foto muito grande (máx 5MB)', true); return; }
     if (!file.type.startsWith('image/')) { showToast('Selecione uma imagem', true); return; }
+    cropFile = file;
+    openCropModal(file);
+    e.target.value = '';
+  }
 
-    // Preview
+  function openCropModal(file) {
+    const modal = document.getElementById('cropModal');
+    const img = document.getElementById('cropImage');
+    cropContainer = document.getElementById('cropContainer');
+    cropImgEl = img;
+
     const reader = new FileReader();
     reader.onload = function(ev) {
-      document.getElementById('avatarPreview').style.backgroundImage = 'url(' + ev.target.result + ')';
-      document.getElementById('avatarPreview').classList.add('has-photo');
-      document.getElementById('avatarPreview').innerHTML = '<div class="avatar-overlay"><span class="avatar-overlay-text">✎ Trocar</span></div>';
+      img.src = ev.target.result;
+      img.onload = function() {
+        const cw = cropContainer.clientWidth;
+        const ch = cropContainer.clientHeight;
+        const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+        const w = img.naturalWidth * scale;
+        const h = img.naturalHeight * scale;
+        img.style.width = w + 'px';
+        img.style.height = h + 'px';
+        img.style.left = ((cw - w) / 2) + 'px';
+        img.style.top = ((ch - h) / 2) + 'px';
+        cropDrag.imgX = (cw - w) / 2;
+        cropDrag.imgY = (ch - h) / 2;
+        document.getElementById('cropZoom').value = 100;
+      };
     };
     reader.readAsDataURL(file);
 
-    // Upload
-    showToast('Enviando foto...');
-    try {
-      const base64 = await new Promise((resolve) => {
-        const r = new FileReader();
-        r.onload = () => resolve(r.result);
-        r.readAsDataURL(file);
-      });
-      const res = await fetch(API + '/profile/photo', {
-        method: 'POST', headers: h(),
-        body: JSON.stringify({ photo: base64 })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        profile.profile_photo = data.photo_url;
-        showToast('✅ Foto atualizada!');
-        setTimeout(() => renderProfile(), 800);
-      } else {
-        const err = await res.json();
-        showToast('Erro: ' + (err.error || 'Falha ao salvar'), true);
-      }
-    } catch(ex) { showToast('Erro ao enviar foto', true); }
+    modal.classList.remove('hidden');
+
+    // Drag events
+    img.onmousedown = function(ev) {
+      ev.preventDefault();
+      cropDrag.active = true;
+      cropDrag.startX = ev.clientX - cropDrag.imgX;
+      cropDrag.startY = ev.clientY - cropDrag.imgY;
+      img.style.cursor = 'grabbing';
+    };
+    img.ontouchstart = function(ev) {
+      if (ev.touches.length !== 1) return;
+      ev.preventDefault();
+      cropDrag.active = true;
+      cropDrag.startX = ev.touches[0].clientX - cropDrag.imgX;
+      cropDrag.startY = ev.touches[0].clientY - cropDrag.imgY;
+    };
+
+    window._cropMouseMove = function(ev) {
+      if (!cropDrag.active) return;
+      ev.preventDefault();
+      const x = (ev.touches ? ev.touches[0].clientX : ev.clientX) - cropDrag.startX;
+      const y = (ev.touches ? ev.touches[0].clientY : ev.clientY) - cropDrag.startY;
+      cropDrag.imgX = x;
+      cropDrag.imgY = y;
+      img.style.left = x + 'px';
+      img.style.top = y + 'px';
+    };
+    window._cropMouseUp = function() {
+      cropDrag.active = false;
+      if (img) img.style.cursor = 'grab';
+    };
+
+    document.addEventListener('mousemove', window._cropMouseMove);
+    document.addEventListener('mouseup', window._cropMouseUp);
+    document.addEventListener('touchmove', window._cropMouseMove, { passive: false });
+    document.addEventListener('touchend', window._cropMouseUp);
   }
 
   async function removePhoto() {
