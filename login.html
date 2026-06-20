@@ -4,360 +4,679 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Área do Aluno · Instituto Lumethos</title>
-  <link rel="icon" href="/img/favicon.ico">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-    :root {
-      --navy:#1B2E45; --gold-badge:#D4A631; --gold-btn:#E6A829;
-      --white:#fff; --gray-bg:#F5F7FA; --gray-border:#CCC;
-      --gray-placeholder:#999; --gray-subtitle:#666; --gray-dark:#333;
-    }
-    body { font-family:'Inter',sans-serif; min-height:100vh; }
 
-    /* ======== SPLIT LAYOUT ======== */
-    .split { display:flex; min-height:100vh; }
-
-    /* ======== LEFT PANEL — 40% ======== */
-    .left-panel {
-      width:40%; background:var(--navy); color:var(--white);
-      display:flex; flex-direction:column; justify-content:center; align-items:center;
-      padding:60px 52px; position:relative; min-width:340px;
+    html, body {
+      height: 100%;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
-    .left-inner { max-width:380px; width:100%; }
-    .shield-crest {
-      width:110px; height:auto; display:block; margin:0 auto 22px;
-    }
-    .motto-badge {
-      display:inline-block; padding:8px 22px; background:var(--gold-badge); color:var(--navy);
-      border-radius:50px; font-size:10.5px; font-weight:700; letter-spacing:2.5px;
-      text-align:center; width:100%; margin-bottom:36px;
-    }
-    .brand-block { text-align:center; margin-bottom:48px; }
-    .brand-inst { font-size:13px; letter-spacing:5px; opacity:.7; text-transform:uppercase; margin-bottom:2px; }
-    .brand-name { font-size:22px; font-weight:700; letter-spacing:4px; text-transform:uppercase; margin-bottom:6px; }
-    .brand-motto { font-size:10px; letter-spacing:3px; opacity:.45; text-transform:uppercase; }
-    .left-heading { font-size:28px; font-weight:800; margin-bottom:16px; text-align:left; }
-    .left-desc { font-size:14px; opacity:.55; line-height:1.75; max-width:340px; text-align:left; }
 
-    /* ======== RIGHT PANEL — 60% ======== */
-    .right-panel {
-      flex:1; background:var(--white); display:flex; flex-direction:column;
-      justify-content:center; align-items:center; padding:60px 40px;
+    /* ═══════════════════════════
+       BACKGROUND — Dark blue + radial glow
+       ═══════════════════════════ */
+    body {
+      background: #080e1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
     }
-    .right-inner { max-width:420px; width:100%; }
-    .welcome-title { font-size:28px; font-weight:800; color:var(--gray-dark); margin-bottom:6px; }
-    .welcome-sub { font-size:15px; color:var(--gray-subtitle); margin-bottom:44px; }
 
-    .form-group { margin-bottom:22px; }
-    .form-group label {
-      display:block; font-size:13px; font-weight:600; color:var(--gray-dark);
-      margin-bottom:8px;
+    /* Radial light behind the card */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle at center, rgba(26, 55, 95, 0.50) 0%, rgba(13, 27, 42, 0.35) 25%, rgba(8, 14, 26, 0) 65%);
+      pointer-events: none;
     }
-    .form-group input {
-      width:100%; padding:13px 16px; background:var(--gray-bg); border:1px solid var(--gray-border);
-      border-radius:10px; font-size:15px; font-family:'Inter',sans-serif;
-      color:var(--gray-dark); outline:none; transition:border-color .2s,box-shadow .2s;
+
+    /* ═══ NAV-TOP ═══ */
+    body { padding-top: 44px; }
+    .nav-top {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(13,27,42,0.85);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      display: flex; align-items: center;
+      padding: 8px 20px; gap: 12px;
+      border-bottom: 1px solid rgba(199,154,46,0.1);
     }
-    .form-group input::placeholder { color:var(--gray-placeholder); }
-    .form-group input:focus { border-color:var(--gold-btn); box-shadow:0 0 0 3px rgba(230,168,41,.1); }
-
-    .form-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; }
-    .remember-me { display:flex; align-items:center; gap:8px; cursor:pointer; }
-    .remember-me input[type="checkbox"] { width:17px; height:17px; accent-color:var(--gold-badge); cursor:pointer; }
-    .remember-me span { font-size:14px; color:var(--gray-subtitle); }
-    .forgot-link { font-size:14px; color:var(--gold-badge); text-decoration:none; font-weight:600; }
-    .forgot-link:hover { text-decoration:underline; }
-
-    .btn-primary {
-      width:100%; padding:15px; background:var(--gold-btn); color:var(--white);
-      border:none; border-radius:10px; font-size:16px; font-weight:700;
-      cursor:pointer; font-family:'Inter',sans-serif; transition:background .2s,transform .1s;
-      letter-spacing:.5px;
+    .nav-top a {
+      display: inline-flex; align-items: center; gap: 5px;
+      text-decoration: none; font-size: 12px; font-weight: 500;
+      color: rgba(255,255,255,0.7); padding: 5px 12px;
+      border-radius: 8px; transition: all 0.15s;
     }
-    .btn-primary:hover { filter:brightness(1.06); }
-    .btn-primary:active { transform:scale(.98); }
-    .btn-primary:disabled { opacity:.55; cursor:not-allowed; }
+    .nav-top a:hover { background: rgba(255,255,255,0.1); color: #C79A2E; }
+    .nav-top a svg { width: 16px; height: 16px; fill: currentColor; }
+    .nav-top .spacer { flex: 1; }
+    .nav-top .logo-mini { height: 20px; opacity: 0.35; }
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-    .register-row { text-align:center; margin-top:32px; }
-    .register-row span { font-size:14px; color:var(--gray-subtitle); }
-    .register-row a { font-size:14px; color:var(--gold-badge); text-decoration:none; font-weight:700; margin-left:4px; }
-    .register-row a:hover { text-decoration:underline; }
+    /* Subtle secondary glow */
+    body::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle at center, rgba(196, 149, 58, 0.07) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
 
+    /* ═══════════════════════════
+       CARD — centered, split
+       ═══════════════════════════ */
+    .login-card {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      width: 100%;
+      max-width: 960px;
+      min-height: 600px;
+      background: #111c2e;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 0 60px rgba(26, 55, 95, 0.15),
+        0 24px 80px rgba(0,0,0,0.40);
+    }
+
+    /* ═══════════════════════════
+       LEFT HALF — Branding (dark)
+       ═══════════════════════════ */
+    .card-left {
+      flex: 0 0 55%;
+      background: linear-gradient(160deg, #0e1b2f 0%, #0a1524 100%);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 64px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-left::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(196,149,58,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .card-left::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -80px;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(196,149,58,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .left-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .tagline-badge {
+      display: inline-block;
+      padding: 7px 22px;
+      background: rgba(196,149,58,0.10);
+      border: 1px solid rgba(196,149,58,0.22);
+      color: #d4a843;
+      border-radius: 50px;
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      margin-bottom: 36px;
+    }
+
+    .brand-logo {
+      margin-bottom: 40px;
+    }
+    .brand-logo img {
+      height: 147px;
+      width: auto;
+    }
+
+    .left-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #e8edf2;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    .left-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(232,237,242,0.50);
+      line-height: 1.7;
+      max-width: 380px;
+    }
+
+    /* ═══════════════════════════
+       RIGHT HALF — Login Form (light)
+       ═══════════════════════════ */
+    .card-right {
+      flex: 1;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 64px 48px;
+    }
+
+    .right-inner {
+      max-width: 360px;
+      width: 100%;
+    }
+
+    .welcome-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 4px;
+      letter-spacing: -0.02em;
+    }
+    .welcome-sub {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 32px;
+      font-weight: 400;
+    }
+
+    /* Form elements */
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      color: #0f172a;
+      font-size: 14.5px;
+      font-family: 'Inter', system-ui, sans-serif;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .form-input::placeholder {
+      color: #94a3b8;
+    }
+    .form-input:focus {
+      border-color: #c4953a;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(196,149,58,0.10);
+    }
+    .form-input.error-input {
+      border-color: #ef4444;
+      background: #fef2f2;
+    }
+
+    /* Checkbox row */
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+    .remember-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .remember-row input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 17px;
+      height: 17px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .remember-row input[type="checkbox"]:checked {
+      background: #c4953a;
+      border-color: #c4953a;
+    }
+    .remember-row input[type="checkbox"]:checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .remember-label {
+      font-size: 13px;
+      color: #475569;
+      user-select: none;
+    }
+    .forgot-link {
+      font-size: 13px;
+      color: #64748b;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.15s ease;
+    }
+    .forgot-link:hover {
+      color: #c4953a;
+    }
+
+    /* Button */
+    .btn-login {
+      width: 100%;
+      padding: 13px;
+      background: #c4953a;
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 14.5px;
+      font-weight: 700;
+      font-family: 'Inter', system-ui, sans-serif;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.01em;
+    }
+    .btn-login:hover {
+      background: #b08530;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(196,149,58,0.30);
+    }
+    .btn-login:active {
+      transform: translateY(0);
+    }
+    .btn-login:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Signup link */
+    .signup-row {
+      text-align: center;
+      margin-top: 24px;
+    }
+    .signup-text {
+      font-size: 13.5px;
+      color: #64748b;
+    }
+    .signup-link {
+      color: #c4953a;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .signup-link:hover {
+      color: #b08530;
+    }
+
+    /* Alerts */
     .alert {
-      padding:12px 16px; border-radius:10px; font-size:13px; margin-bottom:18px;
-      display:none; animation:fadeIn .3s; font-weight:500;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 500;
+      margin-bottom: 14px;
+      display: none;
     }
-    .alert.error { background:#fef2f2; color:#991b1b; border:1px solid #fecaca; display:block; }
-    .alert.success { background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; display:block; }
-    .alert.info { background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; display:block; }
-    @keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+    .alert.error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #dc2626;
+    }
+    .alert.success {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #059669;
+    }
+    .alert.info {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #2563eb;
+    }
 
-    /* Register form — hidden by default */
-    .register-form { display:none; }
-    .register-form.active { display:block; }
-    .login-form { display:block; }
-    .login-form.hidden { display:none; }
+    /* Spinner */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.5s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
 
-    /* ======== MOBILE ======== */
-    @media(max-width:768px) {
-      .split { flex-direction:column; }
-      .left-panel { width:100%; min-width:0; padding:40px 28px 32px; }
-      .left-inner { max-width:100%; }
-      .left-heading { font-size:22px; }
-      .right-panel { padding:28px 24px 40px; }
-      .right-inner { max-width:100%; }
-      .welcome-title { font-size:22px; }
-      .shield-crest { width:80px; }
+    /* ═══════════════════════════
+       RESPONSIVE
+       ═══════════════════════════ */
+    @media (max-width: 800px) {
+      body {
+        padding: 16px;
+      }
+      body::before {
+        width: 400px;
+        height: 400px;
+      }
+      body::after {
+        width: 280px;
+        height: 280px;
+      }
+      .login-card {
+        flex-direction: column;
+        max-width: 440px;
+        min-height: auto;
+        border-radius: 20px;
+      }
+      .card-left {
+        flex: 0 0 auto;
+        padding: 40px 32px 32px;
+        text-align: center;
+      }
+      .left-inner {
+        margin: 0 auto;
+      }
+      .brand-logo img {
+        height: 60px;
+      }
+      .tagline-badge {
+        margin-bottom: 20px;
+      }
+      .brand-logo {
+        margin-bottom: 20px;
+      }
+      .left-title {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+      .left-desc {
+        font-size: 13px;
+        max-width: 100%;
+      }
+      .card-right {
+        padding: 32px 28px 40px;
+      }
+      .welcome-title {
+        font-size: 22px;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="nav-top"><a href="javascript:history.back()" title="Voltar"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg> Voltar</a><a href="/" title="Página Inicial"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> Início</a><span class="spacer"></span><img class="logo-mini" src="img/logo-lumethos-correto.png" alt="Lumethos"></div>
+  <div class="login-card">
+    <!-- LEFT — Branding -->
+    <div class="card-left">
+      <div class="left-inner">
+        <div class="tagline-badge">SAPIENTIA AD MINISTERIUM</div>
 
-<div class="split">
-  <!-- ======== LEFT PANEL ======== -->
-  <div class="left-panel">
-    <div class="left-inner">
-      <img src="/img/logo-selo.webp" alt="Brasão Instituto Lumethos" class="shield-crest"
-        onerror="this.style.display='none'">
-      <div class="motto-badge">SAPIENTIA AD MINISTERIUM</div>
-      <div class="brand-block">
-        <div class="brand-inst">INSTITUTO</div>
-        <div class="brand-name">LUMETHOS</div>
-        <div class="brand-motto">SAPIENTIA AD MINISTERIUM</div>
+        <div class="brand-logo">
+          <img src="/img/logo-lumethos-correto.png" alt="Instituto Lumethos" onerror="this.style.display='none'">
+        </div>
+
+        <h1 class="left-title">Área do Aluno</h1>
+        <p class="left-desc">
+          Acesse seus cursos, materiais exclusivos e ferramentas ministeriais.
+          Sua jornada de capacitação teológica continua aqui.
+        </p>
       </div>
-      <div class="left-heading">Área do Aluno</div>
-      <p class="left-desc">Acesse seus cursos, certificados, biblioteca digital e ferramentas ministeriais.</p>
     </div>
-  </div>
 
-  <!-- ======== RIGHT PANEL ======== -->
-  <div class="right-panel">
-    <div class="right-inner">
-      <!-- LOGIN FORM -->
-      <div class="login-form" id="loginForm">
-        <h1 class="welcome-title">Bem-vindo de volta</h1>
+    <!-- RIGHT — Login -->
+    <div class="card-right">
+      <div class="right-inner">
+        <h2 class="welcome-title">Bem-vindo de volta</h2>
         <p class="welcome-sub">Faça login para acessar sua conta</p>
 
+        <!-- Alerts -->
         <div class="alert error" id="loginError"></div>
         <div class="alert success" id="loginSuccess"></div>
         <div class="alert info" id="loginInfo"></div>
 
-        <div class="form-group">
-          <label for="email">E-mail</label>
-          <input type="email" id="email" placeholder="anderson.boscariol@gmail.com" autocomplete="email" autofocus>
-        </div>
-        <div class="form-group">
-          <label for="password">Senha</label>
-          <input type="password" id="password" placeholder="Sua senha" autocomplete="current-password">
-        </div>
-        <div class="form-row">
-          <label class="remember-me">
-            <input type="checkbox" id="remember">
-            <span>Lembrar-me</span>
-          </label>
-          <a href="#" class="forgot-link" onclick="showForgotPassword(event)">Esqueci a senha</a>
-        </div>
-        <button class="btn-primary" id="loginBtn" onclick="handleLogin()">Entrar</button>
-        <div class="register-row">
-          <span>Ainda não tem conta?</span><a href="#" onclick="showRegisterForm(event)">Cadastre-se</a>
-        </div>
-      </div>
+        <!-- Form -->
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label" for="email">E-mail</label>
+            <input type="email" id="email" class="form-input" placeholder="seu@email.com" required autofocus>
+          </div>
 
-      <!-- REGISTER FORM -->
-      <div class="register-form" id="registerForm">
-        <h1 class="welcome-title">Criar conta</h1>
-        <p class="welcome-sub">Cadastre-se para acessar os cursos</p>
+          <div class="form-group" style="position:relative;">
+            <label class="form-label" for="password">Senha</label>
+            <input type="password" id="password" class="form-input" placeholder="••••••••" required style="padding-right:44px;">
+            <button type="button" id="togglePwd" aria-label="Mostrar senha" style="position:absolute;right:12px;bottom:12px;background:none;border:none;cursor:pointer;padding:0;color:#94a3b8;display:flex;align-items:center;justify-content:center;width:22px;height:22px;transition:color .2s;" onmouseover="this.style.color='#c4953a'" onmouseout="this.style.color='#94a3b8'">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
 
-        <div class="alert error" id="registerError"></div>
-        <div class="alert success" id="registerSuccess"></div>
+          <div class="row">
+            <label class="remember-row">
+              <input type="checkbox" id="rememberMe">
+              <span class="remember-label">Lembrar-me</span>
+            </label>
+            <a href="#" onclick="showForgotPassword(event)" class="forgot-link">Esqueci a senha</a>
+          </div>
 
-        <div class="form-group">
-          <label for="regName">Nome completo</label>
-          <input type="text" id="regName" placeholder="Seu nome completo">
-        </div>
-        <div class="form-group">
-          <label for="regEmail">E-mail</label>
-          <input type="email" id="regEmail" placeholder="seu@email.com" autocomplete="email">
-        </div>
-        <div class="form-group">
-          <label for="regPassword">Senha</label>
-          <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
-        </div>
-        <div class="form-group">
-          <label for="regPassword2">Confirmar senha</label>
-          <input type="password" id="regPassword2" placeholder="Repita a senha">
-        </div>
-        <button class="btn-primary" id="registerBtn" onclick="handleRegister()">Criar conta</button>
-        <div class="register-row">
-          <span>Já tem conta?</span><a href="#" onclick="showLoginForm(event)">Fazer login</a>
+          <button type="submit" class="btn-login" id="loginBtn">
+            Entrar
+          </button>
+        </form>
+
+        <div class="signup-row">
+          <span class="signup-text">Ainda não tem conta? </span>
+          <a href="https://institutolumethos.online" class="signup-link">Cadastre-se</a>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = "https://xplqghmhslfpyyqhwvkp.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_sQPtweum0Qbml5zK3vd4Yg_tbdnxJ-o";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <script>
+    var API = '/api';
 
-  function getRedirect() {
-    const params = new URLSearchParams(location.search);
-    return params.get('redirect') || '/aluno/dashboard.html';
-  }
+    // Auto-redirect if already logged in
+    (async function(){
+      var t = localStorage.getItem('lumethos_token');
+      if (!t) return;
+      try {
+        var r = await fetch(API+'/auth/me',{headers:{'Authorization':'***'+t}});
+        if (r.ok) {
+          var d = await r.json();
+          if (d.user) window.location.href = getRedirect();
+        }
+      } catch(e) {}
+    })();
 
-  async function checkSession() {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) window.location.href = getRedirect();
-    } catch(e) { console.log('Session check:', e); }
-  }
+    function getRedirect(){
+      var p = new URLSearchParams(window.location.search).get('redirect');
+      return p || '/aluno/dashboard.html';
+    }
 
-  function show(prefix, type, msg) {
-    const el = document.getElementById(prefix + type.charAt(0).toUpperCase() + type.slice(1));
-    if (!el) return;
-    el.textContent = msg;
-    el.style.display = 'block';
-    if (type === 'success') setTimeout(function(){ el.style.display = 'none'; }, 5000);
-  }
-  function hide(prefix) {
-    ['Error','Success','Info'].forEach(function(t) {
-      var el = document.getElementById(prefix + t);
-      if (el) el.style.display = 'none';
-    });
-  }
+    function hideAlerts() {
+      ['loginError','loginSuccess','loginInfo'].forEach(function(id){
+        var el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+    }
 
-  async function handleLogin() {
-    var email = document.getElementById('email').value.trim();
-    var password = document.getElementById('password').value;
-    var btn = document.getElementById('loginBtn');
+    function showAlert(type, msg) {
+      hideAlerts();
+      var id = 'login' + (type==='error'?'Error':type==='success'?'Success':'Info');
+      var el = document.getElementById(id);
+      if (el) { el.textContent = msg; el.style.display = 'block'; }
+    }
 
-    hide('login');
-    if (!email || !password) { show('login','error','Preencha e-mail e senha'); return; }
+    async function handleLogin(e) {
+      e.preventDefault();
+      var email = document.getElementById('email').value.trim();
+      var password = document.getElementById('password').value;
+      var btn = document.getElementById('loginBtn');
 
-    btn.disabled = true;
-    btn.textContent = 'Entrando...';
+      hideAlerts();
+      if (!email || !password) {
+        showAlert('error','Preencha e-mail e senha.');
+        return;
+      }
 
-    try {
-      var result = await supabase.auth.signInWithPassword({ email: email, password: password });
-      if (result.error) {
-        var msg = result.error.message;
-        if (msg === 'Invalid login credentials') msg = 'E-mail ou senha incorretos';
-        if (msg.indexOf('Email not confirmed') >= 0) msg = 'Confirme seu e-mail antes de fazer login';
-        show('login','error',msg);
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Entrando...';
+
+      try {
+        var r = await fetch(API+'/auth/login', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({email:email,password:password})
+        });
+        var d = await r.json();
+
+        if (!r.ok || d.error) {
+          var msg = d.error || 'Erro ao fazer login.';
+          if (msg === 'Email ou senha incorretos') msg = 'E-mail ou senha incorretos. Verifique os dados.';
+          showAlert('error',msg);
+          btn.disabled = false;
+          btn.textContent = 'Entrar';
+          return;
+        }
+
+        if (d.token && d.user) {
+          localStorage.setItem('lumethos_token', d.token);
+          localStorage.setItem('lumethos_user', JSON.stringify(d.user));
+          showAlert('success','Login realizado! Redirecionando...');
+          btn.innerHTML = '✓ Conectado';
+          setTimeout(function(){
+            window.location.href = getRedirect();
+          }, 400);
+        }
+      } catch(err) {
+        showAlert('error','Erro de conexão. Tente novamente.');
         btn.disabled = false;
         btn.textContent = 'Entrar';
-        return;
       }
-      if (result.data.session) {
-        show('login','success','Login realizado! Redirecionando...');
-        setTimeout(function(){ window.location.href = getRedirect(); }, 600);
-      }
-    } catch(err) {
-      show('login','error','Erro de conexão. Tente novamente.');
-      btn.disabled = false;
-      btn.textContent = 'Entrar';
     }
-  }
 
-  function showRegisterForm(e) {
-    e.preventDefault();
-    hide('login');
-    hide('register');
-    document.getElementById('loginForm').classList.add('hidden');
-    document.getElementById('registerForm').classList.add('active');
-    document.getElementById('regName').focus();
-  }
+    async function showForgotPassword(e) {
+      e.preventDefault();
+      var email = document.getElementById('email').value.trim();
+      if (!email) { email = prompt('Digite seu e-mail para recuperação:'); }
+      if (!email) return;
 
-  function showLoginForm(e) {
-    e.preventDefault();
-    hide('login');
-    hide('register');
-    document.getElementById('registerForm').classList.remove('active');
-    document.getElementById('loginForm').classList.remove('hidden');
-    document.getElementById('email').focus();
-  }
+      hideAlerts();
+      showAlert('info','Enviando link de recuperação...');
 
-  async function handleRegister() {
-    var name = document.getElementById('regName').value.trim();
-    var email = document.getElementById('regEmail').value.trim();
-    var password = document.getElementById('regPassword').value;
-    var password2 = document.getElementById('regPassword2').value;
-    var btn = document.getElementById('registerBtn');
-
-    hide('register');
-    if (!name || !email || !password) { show('register','error','Preencha todos os campos'); return; }
-    if (password.length < 6) { show('register','error','A senha precisa ter no mínimo 6 caracteres'); return; }
-    if (password !== password2) { show('register','error','As senhas não conferem'); return; }
-
-    btn.disabled = true;
-    btn.textContent = 'Criando conta...';
-
-    try {
-      var result = await supabase.auth.signUp({
-        email: email, password: password,
-        options: { data: { name: name, full_name: name } }
-      });
-      if (result.error) {
-        var msg = result.error.message;
-        if (msg.indexOf('already registered') >= 0 || msg.indexOf('already exists') >= 0) msg = 'Este e-mail já está cadastrado';
-        show('register','error',msg);
-        btn.disabled = false;
-        btn.textContent = 'Criar conta';
-        return;
+      try {
+        var r = await fetch(API+'/auth/forgot-password', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({email:email})
+        });
+        var d = await r.json();
+        if (!r.ok || d.error) {
+          showAlert('error','Erro ao enviar. Verifique o e-mail informado.');
+        } else {
+          showAlert('success','Link de recuperação enviado! Verifique seu e-mail.');
+        }
+      } catch(err) {
+        showAlert('error','Erro de conexão.');
       }
-      if (result.data.user && (!result.data.user.identities || result.data.user.identities.length === 0)) {
-        show('register','error','Este e-mail já está cadastrado. Faça login.');
-        btn.disabled = false;
-        btn.textContent = 'Criar conta';
-        return;
-      }
-      show('register','success','Conta criada! Confirme seu e-mail para ativar.');
-      btn.textContent = 'Criar conta';
-      btn.disabled = false;
-      setTimeout(function(){ showLoginForm(new Event('click')); }, 2500);
-    } catch(err) {
-      show('register','error','Erro de conexão. Tente novamente.');
-      btn.disabled = false;
-      btn.textContent = 'Criar conta';
     }
-  }
 
-  async function showForgotPassword(e) {
-    e.preventDefault();
-    var emailValue = document.getElementById('email').value.trim();
-    if (!emailValue) { emailValue = prompt('Digite seu e-mail para redefinir a senha:'); }
-    if (!emailValue) return;
-    hide('login');
-    show('login','info','Enviando link de redefinição...');
-    try {
-      var result = await supabase.auth.resetPasswordForEmail(emailValue, {
-        redirectTo: window.location.origin + '/login.html?reset=true'
-      });
-      if (result.error) {
-        show('login','error','Erro ao enviar. Verifique o e-mail digitado.');
+    // Remember me
+    (function(){
+      var saved = localStorage.getItem('lumethos_remember');
+      if (saved) {
+        try {
+          var data = JSON.parse(saved);
+          document.getElementById('email').value = data.email || '';
+          document.getElementById('rememberMe').checked = true;
+        } catch(e) {}
+      }
+    })();
+
+    document.getElementById('rememberMe').addEventListener('change', function(){
+      if (this.checked) {
+        var email = document.getElementById('email').value.trim();
+        if (email) {
+          localStorage.setItem('lumethos_remember', JSON.stringify({email:email}));
+        }
       } else {
-        show('login','success','Link de redefinição enviado! Verifique seu e-mail.');
+        localStorage.removeItem('lumethos_remember');
       }
-    } catch(err) {
-      show('login','error','Erro de conexão. Tente novamente.');
-    }
-  }
+    });
 
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      if (document.getElementById('registerForm').classList.contains('active')) {
-        handleRegister();
-      } else {
-        handleLogin();
+    document.getElementById('email').addEventListener('input', function(){
+      if (document.getElementById('rememberMe').checked) {
+        localStorage.setItem('lumethos_remember', JSON.stringify({email:this.value.trim()}));
       }
-    }
-  });
+    });
 
-  checkSession();
-</script>
-
+    // Password visibility toggle
+    (function(){
+      var btn = document.getElementById('togglePwd');
+      var pwd = document.getElementById('password');
+      var eyeSvg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+      var eyeOffSvg = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+      btn.addEventListener('click', function(){
+        if (pwd.type === 'password') {
+          pwd.type = 'text';
+          btn.innerHTML = eyeOffSvg;
+          btn.setAttribute('aria-label','Ocultar senha');
+        } else {
+          pwd.type = 'password';
+          btn.innerHTML = eyeSvg;
+          btn.setAttribute('aria-label','Mostrar senha');
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
