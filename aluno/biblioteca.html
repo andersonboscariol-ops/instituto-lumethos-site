@@ -372,6 +372,26 @@
     }
     .row-scroll::-webkit-scrollbar { display: none; }
 
+    /* ═══ NETFLIX GRID (Catálogo Completo) ═══ */
+    .course-grid-netflix {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 4px 2px 16px;
+    }
+    .course-grid-netflix .course-card {
+      min-width: unset; max-width: unset; width: 100%;
+    }
+    .course-grid-netflix .course-card .card-thumb {
+      aspect-ratio: 16/10;
+    }
+    .course-grid-netflix .course-card .card-thumb-img {
+      transition: transform 0.5s ease;
+    }
+    .course-grid-netflix .course-card:hover .card-thumb-img {
+      transform: scale(1.1);
+    }
+
     /* ═══ COURSE CARD ═══ */
     .course-card {
       min-width: 290px; max-width: 290px;
@@ -411,8 +431,8 @@
       font-family: 'JetBrains Mono', monospace; letter-spacing: 0.5px; z-index: 2;
     }
     .course-card .card-badge.new { background: rgba(199,154,46,0.12); color: var(--gold); border: 1px solid rgba(199,154,46,0.25); }
-    .course-card .card-badge.progress { background: rgba(199,154,46,0.12); color: var(--gold); border: 1px solid rgba(199,154,46,0.25); }
-    .course-card .card-badge.done { background: rgba(199,154,46,0.12); color: var(--gold); border: 1px solid rgba(199,154,46,0.25); }
+    .course-card .card-badge.in-progress { background: rgba(199,154,46,0.18); color: var(--gold); border: 1px solid rgba(199,154,46,0.35); }
+    .course-card .card-badge.completed { background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
     .course-card .card-play-btn {
       position: absolute; inset: 0; display: flex;
       align-items: center; justify-content: center;
@@ -680,25 +700,32 @@ document.getElementById('userName').textContent = '// ' + displayName.toLowerCas
 
       for (const c of courses) {
         const completedCount = progressMap[c.id] || 0;
-        if (completedCount === 0 && !progressMap[c.id]) continue;
-        const totalLessons = c.total_lessons || 0;
+        const totalLessons = c.total_lessons || (c.modules ? c.modules.length * 4 : 0);
         const pct = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
         enrollments.push({
           id: c.id, slug: c.slug, title: c.title,
-          image_url: c.image || '', color: c.color || '#151f38',
+          image_url: getCourseImage(c.slug), color: c.color || '#151f38',
           progress_pct: pct,
           modules_completed: completedCount,
           total_modules: totalLessons,
-          description: c.description || ''
+          description: c.description || c.subtitle || ''
         });
       }
     } catch(e) { console.error('Erro:', e); }
+
+    if (enrollments.length === 0) {
+      document.getElementById('mainContent').innerHTML = `<div class="empty-state anim-in anim-d1">
+        <div class="empty-glow">◆</div>
+        <h3>Erro ao carregar cursos</h3><p>Não foi possível carregar a biblioteca. Tente novamente.</p>
+        <a href="/aluno/dashboard.html" class="hero-btn-primary">Voltar ao Dashboard</a>
+      </div>`; return;
+    }
 
     const inProgress = enrollments.filter(c => c.progress_pct > 0 && c.progress_pct < 100);
     const notStarted = enrollments.filter(c => c.progress_pct === 0);
     const completed = enrollments.filter(c => c.progress_pct >= 100);
     const totalModules = enrollments.reduce((s, c) => s + (c.modules_completed || 0), 0);
-    const featured = inProgress[0] || completed[0] || notStarted[0];
+    const featured = inProgress[0] || notStarted[0] || completed[0];
 
     // Update sidebar stats
     document.getElementById('sbCourses').textContent = enrollments.length;
@@ -707,17 +734,9 @@ document.getElementById('userName').textContent = '// ' + displayName.toLowerCas
 
     const main = document.getElementById('mainContent');
 
-    if (enrollments.length === 0) {
-      main.innerHTML = `<div class="empty-state anim-in anim-d1">
-        <div class="empty-glow">◆</div>
-        <h3>Biblioteca vazia</h3><p>Você ainda não está matriculado em nenhum curso.</p>
-        <a href="/#cursos" class="hero-btn-primary">Explorar Cursos →</a>
-      </div>`; return;
-    }
-
     let html = '';
 
-    /* Hero */
+    /* Hero - featured course */
     html += `<div class="hero-featured anim-in anim-d1">
       <div class="hero-overlay"></div>
       <div class="hero-content">
@@ -726,38 +745,37 @@ document.getElementById('userName').textContent = '// ' + displayName.toLowerCas
         <div class="hero-desc">${featured.description || 'Continue sua jornada de formação ministerial.'}</div>
         <div class="hero-buttons">
           <a href="/aluno/curso.html?slug=${featured.slug}" class="hero-btn-primary">▶ ${featured.progress_pct > 0 ? 'Continuar' : 'Começar'}</a>
-          <a href="#rows" class="hero-btn-secondary">ℹ Ver todos</a>
+          <a href="#catalog" class="hero-btn-secondary">ℹ Ver catálogo</a>
         </div>
       </div>
     </div>`;
 
-    function cardHTML(c, badgeType) {
-      const label = badgeType === 'new' ? 'NEW' : badgeType === 'done' ? '100%' : `${c.progress_pct}%`;
-      const hasBar = badgeType === 'progress';
+    function cardHTML(c, status) {
+      const label = status === 'in-progress' ? `${c.progress_pct}%` : status === 'completed' ? '✓ 100%' : 'DISPONÍVEL';
       return `<a href="/aluno/curso.html?slug=${c.slug}" class="course-card">
         <div class="card-thumb">
-          ${(c.image_url || c.image || getCourseImage(c.slug)) ? `<img src="${c.image_url || c.image || getCourseImage(c.slug)}" alt="${c.title}" class="card-thumb-img" loading="lazy" onerror="this.style.display='none'">` : ''}
+          <img src="${getCourseImage(c.slug)}" alt="${c.title}" class="card-thumb-img" loading="lazy" onerror="this.style.display='none'">
           <span class="card-thumb-icon">${getIcon(c.slug)}</span>
-          <span class="card-badge ${badgeType}">${label}</span>
-          <div class="card-play-btn"><div class="card-play-circle">${badgeType === 'done' ? '↻' : '▶'}</div></div>
+          <span class="card-badge ${status}">${label}</span>
+          <div class="card-play-btn"><div class="card-play-circle">${status === 'completed' ? '↻' : '▶'}</div></div>
         </div>
         <div class="card-info">
           <h4>${c.title}</h4>
-          <div class="card-meta"><span>${c.total_modules} modules</span>${c.modules_completed > 0 ? `<span class="dot"></span><span>${c.modules_completed} done</span>` : ''}</div>
+          <div class="card-meta"><span>${c.total_modules} aulas</span>${c.progress_pct > 0 ? `<span class="dot"></span><span>${c.modules_completed} concluídas</span>` : ''}</div>
         </div>
-        ${hasBar ? `<div class="card-glow-bar"><div class="fill" style="width:${c.progress_pct}%"></div></div>` : ''}
+        ${status === 'in-progress' ? `<div class="card-glow-bar"><div class="fill" style="width:${c.progress_pct}%"></div></div>` : ''}
       </a>`;
     }
 
     if (inProgress.length > 0) {
-      html += `<div class="category-row anim-in anim-d2"><div class="row-header"><div class="row-title"><span class="row-accent gold"></span>Continue Assistindo</div><div class="row-count">${inProgress.length}</div></div><div class="row-scroll">${inProgress.map(c => cardHTML(c, 'progress')).join('')}</div></div>`;
+      html += `<div class="category-row anim-in anim-d2"><div class="row-header"><div class="row-title"><span class="row-accent gold"></span>Continue Assistindo</div><div class="row-count">${inProgress.length}</div></div><div class="row-scroll">${inProgress.map(c => cardHTML(c, 'in-progress')).join('')}</div></div>`;
     }
-    if (notStarted.length > 0) {
-      html += `<div class="category-row anim-in anim-d3"><div class="row-header"><div class="row-title"><span class="row-accent cyan"></span>Minha Fila</div><div class="row-count">${notStarted.length}</div></div><div class="row-scroll">${notStarted.map(c => cardHTML(c, 'new')).join('')}</div></div>`;
-    }
-    if (completed.length > 0) {
-      html += `<div class="category-row anim-in anim-d4"><div class="row-header"><div class="row-title"><span class="row-accent emerald"></span>Concluídos</div><div class="row-count">${completed.length}</div></div><div class="row-scroll">${completed.map(c => cardHTML(c, 'done')).join('')}</div></div>`;
-    }
+
+    /* Full catalog — ALL courses Netflix grid */
+    html += `<div id="catalog" class="category-row anim-in anim-d3"><div class="row-header"><div class="row-title"><span class="row-accent"></span>Catálogo Completo</div><div class="row-count">${enrollments.length}</div></div><div class="course-grid-netflix">${enrollments.map(c => {
+      const status = c.progress_pct >= 100 ? 'completed' : c.progress_pct > 0 ? 'in-progress' : 'new';
+      return cardHTML(c, status);
+    }).join('')}</div></div>`;
     html += `<div id="rows"></div>`;
     main.innerHTML = html;
   }
