@@ -502,6 +502,16 @@
       -ms-overflow-style: none; scrollbar-width: none;
     }
     .row-scroll::-webkit-scrollbar { display: none; }
+    .row-link {
+      font-size: 12px; font-weight: 600; color: var(--gold);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .row-link:hover { color: var(--gold-light); }
+    .course-grid-netflix {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px; padding: 4px 2px 16px;
+    }
 
     /* ═══════════ COURSE CARD - GLASS ═══════════ */
     .course-card {
@@ -561,6 +571,10 @@
     .course-card .card-badge.done {
       background: rgba(199,154,46,0.12); color: var(--gold);
       border: 1px solid rgba(199,154,46,0.25);
+    }
+    .course-card .card-badge.available {
+      background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.1);
     }
     .course-card .card-play-btn {
       position: absolute; inset: 0; display: flex;
@@ -678,6 +692,10 @@
       .course-card { min-width: 200px; max-width: 200px; }
       .course-card .card-thumb { height: 110px; }
       .topbar-user-name { display: none; }
+      .course-grid-netflix { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media(max-width:480px) {
+      .course-grid-netflix { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -998,7 +1016,33 @@
       </div>`;
     }
 
+    /* ── Catálogo de Cursos Disponíveis ── */
+    const enrolledIds = new Set(enrollments.map(c => c.id));
+    const available = courses.filter(c => !enrolledIds.has(c.id));
+    if (available.length > 0) {
+      html += `<div class="content-row anim-in anim-d4" id="catalogo">
+        <div class="row-header"><div class="row-title"><span class="row-accent gold"></span>Cursos Disponíveis</div><a href="/aluno/biblioteca.html" class="row-link">Ver todos →</a></div>
+        <div class="course-grid-netflix">${available.map(c => catalogCard(c)).join('')}</div>
+      </div>`;
+    }
+
     main.innerHTML = html;
+  }
+
+  function catalogCard(c) {
+    const img = courseImages[c.slug] ? '/img/cursos/' + courseImages[c.slug] : null;
+    return `<a href="/aluno/curso.html?slug=${c.slug}" class="course-card">
+      <div class="card-thumb">
+        ${img ? `<img src="${img}" alt="${c.title}" class="card-thumb-img" loading="lazy" onerror="this.style.display='none'">` : ''}
+        <span class="card-thumb-icon">${getIcon(c.slug)}</span>
+        <span class="card-badge available">DISPONÍVEL</span>
+        <div class="card-play-btn"><div class="card-play-circle">▶</div></div>
+      </div>
+      <div class="card-body">
+        <h4>${c.title}</h4>
+        <div class="card-meta">${c.hours || '?'}h · ${c.total_modules || '?'} módulos</div>
+      </div>
+    </a>`;
   }
 
   function cardHTML(c, badgeType) {
