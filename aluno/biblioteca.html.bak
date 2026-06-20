@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Biblioteca · Instituto Lumethos</title>
+  <link rel="icon" href="../img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+    :root {
+      --bg-deep: #020617; --glass-bg: rgba(15,23,42,0.65);
+      --glass-border: rgba(255,255,255,0.06); --glass-hover: rgba(30,41,59,0.8);
+      --gold: #eab308; --gold-neon: #fbbf24;
+      --purple: #a855f7; --purple-neon: #c084fc;
+      --cyan: #06b6d4; --cyan-neon: #22d3ee;
+      --emerald: #10b981; --emerald-neon: #34d399;
+      --rose: #f43f5e; --rose-neon: #fb7185;
+      --text: #f1f5f9; --text-dim: rgba(241,245,249,0.6);
+      --text-muted: rgba(241,245,249,0.35);
+      --radius: 14px; --radius-sm: 10px;
+      --sidebar-w: 250px; --topbar-h: 56px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-deep); color: var(--text);
+      min-height: 100vh; -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Animated grid */
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        linear-gradient(rgba(168,85,247,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(168,85,247,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 50% at 50% 50%, black 30%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 50% at 50% 50%, black 30%, transparent 70%);
+    }
+
+    /* Orbs */
+    .bg-orb {
+      position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
+      filter: blur(100px); opacity: 0.10;
+      animation: orbFloat 20s ease-in-out infinite;
+    }
+    .bg-orb.orb-1 { width: 600px; height: 600px; background: var(--purple); top: -200px; right: -150px; }
+    .bg-orb.orb-2 { width: 500px; height: 500px; background: var(--cyan); bottom: -200px; left: -100px; animation-delay: -10s; }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, -40px) scale(1.1); }
+      50% { transform: translate(-20px, 30px) scale(0.95); }
+      75% { transform: translate(-30px, -20px) scale(1.05); }
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* ═══ TOPBAR ═══ */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: var(--topbar-h);
+      background: rgba(2,6,23,0.82);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-logo { height: 64px; width: auto; filter: brightness(1.1); }
+    .topbar-right { display: flex; align-items: center; gap: 14px; }
+    .topbar-user-name { font-size: 11px; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.5px; }
+    .topbar-avatar {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--purple), var(--cyan));
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px;
+      box-shadow: 0 0 20px rgba(168,85,247,0.25);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .topbar-btn {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-dim); padding: 6px 14px; border-radius: 8px;
+      font-size: 11px; cursor: pointer; transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif; font-weight: 500; letter-spacing: 0.3px;
+    }
+    .topbar-btn:hover { color: var(--rose-neon); border-color: rgba(244,63,94,0.3); box-shadow: 0 0 15px rgba(244,63,94,0.1); }
+
+    /* ═══ LAYOUT ═══ */
+    .layout { display: flex; padding-top: var(--topbar-h); min-height: 100vh; position: relative; z-index: 1; }
+
+    /* ═══ SIDEBAR ═══ */
+    .sidebar {
+      width: var(--sidebar-w); min-width: var(--sidebar-w);
+      background: rgba(15,23,42,0.5); backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-right: 1px solid rgba(255,255,255,0.04);
+      position: fixed; top: var(--topbar-h); left: 0; bottom: 0;
+      overflow-y: auto; z-index: 100; padding: 20px 0;
+      display: flex; flex-direction: column;
+    }
+    .sidebar-section { padding: 2px 10px; margin-bottom: 16px; }
+    .sidebar-section .section-label {
+      font-size: 9px; text-transform: uppercase; letter-spacing: 2.5px;
+      color: var(--text-muted); padding: 0 16px; margin-bottom: 10px;
+      font-weight: 700; font-family: 'JetBrains Mono', monospace;
+    }
+    .sidebar-link {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 16px; border-radius: 10px;
+      color: var(--text-dim); text-decoration: none;
+      font-size: 13px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      font-weight: 500; margin-bottom: 2px;
+      border: 1px solid transparent;
+    }
+    .sidebar-link .icon { font-size: 18px; width: 22px; text-align: center; flex-shrink: 0; transition: all 0.3s ease; position: relative; z-index: 1; }
+    .sidebar-link .label { position: relative; z-index: 1; }
+    .sidebar-link .badge { margin-left: auto; padding: 3px 8px; border-radius: 6px; font-size: 9px; font-weight: 700; letter-spacing: 0.5px; font-family: 'JetBrains Mono', monospace; }
+    .sidebar-link:hover .icon { transform: scale(1.2); }
+    .sidebar-link:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
+    .sidebar-link.accent-gold:hover { color: var(--gold-neon); border-color: rgba(234,179,8,0.25); box-shadow: 0 0 30px rgba(234,179,8,0.1), inset 0 0 30px rgba(234,179,8,0.02); }
+    .sidebar-link.accent-blue:hover { color: #60a5fa; border-color: rgba(59,130,246,0.25); box-shadow: 0 0 30px rgba(59,130,246,0.1), inset 0 0 30px rgba(59,130,246,0.02); }
+    .sidebar-link.accent-cyan:hover { color: var(--cyan-neon); border-color: rgba(6,182,212,0.25); box-shadow: 0 0 30px rgba(6,182,212,0.1), inset 0 0 30px rgba(6,182,212,0.02); }
+    .sidebar-link.accent-green:hover { color: var(--emerald-neon); border-color: rgba(16,185,129,0.25); box-shadow: 0 0 30px rgba(16,185,129,0.1), inset 0 0 30px rgba(16,185,129,0.02); }
+    .sidebar-link.accent-purple:hover { color: var(--purple-neon); border-color: rgba(168,85,247,0.25); box-shadow: 0 0 30px rgba(168,85,247,0.1), inset 0 0 30px rgba(168,85,247,0.02); }
+    .sidebar-link.accent-rose:hover { color: var(--rose-neon); border-color: rgba(244,63,94,0.25); box-shadow: 0 0 30px rgba(244,63,94,0.1), inset 0 0 30px rgba(244,63,94,0.02); }
+    .sidebar-link.accent-amber:hover { color: #f59e0b; border-color: rgba(245,158,11,0.25); box-shadow: 0 0 30px rgba(245,158,11,0.1), inset 0 0 30px rgba(245,158,11,0.02); }
+    .sidebar-link.accent-teal:hover { color: #2dd4bf; border-color: rgba(45,212,191,0.25); box-shadow: 0 0 30px rgba(45,212,191,0.1), inset 0 0 30px rgba(45,212,191,0.02); }
+    .sidebar-link.accent-red:hover { color: var(--rose-neon); border-color: rgba(244,63,94,0.25); box-shadow: 0 0 30px rgba(244,63,94,0.1), inset 0 0 30px rgba(244,63,94,0.02); }
+    .sidebar-link.active { background: rgba(255,255,255,0.04); border: 1px solid rgba(6,182,212,0.2); color: var(--cyan-neon); box-shadow: 0 0 20px rgba(6,182,212,0.08), inset 0 0 20px rgba(6,182,212,0.03); }
+    .sidebar-link.active::before { content: ''; position: absolute; left: -1px; top: 12px; bottom: 12px; width: 2px; background: linear-gradient(180deg, var(--cyan-neon), var(--purple-neon)); border-radius: 0 2px 2px 0; box-shadow: 0 0 10px var(--cyan-neon); }
+    .sidebar-link.active .badge { background: rgba(6,182,212,0.15); color: var(--cyan-neon); }
+    .sidebar-spacer { flex: 1; }
+
+    /* ═══ MAIN ═══ */
+    .main-content { flex: 1; margin-left: var(--sidebar-w); padding: 0 0 60px; max-width: calc(100% - var(--sidebar-w)); }
+
+    /* ═══ NETFLIX HERO ═══ */
+    .hero-featured {
+      position: relative; height: 460px;
+      background: linear-gradient(135deg, rgba(15,23,42,0.6) 0%, rgba(2,6,23,0.8) 100%);
+      overflow: hidden; margin-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .hero-featured::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(168,85,247,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 20%, rgba(6,182,212,0.06) 0%, transparent 50%);
+    }
+    .hero-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 60%; background: linear-gradient(to top, var(--bg-deep) 0%, transparent 100%);
+    }
+    .hero-content {
+      position: absolute; bottom: 56px; left: 48px; max-width: 560px; z-index: 2;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; text-transform: uppercase; letter-spacing: 2px;
+      color: var(--cyan-neon); margin-bottom: 12px;
+      font-weight: 700; font-family: 'JetBrains Mono', monospace;
+    }
+    .hero-badge::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--cyan); box-shadow: 0 0 8px var(--cyan-neon);
+      animation: pulse 2s infinite;
+    }
+    .hero-content h1 {
+      font-size: 42px; font-weight: 900; margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--text) 0%, var(--text-dim) 60%, var(--cyan-neon) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; letter-spacing: -1px; line-height: 1.1;
+    }
+    .hero-content .hero-desc {
+      font-size: 14px; color: var(--text-dim); line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .hero-buttons { display: flex; gap: 14px; }
+    .hero-btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 30px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--cyan), #0891b2);
+      color: #fff; text-decoration: none; font-weight: 700;
+      font-size: 13px; transition: all 0.3s ease;
+      box-shadow: 0 0 25px rgba(6,182,212,0.3), 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .hero-btn-primary:hover { box-shadow: 0 0 45px rgba(6,182,212,0.5), 0 8px 24px rgba(0,0,0,0.4); transform: translateY(-2px); }
+    .hero-btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 30px; border-radius: 10px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-dim); text-decoration: none; font-weight: 600;
+      font-size: 13px; transition: all 0.3s ease;
+    }
+    .hero-btn-secondary:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+    /* ═══ NETFLIX ROWS ═══ */
+    .category-row { padding: 0 36px; margin-bottom: 44px; }
+    .row-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .row-title {
+      font-size: 16px; font-weight: 700; color: var(--text);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .row-accent {
+      width: 4px; height: 16px; border-radius: 2px; display: inline-block;
+    }
+    .row-accent.gold { background: var(--gold); box-shadow: 0 0 10px var(--gold-neon); }
+    .row-accent.cyan { background: var(--cyan); box-shadow: 0 0 10px var(--cyan-neon); }
+    .row-accent.emerald { background: var(--emerald); box-shadow: 0 0 10px var(--emerald-neon); }
+    .row-count { font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+    .row-scroll {
+      display: flex; gap: 16px; overflow-x: auto;
+      padding: 4px 2px 16px;
+      scroll-behavior: smooth;
+      -ms-overflow-style: none; scrollbar-width: none;
+    }
+    .row-scroll::-webkit-scrollbar { display: none; }
+
+    /* ═══ COURSE CARD ═══ */
+    .course-card {
+      min-width: 290px; max-width: 290px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius); overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+      flex-shrink: 0; cursor: pointer; text-decoration: none; color: inherit;
+      position: relative;
+    }
+    .course-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(168,85,247,0.05), transparent, rgba(6,182,212,0.05));
+      opacity: 0; transition: opacity 0.4s; border-radius: var(--radius); z-index: 0;
+    }
+    .course-card:hover::before { opacity: 1; }
+    .course-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(6,182,212,0.3);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(6,182,212,0.15), 0 0 40px rgba(6,182,212,0.08);
+      z-index: 10;
+    }
+    .course-card .card-thumb {
+      height: 170px; position: relative; overflow: hidden;
+      background: linear-gradient(135deg, rgba(15,23,42,0.8) 0%, rgba(2,6,23,0.9) 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .course-card .card-thumb-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .course-card:hover .card-thumb-img { transform: scale(1.12); }
+    .course-card .card-thumb-icon { font-size: 54px; position: absolute; transition: all 0.4s ease; }
+    .course-card:hover .card-thumb-icon { transform: scale(1.2) rotate(3deg); opacity: 0.5; }
+    .course-card .card-badge {
+      position: absolute; top: 14px; right: 14px;
+      font-size: 10px; font-weight: 800; padding: 5px 12px; border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace; letter-spacing: 0.5px; z-index: 2;
+    }
+    .course-card .card-badge.new { background: rgba(6,182,212,0.12); color: var(--cyan-neon); border: 1px solid rgba(6,182,212,0.25); }
+    .course-card .card-badge.progress { background: rgba(234,179,8,0.12); color: var(--gold-neon); border: 1px solid rgba(234,179,8,0.25); }
+    .course-card .card-badge.done { background: rgba(16,185,129,0.12); color: var(--emerald-neon); border: 1px solid rgba(16,185,129,0.25); }
+    .course-card .card-play-btn {
+      position: absolute; inset: 0; display: flex;
+      align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.3s ease; z-index: 3;
+    }
+    .course-card .card-play-circle {
+      width: 56px; height: 56px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--cyan), #0891b2);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 30px rgba(6,182,212,0.3);
+      transform: scale(0.7); transition: transform 0.3s ease;
+    }
+    .course-card:hover .card-play-btn { opacity: 1; }
+    .course-card:hover .card-play-circle { transform: scale(1); }
+    .course-card .card-info { padding: 20px 22px; position: relative; z-index: 1; }
+    .course-card .card-info h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .course-card .card-meta {
+      font-size: 11px; color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .course-card .card-meta .dot { width: 3px; height: 3px; background: var(--text-muted); border-radius: 50%; }
+    .course-card .card-glow-bar { height: 2px; margin: 0 22px; border-radius: 1px; background: rgba(255,255,255,0.04); overflow: hidden; }
+    .course-card .card-glow-bar .fill { height: 100%; border-radius: 1px; background: linear-gradient(90deg, var(--cyan), var(--purple)); box-shadow: 0 0 10px var(--cyan-neon); transition: width 0.8s ease; }
+
+    /* Empty */
+    .empty-state {
+      text-align: center; padding: 80px 20px; margin: 0 36px;
+      background: var(--glass-bg); backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border); border-radius: var(--radius);
+    }
+    .empty-state .empty-glow {
+      width: 80px; height: 80px; border-radius: 20px;
+      background: linear-gradient(135deg, rgba(168,85,247,0.1), rgba(6,182,212,0.1));
+      border: 1px solid rgba(168,85,247,0.15); display: flex;
+      align-items: center; justify-content: center;
+      font-size: 36px; margin: 0 auto 20px;
+    }
+    .empty-state h3 {
+      font-size: 22px; font-weight: 700; margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--text), var(--cyan-neon));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .empty-state p { color: var(--text-dim); font-size: 14px; margin-bottom: 24px; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .anim-in { animation: fadeInUp 0.5s ease forwards; opacity: 0; }
+    .anim-d1 { animation-delay: 0.04s; }
+    .anim-d2 { animation-delay: 0.1s; }
+    .anim-d3 { animation-delay: 0.16s; }
+    .anim-d4 { animation-delay: 0.22s; }
+
+    @media(max-width:768px) {
+      .sidebar { width: 100%; min-width: 100%; position: relative; top: auto; bottom: auto; height: auto; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.04); padding: 6px 0; flex-direction: row; overflow-x: auto; }
+      .sidebar-section { padding: 0 3px; margin: 0; display: flex; }
+      .sidebar-section .section-label { display: none; }
+      .sidebar-link { white-space: nowrap; font-size: 10px; padding: 6px 8px; margin: 0 1px; border-radius: 6px; }
+      .sidebar-link .icon { font-size: 13px; width: auto; }
+      .sidebar-link .badge { display: none; }
+      .sidebar-link.active::before { display: none; }
+      .layout { flex-direction: column; }
+      .main-content { margin-left: 0; max-width: 100%; }
+      .hero-featured { height: 320px; }
+      .hero-content { left: 20px; bottom: 32px; max-width: calc(100% - 40px); }
+      .hero-content h1 { font-size: 26px; }
+      .category-row { padding: 0 16px; }
+      .course-card { min-width: 220px; max-width: 220px; }
+      .course-card .card-thumb { height: 130px; }
+      .topbar-user-name { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+
+<!-- ═══ TOPBAR ═══ -->
+<nav class="topbar">
+  <div class="topbar-left">
+    <img src="../img/logo-lumethos-correto.png" alt="Instituto Lumethos" class="topbar-logo" onerror="this.style.display='none'">
+  </div>
+  <div class="topbar-right">
+    <span class="topbar-user-name" id="userName">// carregando...</span>
+    <div class="topbar-avatar" id="userAvatar">?</div>
+    <button class="topbar-btn" onclick="logout()">LOGOUT</button>
+  </div>
+</nav>
+
+<!-- ═══ LAYOUT ═══ -->
+<div class="layout">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="section-label">● Navegação</div>
+      <a href="/aluno/dashboard.html" class="sidebar-link active accent-purple"><span class="icon">◆</span><span class="label">Dashboard</span></a>
+      <a href="#" class="sidebar-link accent-amber"><span class="icon">⬢</span><span class="label">Certificados</span><span class="badge">EM BREVE</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="section-label">● Ferramentas</div>
+      <a href="/scriba.html" class="sidebar-link accent-teal"><span class="icon">◈</span><span class="label">Scriba</span></a>
+      <a href="/centelhaz.html" class="sidebar-link accent-purple"><span class="icon">✦</span><span class="label">Centelhaz</span></a>
+    </div>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-section">
+      <div class="section-label">● Conta</div>
+      <a href="/aluno/perfil.html" class="sidebar-link accent-rose"><span class="icon">◉</span><span class="label">Meu Perfil</span></a>
+      <a href="#" onclick="logout()" class="sidebar-link accent-red"><span class="icon">⊘</span><span class="label">Sair</span></a>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN ═══ -->
+  <main class="main-content" id="mainContent">
+    <div style="display:flex;align-items:center;justify-content:center;min-height:60vh;">
+      <div style="text-align:center;color:var(--text-muted);font-family:'JetBrains Mono',monospace;font-size:12px;">LOADING...</div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const API = '/api';
+  const TOKEN = localStorage.getItem('lumethos_token');
+  const headers = () => ({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN });
+
+  async function checkAuth() {
+    if (!TOKEN) { goLogin(); return null; }
+    try { const r = await fetch(API + '/auth/me', { headers: headers() }); if (!r.ok) { localStorage.clear(); goLogin(); return null; } return await r.json(); }
+    catch(e) { localStorage.clear(); goLogin(); return null; }
+  }
+  function goLogin() { window.location.href = '/login.html?redirect=' + encodeURIComponent(location.pathname); }
+  function logout() { localStorage.clear(); window.location.href = '/login.html'; }
+
+  const courseIcons = { capelania: '⛪', teologia: '📖', pastoral: '🕊️', infantil: '🧒', jovens: '🔥', diaconal: '🤲', hinologia: '🎵', patristica: '🏛️', 'historia-igreja': '📜' };
+  function getIcon(slug) { return courseIcons[slug] || '◆'; }
+
+  async function loadLibrary() {
+    const authData = await checkAuth();
+    if (!authData || !authData.user) return;
+    const user = authData.user;
+    const nameFallback = (user.email || '').split('@')[0] || 'Aluno';
+    let profile = null;
+    try { const r = await fetch(API + '/profile', { headers: headers() }); if (r.ok) profile = await r.json(); } catch(e) {}
+    const displayName = profile?.name || nameFallback;
+    document.getElementById('userName').textContent = '// ' + displayName.toLowerCase();
+    document.getElementById('userAvatar').textContent = displayName.charAt(0).toUpperCase();
+
+    let enrollments = [];
+    try {
+      const [coursesRes, progressRes] = await Promise.all([
+        fetch(API + '/courses', { headers: headers() }),
+        fetch(API + '/courses/progress', { headers: headers() })
+      ]);
+      const courses = coursesRes.ok ? await coursesRes.json() : [];
+      const progress = progressRes.ok ? await progressRes.json() : [];
+
+      const courseMap = {};
+      for (const p of progress) {
+        if (!courseMap[p.course_id]) courseMap[p.course_id] = { completed: 0, total: 0 };
+        courseMap[p.course_id].total++;
+        if (p.completed) courseMap[p.course_id].completed++;
+      }
+
+      for (const c of courses) {
+        const stats = courseMap[c.id];
+        if (!stats) continue;
+        const pct = stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
+        enrollments.push({
+          id: c.id, slug: c.slug, title: c.title,
+          image_url: c.image || '', color: c.color || '#151f38',
+          progress_pct: pct,
+          modules_completed: stats.completed,
+          total_modules: stats.total,
+          description: c.description || ''
+        });
+      }
+    } catch(e) { console.error('Erro:', e); }
+
+    const inProgress = enrollments.filter(c => c.progress_pct > 0 && c.progress_pct < 100);
+    const notStarted = enrollments.filter(c => c.progress_pct === 0);
+    const completed = enrollments.filter(c => c.progress_pct >= 100);
+    const featured = inProgress[0] || completed[0] || notStarted[0];
+    const main = document.getElementById('mainContent');
+
+    if (enrollments.length === 0) {
+      main.innerHTML = `<div class="empty-state anim-in anim-d1">
+        <div class="empty-glow">◆</div>
+        <h3>Biblioteca vazia</h3><p>Você ainda não está matriculado em nenhum curso.</p>
+        <a href="/#cursos" class="hero-btn-primary">Explorar Cursos →</a>
+      </div>`; return;
+    }
+
+    let html = '';
+
+    /* Hero */
+    html += `<div class="hero-featured anim-in anim-d1">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-badge">${featured.progress_pct > 0 ? 'Continue Assistindo' : 'Destaque'}</div>
+        <h1>${featured.title}</h1>
+        <div class="hero-desc">${featured.description || 'Continue sua jornada de formação ministerial.'}</div>
+        <div class="hero-buttons">
+          <a href="/aluno/curso.html?slug=${featured.slug}" class="hero-btn-primary">▶ ${featured.progress_pct > 0 ? 'Continuar' : 'Começar'}</a>
+          <a href="#rows" class="hero-btn-secondary">ℹ Ver todos</a>
+        </div>
+      </div>
+    </div>`;
+
+    function cardHTML(c, badgeType) {
+      const label = badgeType === 'new' ? 'NEW' : badgeType === 'done' ? '100%' : `${c.progress_pct}%`;
+      const hasBar = badgeType === 'progress';
+      return `<a href="/aluno/curso.html?slug=${c.slug}" class="course-card">
+        <div class="card-thumb">
+          ${c.image_url ? `<img src="${c.image_url}" alt="${c.title}" class="card-thumb-img" loading="lazy" onerror="this.style.display='none'">` : ''}
+          <span class="card-thumb-icon">${getIcon(c.slug)}</span>
+          <span class="card-badge ${badgeType}">${label}</span>
+          <div class="card-play-btn"><div class="card-play-circle">${badgeType === 'done' ? '↻' : '▶'}</div></div>
+        </div>
+        <div class="card-info">
+          <h4>${c.title}</h4>
+          <div class="card-meta"><span>${c.total_modules} modules</span>${c.modules_completed > 0 ? `<span class="dot"></span><span>${c.modules_completed} done</span>` : ''}</div>
+        </div>
+        ${hasBar ? `<div class="card-glow-bar"><div class="fill" style="width:${c.progress_pct}%"></div></div>` : ''}
+      </a>`;
+    }
+
+    if (inProgress.length > 0) {
+      html += `<div class="category-row anim-in anim-d2"><div class="row-header"><div class="row-title"><span class="row-accent gold"></span>Continue Assistindo</div><div class="row-count">${inProgress.length}</div></div><div class="row-scroll">${inProgress.map(c => cardHTML(c, 'progress')).join('')}</div></div>`;
+    }
+    if (notStarted.length > 0) {
+      html += `<div class="category-row anim-in anim-d3"><div class="row-header"><div class="row-title"><span class="row-accent cyan"></span>Minha Fila</div><div class="row-count">${notStarted.length}</div></div><div class="row-scroll">${notStarted.map(c => cardHTML(c, 'new')).join('')}</div></div>`;
+    }
+    if (completed.length > 0) {
+      html += `<div class="category-row anim-in anim-d4"><div class="row-header"><div class="row-title"><span class="row-accent emerald"></span>Concluídos</div><div class="row-count">${completed.length}</div></div><div class="row-scroll">${completed.map(c => cardHTML(c, 'done')).join('')}</div></div>`;
+    }
+    html += `<div id="rows"></div>`;
+    main.innerHTML = html;
+  }
+  loadLibrary();
+</script>
+</body>
+</html>

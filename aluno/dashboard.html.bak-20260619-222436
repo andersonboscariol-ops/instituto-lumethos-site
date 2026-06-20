@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Área do Aluno · Instituto Lumethos</title>
+  <meta name="description" content="Sua jornada de formação ministerial">
+  <link rel="icon" href="../img/favicon.ico">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --navy: #0D1B2A;
+      --navy-light: #152238;
+      --navy-card: #1a2d45;
+      --gold: #C79A2E;
+      --gold-bright: #e0b84c;
+      --gold-soft: rgba(199,154,46,0.15);
+      --white: #ffffff;
+      --text-secondary: rgba(255,255,255,0.72);
+      --text-muted: rgba(255,255,255,0.42);
+      --border: rgba(255,255,255,0.06);
+      --border-hover: rgba(255,255,255,0.12);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --sidebar-width: 260px;
+      --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ======== TOP BAR ======== */
+    .topbar {
+      position: fixed; top:0; left:0; right:0; z-index:100;
+      height:54px; background:rgba(13,27,42,0.92);
+      backdrop-filter:blur(16px) saturate(180%);
+      -webkit-backdrop-filter:blur(16px) saturate(180%);
+      border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 24px;
+    }
+    .topbar .logo {
+      font-family:'Libre Baskerville',serif; font-size:16px; color:var(--gold);
+      text-decoration:none; letter-spacing:.5px; font-weight:700;
+    }
+    .topbar .user-area { display:flex; align-items:center; gap:14px; }
+    .topbar .user-name { font-size:13px; color:var(--text-secondary); font-weight:500; }
+    .topbar .avatar {
+      width:34px; height:34px; border-radius:50%;
+      background:linear-gradient(135deg,var(--gold),var(--gold-bright));
+      color:var(--navy); display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:15px; cursor:pointer;
+      box-shadow:0 2px 8px rgba(199,154,46,.25);
+    }
+    .topbar .logout-btn {
+      background:none; border:1px solid var(--border-hover);
+      color:var(--text-muted); padding:6px 14px; border-radius:50px;
+      font-size:12px; cursor:pointer; transition:all var(--transition);
+      font-family:'Inter',sans-serif; font-weight:500;
+    }
+    .topbar .logout-btn:hover { color:var(--white); border-color:rgba(255,255,255,.3); }
+
+    /* ======== SIDEBAR ======== */
+    .layout { display:flex; padding-top:54px; min-height:100vh; }
+    .sidebar {
+      width:var(--sidebar-width); min-width:var(--sidebar-width);
+      background:var(--navy-light);
+      border-right:1px solid var(--border);
+      position:fixed; top:54px; left:0; bottom:0;
+      overflow-y:auto; z-index:50; padding:20px 0;
+    }
+    .sidebar-section { padding:4px 12px; margin-bottom:12px; }
+    .sidebar-section .section-label {
+      font-size:10px; text-transform:uppercase; letter-spacing:1.5px;
+      color:var(--text-muted); padding:0 14px; margin-bottom:8px;
+      font-weight:600;
+    }
+    .sidebar-link {
+      display:flex; align-items:center; gap:12px;
+      padding:11px 14px; border-radius:var(--radius-sm);
+      color:var(--text-secondary); text-decoration:none;
+      font-size:13px; transition:all var(--transition); font-weight:500;
+      margin-bottom:2px; position:relative;
+    }
+    .sidebar-link:hover { background:rgba(255,255,255,.03); color:var(--white); }
+    .sidebar-link.active {
+      background:var(--gold-soft); color:var(--gold); font-weight:600;
+    }
+    .sidebar-link.active::before {
+      content:''; position:absolute; left:0; top:8px; bottom:8px;
+      width:3px; background:var(--gold); border-radius:0 3px 3px 0;
+    }
+    .sidebar-link .icon { font-size:18px; width:24px; text-align:center; flex-shrink:0; }
+    .sidebar-link .badge {
+      margin-left:auto; background:var(--gold-soft); color:var(--gold);
+      font-size:10px; font-weight:700; padding:3px 8px; border-radius:10px;
+    }
+
+    /* ======== MAIN CONTENT ======== */
+    .main-content {
+      flex:1; margin-left:var(--sidebar-width);
+      padding:36px 40px; max-width:calc(100% - var(--sidebar-width));
+    }
+    .page-header { margin-bottom:32px; }
+    .page-header h1 {
+      font-family:'Libre Baskerville',serif;
+      font-size:30px; margin-bottom:6px; letter-spacing:-.3px;
+    }
+    .page-header p { color:var(--text-secondary); font-size:14px; font-weight:400; }
+
+    /* ======== CONTINUE LEARNING HERO ======== */
+    .hero-card {
+      background:linear-gradient(135deg, #1a2d45 0%, #1e3350 50%, #1a2840 100%);
+      border:1px solid var(--border); border-radius:var(--radius);
+      padding:32px; margin-bottom:28px; position:relative; overflow:hidden;
+      display:flex; align-items:center; gap:32px;
+    }
+    .hero-card::before {
+      content:''; position:absolute; top:-60px; right:-60px;
+      width:200px; height:200px; border-radius:50%;
+      background:radial-gradient(circle,rgba(199,154,46,.08),transparent 70%);
+    }
+    .hero-progress-ring { flex-shrink:0; position:relative; }
+    .hero-progress-ring svg { transform:rotate(-90deg); }
+    .hero-progress-ring .ring-text {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      font-size:22px; font-weight:700; color:var(--gold);
+    }
+    .hero-info { flex:1; position:relative; z-index:1; }
+    .hero-info .hero-label {
+      font-size:11px; text-transform:uppercase; letter-spacing:1.2px;
+      color:var(--gold); margin-bottom:8px; font-weight:600;
+    }
+    .hero-info h2 {
+      font-family:'Libre Baskerville',serif; font-size:22px; margin-bottom:6px;
+      letter-spacing:-.2px;
+    }
+    .hero-info .hero-meta {
+      font-size:13px; color:var(--text-muted); margin-bottom:16px;
+    }
+    .hero-cta {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 24px; background:var(--gold); color:var(--navy);
+      border-radius:50px; text-decoration:none; font-weight:700;
+      font-size:13px; transition:all var(--transition);
+    }
+    .hero-cta:hover { background:var(--gold-bright); transform:translateY(-1px); box-shadow:0 4px 16px rgba(199,154,46,.3); }
+
+    /* ======== STATS CARDS ======== */
+    .stats-grid {
+      display:grid; grid-template-columns:repeat(4,1fr);
+      gap:14px; margin-bottom:32px;
+    }
+    .stat-card {
+      background:var(--navy-card); border-radius:var(--radius);
+      padding:20px 22px; border:1px solid var(--border);
+      transition:all var(--transition); position:relative; overflow:hidden;
+    }
+    .stat-card:hover {
+      border-color:var(--border-hover);
+      transform:translateY(-2px);
+    }
+    .stat-card::after {
+      content:''; position:absolute; top:0; left:0; right:0;
+      height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent);
+      opacity:0; transition:opacity var(--transition);
+    }
+    .stat-card:hover::after { opacity:1; }
+    .stat-card .stat-icon {
+      width:36px; height:36px; border-radius:8px;
+      background:var(--gold-soft); display:flex; align-items:center;
+      justify-content:center; font-size:16px; margin-bottom:12px;
+    }
+    .stat-card .stat-num { font-size:26px; font-weight:700; letter-spacing:-.5px; }
+    .stat-card .stat-num.gold { color:var(--gold); }
+    .stat-card .stat-label {
+      font-size:11px; color:var(--text-muted); margin-top:4px;
+      font-weight:500; letter-spacing:.3px;
+    }
+
+    /* ======== COURSE CARDS ======== */
+    .section-title {
+      font-family:'Libre Baskerville',serif;
+      font-size:19px; margin-bottom:16px; display:flex; align-items:center; gap:10px;
+    }
+    .section-title .dot {
+      width:8px; height:8px; border-radius:50%; background:var(--gold);
+      display:inline-block;
+    }
+    .courses-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+      gap:16px; margin-bottom:36px;
+    }
+    .enrolled-card {
+      background:var(--navy-card); border-radius:var(--radius);
+      border:1px solid var(--border); overflow:hidden;
+      transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+      text-decoration:none; color:var(--white); display:block;
+      position:relative;
+    }
+    .enrolled-card::before {
+      content:''; position:absolute; inset:0; border-radius:var(--radius);
+      border:1px solid transparent; transition:border-color 0.3s;
+      pointer-events:none;
+    }
+    .enrolled-card:hover {
+      transform:translateY(-4px);
+      border-color:rgba(199,154,46,.2);
+      box-shadow:0 12px 40px rgba(0,0,0,.35),0 0 0 1px rgba(199,154,46,.08);
+    }
+    .enrolled-card.completed { opacity:.75; }
+    .enrolled-card.completed:hover { opacity:1; }
+    .enrolled-card .card-top {
+      padding:22px 22px 14px; display:flex; gap:16px; align-items:flex-start;
+    }
+    .enrolled-card .course-icon {
+      width:52px; height:52px; border-radius:12px;
+      background:linear-gradient(135deg,rgba(199,154,46,.12),rgba(199,154,46,.04));
+      display:flex; align-items:center; justify-content:center;
+      font-size:22px; flex-shrink:0; border:1px solid rgba(199,154,46,.1);
+    }
+    .enrolled-card .course-info { flex:1; min-width:0; }
+    .enrolled-card .course-info h3 {
+      font-size:15px; margin-bottom:4px; font-weight:600;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .enrolled-card .course-info .course-meta {
+      font-size:12px; color:var(--text-muted);
+    }
+    .enrolled-card .progress-bar {
+      height:5px; background:rgba(255,255,255,.06);
+      margin:0 22px; border-radius:3px; overflow:hidden;
+    }
+    .enrolled-card .progress-bar .fill {
+      height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-bright));
+      border-radius:3px; transition:width 0.6s cubic-bezier(0.4,0,0.2,1);
+      position:relative;
+    }
+    .enrolled-card .progress-bar .fill::after {
+      content:''; position:absolute; right:0; top:-1px;
+      width:7px; height:7px; border-radius:50%;
+      background:var(--gold-bright);
+    }
+    .enrolled-card .card-bottom {
+      padding:12px 22px 18px; display:flex; justify-content:space-between;
+      align-items:center;
+    }
+    .enrolled-card .progress-text {
+      font-size:12px; font-weight:600; color:var(--gold);
+    }
+    .enrolled-card .continue-btn {
+      font-size:12px; font-weight:600; color:var(--gold);
+      display:flex; align-items:center; gap:5px;
+      opacity:0; transform:translateX(-8px);
+      transition:all 0.25s ease;
+    }
+    .enrolled-card:hover .continue-btn {
+      opacity:1; transform:translateX(0);
+    }
+
+    /* ======== QUICK ACTIONS ======== */
+    .quick-actions {
+      display:flex; gap:10px; margin-bottom:28px; flex-wrap:wrap;
+    }
+    .quick-action {
+      padding:10px 20px; background:var(--navy-card);
+      border:1px solid var(--border); border-radius:50px;
+      color:var(--text-secondary); text-decoration:none;
+      font-size:12px; font-weight:500; transition:all var(--transition);
+      display:flex; align-items:center; gap:7px;
+    }
+    .quick-action:hover {
+      border-color:var(--gold); color:var(--gold);
+      background:var(--gold-soft);
+    }
+
+    /* ======== EMPTY STATE ======== */
+    .empty-state {
+      text-align:center; padding:80px 20px;
+      background:var(--navy-card); border-radius:var(--radius);
+      border:1px solid var(--border);
+    }
+    .empty-state .empty-icon {
+      width:72px; height:72px; border-radius:50%;
+      background:var(--gold-soft); display:flex; align-items:center;
+      justify-content:center; font-size:32px; margin:0 auto 16px;
+    }
+    .empty-state h3 { font-size:20px; margin-bottom:8px; }
+    .empty-state p { color:var(--text-muted); font-size:14px; margin-bottom:24px; max-width:360px; margin-left:auto; margin-right:auto; }
+    .empty-state .cta-btn {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:12px 28px; background:var(--gold); color:var(--navy);
+      border-radius:50px; text-decoration:none; font-weight:700; font-size:14px;
+      transition:all var(--transition);
+    }
+    .empty-state .cta-btn:hover { background:var(--gold-bright); transform:translateY(-2px); }
+
+    /* ======== FADE-IN ======== */
+    @keyframes fadeInUp {
+      from { opacity:0; transform:translateY(16px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+    .fade-in { animation:fadeInUp 0.4s ease forwards; }
+    .fade-in-1 { animation-delay:0.05s; }
+    .fade-in-2 { animation-delay:0.1s; }
+    .fade-in-3 { animation-delay:0.15s; }
+    .fade-in-4 { animation-delay:0.2s; }
+
+    /* ======== MOBILE ======== */
+    @media(max-width:768px) {
+      .sidebar {
+        width:100%; min-width:100%; position:relative; top:auto;
+        bottom:auto; height:auto; border-right:none; border-bottom:1px solid var(--border);
+        padding:8px 0;
+      }
+      .sidebar .sidebar-section { padding:4px 8px; }
+      .sidebar .sidebar-links-scroll { display:flex; overflow-x:auto; gap:4px; padding:4px 8px; }
+      .sidebar .section-label { display:none; }
+      .sidebar .sidebar-link { white-space:nowrap; font-size:12px; padding:8px 10px; }
+      .sidebar-link .icon { display:none; }
+      .layout { flex-direction:column; }
+      .main-content { margin-left:0; max-width:100%; padding:20px 16px; }
+      .stats-grid { grid-template-columns:repeat(2,1fr); }
+      .courses-grid { grid-template-columns:1fr; }
+      .hero-card { flex-direction:column; text-align:center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ======== TOP BAR ======== -->
+<nav class="topbar">
+  <a href="/aluno/dashboard.html" class="logo">INSTITUTO LUMETHOS</a>
+  <div class="user-area">
+    <span class="user-name" id="userName">Carregando...</span>
+    <div class="avatar" id="userAvatar">?</div>
+    <button class="logout-btn" onclick="logout()">Sair</button>
+  </div>
+</nav>
+
+<!-- ======== LAYOUT ======== -->
+<div class="layout">
+
+  <!-- ======== SIDEBAR ======== -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="section-label">Principal</div>
+      <a href="/aluno/dashboard.html" class="sidebar-link active">
+        <span class="icon">⬡</span> Dashboard
+      </a>
+      <a href="/biblioteca.html" class="sidebar-link">
+        <span class="icon">◈</span> Biblioteca
+      </a>
+      <a href="/aluno/curso.html" class="sidebar-link">
+        <span class="icon">◆</span> Meus Cursos
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-label">Ferramentas</div>
+      <a href="/scriba.html" class="sidebar-link">
+        <span class="icon">◇</span> Scriba
+        <span class="badge">Escrever</span>
+      </a>
+      <a href="/centelhaz.html" class="sidebar-link">
+        <span class="icon">✦</span> Centelhaz
+        <span class="badge">CRM</span>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-label">Conta</div>
+      <a href="/aluno/perfil.html" class="sidebar-link">
+        <span class="icon">◉</span> Meu Perfil
+      </a>
+      <a href="/verificacao.html" class="sidebar-link">
+        <span class="icon">◎</span> Verificar MIRC
+      </a>
+      <a href="#" onclick="logout()" class="sidebar-link">
+        <span class="icon">⊘</span> Sair
+      </a>
+    </div>
+  </aside>
+
+  <!-- ======== MAIN ======== -->
+  <main class="main-content" id="mainContent">
+    <div style="text-align:center;padding:80px;color:var(--text-muted);">
+      <div style="font-size:32px;margin-bottom:12px;">◈</div>
+      <div>Carregando seu painel...</div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const API = '/api';
+  const TOKEN = localStorage.getItem('lumethos_token');
+  const USER = JSON.parse(localStorage.getItem('lumethos_user') || 'null');
+  const headers = () => ({ 'Content-Type':'application/json', 'Authorization':'Bearer '+TOKEN });
+
+  // ======== AUTH ========
+  async function checkAuth() {
+    if (!TOKEN) {
+      window.location.href = '/login.html?redirect=' + encodeURIComponent(location.pathname);
+      return null;
+    }
+    try {
+      const r = await fetch(API+'/auth/me', { headers: headers() });
+      if (!r.ok) { localStorage.clear(); window.location.href = '/login.html?redirect=' + encodeURIComponent(location.pathname); return null; }
+      return await r.json();
+    } catch(e) {
+      localStorage.clear(); window.location.href = '/login.html?redirect=' + encodeURIComponent(location.pathname);
+      return null;
+    }
+  }
+
+  function logout() { localStorage.clear(); window.location.href = '/login.html'; }
+
+  // ======== SVG PROGRESS RING ========
+  function progressRing(pct, size=100) {
+    const r = 40, circ = 2 * Math.PI * r;
+    const offset = circ - (pct/100) * circ;
+    return `<svg width="${size}" height="${size}" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="${r}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"/>
+      <circle cx="50" cy="50" r="${r}" fill="none" stroke="url(#goldGrad)" stroke-width="6"
+        stroke-dasharray="${circ}" stroke-dashoffset="${offset}" stroke-linecap="round"/>
+      <defs><linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#C79A2E"/><stop offset="100%" stop-color="#e0b84c"/>
+      </linearGradient></defs>
+    </svg>`;
+  }
+
+  // ======== RENDER ========
+  async function loadDashboard() {
+    const authData = await checkAuth();
+    if (!authData || !authData.user) return;
+
+    const user = authData.user;
+    const email = user.email || '';
+    const nameFromMeta = user.name || email.split('@')[0] || 'Aluno';
+
+    let profile = null;
+    try {
+      const r = await fetch(API+'/profile', { headers: headers() });
+      if (r.ok) profile = await r.json();
+    } catch(e) {}
+
+    const role = profile?.role || user.role || 'aluno';
+    const displayName = profile?.name || nameFromMeta;
+
+    document.getElementById('userName').textContent = displayName;
+    document.getElementById('userAvatar').textContent = displayName.charAt(0).toUpperCase();
+
+    let enrollments = [];
+    let totalCompletedLessons = 0;
+
+    try {
+      const r = await fetch(API+'/courses/progress', { headers: headers() });
+      if (r.ok) {
+        const data = await r.json();
+        if (data && data.courses) {
+          enrollments = data.courses.map(c => ({
+            id: c.id, slug: c.slug, title: c.title,
+            image_url: c.image_url, progress_pct: c.progress || 0,
+            modules_completed: c.modules_completed || 0,
+            total_modules: c.total_modules || 0,
+            last_lesson: c.last_lesson
+          }));
+          totalCompletedLessons = enrollments.reduce((s,c)=>s+(c.modules_completed||0),0);
+        }
+      }
+    } catch(e) {}
+
+    const activeCourses = enrollments.filter(c => c.progress_pct > 0 && c.progress_pct < 100);
+    const notStarted = enrollments.filter(c => c.progress_pct === 0);
+    const completedCourses = enrollments.filter(c => c.progress_pct >= 100);
+    const currentCourse = activeCourses[0] || completedCourses[0] || null;
+
+    const main = document.getElementById('mainContent');
+    let html = '';
+
+    // === HEADER ===
+    html += `
+      <div class="page-header fade-in fade-in-1">
+        <h1>Olá, ${displayName.split(' ')[0]}</h1>
+        <p>Sua jornada de formação ministerial</p>
+      </div>`;
+
+    // === HERO: CONTINUE LEARNING ===
+    if (currentCourse) {
+      html += `
+      <div class="hero-card fade-in fade-in-2">
+        <div class="hero-progress-ring">${progressRing(currentCourse.progress_pct, 110)}
+          <div class="ring-text">${currentCourse.progress_pct}%</div>
+        </div>
+        <div class="hero-info">
+          <div class="hero-label">Continue de onde parou</div>
+          <h2>${currentCourse.title}</h2>
+          <div class="hero-meta">${currentCourse.modules_completed} de ${currentCourse.total_modules} módulos concluídos</div>
+          <a href="/aluno/curso.html?slug=${currentCourse.slug}" class="hero-cta">
+            Continuar Estudando →
+          </a>
+        </div>
+      </div>`;
+    }
+
+    // === QUICK ACTIONS ===
+    html += `
+      <div class="quick-actions fade-in fade-in-2">
+        <a href="/biblioteca.html" class="quick-action">◈ Explorar Cursos</a>
+        <a href="/scriba.html" class="quick-action">◇ Scriba</a>
+        <a href="/centelhaz.html" class="quick-action">✦ Centelhaz</a>
+        ${role === 'admin' ? '<a href="/admin/index.html" class="quick-action">◎ Admin</a>' : ''}
+      </div>`;
+
+    // === STATS ===
+    html += `
+      <div class="stats-grid fade-in fade-in-3">
+        <div class="stat-card">
+          <div class="stat-icon">◆</div>
+          <div class="stat-num">${enrollments.length}</div>
+          <div class="stat-label">Cursos Matriculados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">◇</div>
+          <div class="stat-num gold">${totalCompletedLessons}</div>
+          <div class="stat-label">Módulos Concluídos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✦</div>
+          <div class="stat-num">${completedCourses.length}</div>
+          <div class="stat-label">Certificados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">◎</div>
+          <div class="stat-num gold">${Math.round(enrollments.length > 0 ? enrollments.reduce((s,c)=>s+c.progress_pct,0)/enrollments.length : 0)}%</div>
+          <div class="stat-label">Progresso Geral</div>
+        </div>
+      </div>`;
+
+    // === COURSES ===
+    if (enrollments.length === 0) {
+      html += `
+        <div class="empty-state fade-in fade-in-4">
+          <div class="empty-icon">◈</div>
+          <h3>Sua jornada começa aqui</h3>
+          <p>Explore nossa biblioteca de formações ministeriais e inicie seu primeiro curso</p>
+          <a href="/biblioteca.html" class="cta-btn">Explorar Cursos →</a>
+        </div>`;
+    } else {
+      const renderCourseCard = (c, showProgress = true) => `
+        <a href="/aluno/curso.html?slug=${c.slug}" class="enrolled-card ${c.progress_pct >= 100 ? 'completed' : ''}">
+          <div class="card-top">
+            <div class="course-icon">${c.progress_pct >= 100 ? '✦' : c.progress_pct > 0 ? '◆' : '◇'}</div>
+            <div class="course-info">
+              <h3>${c.title}</h3>
+              <div class="course-meta">${c.modules_completed}/${c.total_modules} módulos${c.progress_pct >= 100 ? ' · Concluído' : ''}</div>
+            </div>
+          </div>
+          ${showProgress ? `
+          <div class="progress-bar">
+            <div class="fill" style="width:${c.progress_pct}%"></div>
+          </div>` : ''}
+          <div class="card-bottom">
+            <span class="progress-text">${c.progress_pct}% concluído</span>
+            <span class="continue-btn">${c.progress_pct >= 100 ? 'Revisar' : c.progress_pct > 0 ? 'Continuar' : 'Começar'} →</span>
+          </div>
+        </a>`;
+
+      if (activeCourses.length > 0) {
+        html += `<div class="section-title fade-in"><span class="dot"></span> Em Andamento</div>`;
+        html += `<div class="courses-grid">${activeCourses.map(c => renderCourseCard(c)).join('')}</div>`;
+      }
+      if (notStarted.length > 0) {
+        html += `<div class="section-title fade-in" style="margin-top:8px;"><span class="dot"></span> Não Iniciados</div>`;
+        html += `<div class="courses-grid">${notStarted.map(c => renderCourseCard(c)).join('')}</div>`;
+      }
+      if (completedCourses.length > 0) {
+        html += `<div class="section-title fade-in" style="margin-top:8px;"><span class="dot"></span> Concluídos</div>`;
+        html += `<div class="courses-grid">${completedCourses.map(c => renderCourseCard(c)).join('')}</div>`;
+      }
+    }
+
+    main.innerHTML = html;
+  }
+
+  loadDashboard();
+</script>
+
+</body>
+</html>

@@ -10,247 +10,245 @@
     @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
 
     :root {
-      --navy: #0D1B2A;
-      --navy-light: #152238;
-      --navy-card: #1a2d45;
-      --gold: #C79A2E;
-      --gold-light: #e0b84c;
+      --navy: #0D1B2A; --navy-light: #152238; --navy-card: #1a2d45;
+      --gold: #C79A2E; --gold-bright: #e0b84c;
+      --gold-soft: rgba(199,154,46,.12);
       --white: #fff;
       --text-secondary: rgba(255,255,255,0.7);
-      --text-muted: rgba(255,255,255,0.45);
+      --text-muted: rgba(255,255,255,0.42);
       --border: rgba(255,255,255,0.06);
-      --sidebar-w: 300px;
-      --lesson-bg: #ffffff;
+      --border-hover: rgba(255,255,255,0.12);
+      --sidebar-w: 320px;
+      --lesson-bg: #fafbfc;
       --lesson-text: #1a1a2e;
-      --lesson-text-light: #555;
-      --lesson-border: #e5e5e5;
+      --lesson-text-mid: #555;
+      --lesson-border: #e5e7eb;
+      --lesson-card: #ffffff;
+      --radius: 12px; --radius-sm: 8px;
+      --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
     }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--navy);
-      color: var(--white);
-      min-height: 100vh;
-    }
+    body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; }
 
     .topbar {
-      position:fixed; top:0; left:0; right:0; z-index:200;
-      height:48px; background:rgba(13,27,42,0.94);
-      backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+      position:fixed; top:0; left:0; right:0; z-index:200; height:52px;
+      background:rgba(13,27,42,0.92); backdrop-filter:blur(16px) saturate(180%);
+      -webkit-backdrop-filter:blur(16px) saturate(180%);
       border-bottom:1px solid var(--border);
       display:flex; align-items:center; justify-content:space-between;
-      padding:0 16px; gap:12px;
+      padding:0 20px; gap:12px;
     }
-    .topbar .back-section { display:flex; align-items:center; gap:8px; min-width:0; }
+    .topbar .back-section { display:flex; align-items:center; gap:10px; min-width:0; }
     .topbar .back-btn {
-      background:none; border:none; color:var(--text-secondary);
-      font-size:16px; cursor:pointer; padding:4px 8px; border-radius:6px;
-      transition:color .2s; line-height:1;
+      width:32px; height:32px; border-radius:8px; border:1px solid var(--border-hover);
+      background:none; color:var(--text-secondary); font-size:16px; cursor:pointer;
+      transition:all var(--transition); display:flex; align-items:center; justify-content:center;
     }
-    .topbar .back-btn:hover { color:var(--white); }
+    .topbar .back-btn:hover { border-color:var(--gold); color:var(--gold); }
     .topbar .topbar-title {
-      font-size:12px; font-weight:500; color:var(--text-secondary);
-      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+      font-size:13px; font-weight:500; color:var(--text-secondary);
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:300px;
     }
     .topbar .progress-pill {
-      background:rgba(199,154,46,.12); color:var(--gold);
-      font-size:11px; font-weight:600; padding:4px 10px; border-radius:20px;
-      white-space:nowrap;
+      background:var(--gold-soft); color:var(--gold); font-size:11px;
+      font-weight:700; padding:6px 14px; border-radius:50px; white-space:nowrap;
+      border:1px solid rgba(199,154,46,.15);
     }
     .topbar .nav-home {
-      color:var(--text-muted); text-decoration:none; font-size:12px;
-      padding:4px 8px; transition:color .2s;
+      color:var(--text-muted); text-decoration:none; font-size:14px;
+      padding:4px 8px; transition:color var(--transition);
     }
     .topbar .nav-home:hover { color:var(--white); }
 
-    .layout { display:flex; padding-top:48px; min-height:calc(100vh - 48px); }
+    .layout { display:flex; padding-top:52px; min-height:calc(100vh - 52px); }
 
-    /* Sidebar */
+    /* ===== SIDEBAR ===== */
     .sidebar {
       width:var(--sidebar-w); min-width:var(--sidebar-w);
-      background:var(--navy-light);
-      border-right:1px solid var(--border);
-      overflow-y:auto; height:calc(100vh - 48px);
-      position:sticky; top:48px;
+      background:var(--navy-light); border-right:1px solid var(--border);
+      overflow-y:auto; height:calc(100vh - 52px);
+      position:sticky; top:52px; padding:8px 0;
     }
-    .sidebar .module-group { border-bottom:1px solid var(--border); }
+    .sidebar .module-group {
+      margin:0 10px 4px; border-radius:var(--radius-sm);
+      overflow:hidden; border:1px solid transparent; transition:all var(--transition);
+    }
+    .sidebar .module-group.open { border-color:var(--border); background:rgba(255,255,255,.01); }
     .sidebar .module-header {
       display:flex; align-items:center; justify-content:space-between;
-      padding:14px 16px; cursor:pointer; user-select:none;
-      transition:background .15s;
+      padding:13px 16px; cursor:pointer; user-select:none;
+      transition:background var(--transition); border-radius:var(--radius-sm);
     }
-    .sidebar .module-header:hover { background:rgba(255,255,255,.02); }
+    .sidebar .module-header:hover { background:rgba(255,255,255,.03); }
     .sidebar .module-title {
-      font-size:13px; font-weight:600;
-      display:flex; align-items:center; gap:8px;
+      font-size:13px; font-weight:600; display:flex; align-items:center; gap:10px;
     }
+    .sidebar .module-num {
+      width:24px; height:24px; border-radius:6px;
+      background:var(--gold-soft); color:var(--gold);
+      font-size:11px; font-weight:700; display:flex; align-items:center;
+      justify-content:center; flex-shrink:0;
+    }
+    .sidebar .module-group.open .module-num { background:var(--gold); color:var(--navy); }
     .sidebar .module-meta {
-      display:flex; align-items:center; gap:10px;
-      font-size:11px; color:var(--text-muted);
+      display:flex; align-items:center; gap:10px; font-size:11px; color:var(--text-muted);
     }
     .sidebar .module-arrow {
-      font-size:10px; color:var(--text-muted); transition:transform .2s;
+      font-size:9px; color:var(--text-muted); transition:transform 0.25s ease;
     }
-    .sidebar .module-group.open .module-arrow { transform:rotate(90deg); }
-    .sidebar .lesson-list { display:none; }
+    .sidebar .module-group.open .module-arrow { transform:rotate(90deg); color:var(--gold); }
+    .sidebar .lesson-list { display:none; padding:0 0 8px; }
     .sidebar .module-group.open .lesson-list { display:block; }
     .sidebar .lesson-item {
-      display:flex; align-items:center; gap:10px;
-      padding:9px 16px 9px 32px; cursor:pointer;
+      display:flex; align-items:center; gap:12px;
+      padding:10px 16px 10px 48px; cursor:pointer;
       font-size:12px; color:var(--text-secondary);
-      transition:all .15s; border-left:2px solid transparent;
+      transition:all var(--transition); border-left:2px solid transparent;
+      position:relative;
     }
-    .sidebar .lesson-item:hover {
-      background:rgba(255,255,255,.03); color:var(--white);
-    }
+    .sidebar .lesson-item:hover { background:rgba(255,255,255,.03); color:var(--white); }
     .sidebar .lesson-item.active {
-      background:rgba(199,154,46,.08);
-      border-left-color:var(--gold); color:var(--gold);
-      font-weight:500;
+      background:var(--gold-soft); border-left-color:var(--gold);
+      color:var(--gold); font-weight:600;
     }
     .sidebar .lesson-item.completed { color:#4ade80; }
     .sidebar .lesson-icon {
-      width:18px; height:18px; border-radius:50%;
-      border:2px solid var(--text-muted); flex-shrink:0;
+      width:20px; height:20px; border-radius:50%; flex-shrink:0;
+      border:2px solid rgba(255,255,255,.15);
       display:flex; align-items:center; justify-content:center;
       font-size:9px;
     }
     .sidebar .lesson-item.completed .lesson-icon {
-      border-color:#4ade80; background:#4ade80; color:var(--navy);
+      border-color:#4ade80; background:#4ade80; color:var(--navy); font-weight:700;
     }
     .sidebar .lesson-item.active .lesson-icon {
       border-color:var(--gold);
     }
 
-    /* Main white area */
+    /* ===== MAIN CONTENT ===== */
     .main-content {
-      flex:1; overflow-y:auto; height:calc(100vh - 48px);
+      flex:1; overflow-y:auto; height:calc(100vh - 52px);
       background:var(--lesson-bg);
     }
     .lesson-container {
-      max-width:860px; margin:0 auto; padding:32px 40px 60px;
+      max-width:860px; margin:0 auto; padding:36px 44px 80px;
       color:var(--lesson-text);
     }
     .lesson-container h1 {
       font-family:'Libre Baskerville',serif;
-      font-size:28px; color:var(--lesson-text); margin-bottom:8px;
-      line-height:1.3;
+      font-size:30px; color:var(--lesson-text); margin-bottom:10px;
+      line-height:1.35; letter-spacing:-.3px;
     }
     .lesson-meta {
-      display:flex; gap:16px; align-items:center; margin-bottom:20px;
-      font-size:13px; color:var(--lesson-text-light); flex-wrap:wrap;
+      display:flex; gap:18px; align-items:center; margin-bottom:28px;
+      font-size:13px; color:var(--lesson-text-mid); flex-wrap:wrap;
     }
-    .lesson-meta span {
-      display:flex; align-items:center; gap:4px;
+    .lesson-meta span { display:flex; align-items:center; gap:5px; }
+    .lesson-meta .meta-tag {
+      padding:4px 12px; border-radius:50px; font-size:11px; font-weight:500;
     }
+    .meta-tag.free { background:rgba(34,197,94,.1); color:#16a34a; }
+    .meta-tag.video { background:rgba(199,154,46,.1); color:var(--gold); }
 
     .video-wrapper {
-      aspect-ratio:16/9; background:#f0f0f0;
-      border-radius:12px; overflow:hidden; margin-bottom:28px;
-      border:1px solid var(--lesson-border);
+      aspect-ratio:16/9; background:#e8eaed;
+      border-radius:var(--radius); overflow:hidden; margin-bottom:32px;
+      border:1px solid var(--lesson-border); box-shadow:0 2px 16px rgba(0,0,0,.06);
     }
     .video-wrapper iframe { width:100%; height:100%; border:none; }
     .video-wrapper .no-video {
       display:flex; flex-direction:column; align-items:center;
       justify-content:center; height:100%; color:#999;
     }
-    .video-wrapper .no-video span { font-size:48px; margin-bottom:8px; }
+    .video-wrapper .no-video span { font-size:52px; margin-bottom:10px; }
 
     .lesson-body {
-      font-size:15px; line-height:1.8; color:var(--lesson-text-light);
+      font-size:15px; line-height:1.85; color:var(--lesson-text); max-width:720px;
     }
     .lesson-body h2 {
-      font-family:'Libre Baskerville',serif;
-      font-size:20px; color:var(--lesson-text); margin:28px 0 12px;
+      font-family:'Libre Baskerville',serif; font-size:22px;
+      color:var(--lesson-text); margin:36px 0 14px; letter-spacing:-.2px;
     }
     .lesson-body h3 {
-      font-size:16px; color:var(--lesson-text); margin:20px 0 8px;
-      font-weight:600;
+      font-size:17px; color:var(--lesson-text); margin:24px 0 10px; font-weight:600;
     }
-    .lesson-body p { margin-bottom:14px; }
-    .lesson-body ul, .lesson-body ol { margin:8px 0 16px 20px; }
-    .lesson-body li { margin-bottom:6px; }
+    .lesson-body p { margin-bottom:16px; color:var(--lesson-text-mid); }
+    .lesson-body ul, .lesson-body ol { margin:10px 0 20px 22px; color:var(--lesson-text-mid); }
+    .lesson-body li { margin-bottom:8px; }
     .lesson-body blockquote {
-      border-left:4px solid var(--gold); padding:8px 16px;
-      margin:16px 0; background:#fdf8f0; border-radius:0 8px 8px 0;
-      font-style:italic;
+      border-left:4px solid var(--gold); padding:14px 20px;
+      margin:20px 0; background:rgba(199,154,46,.04);
+      border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+      font-style:italic; color:var(--lesson-text-mid);
     }
+    .lesson-body strong { color:var(--lesson-text); }
 
     /* Quiz */
     .quiz-section {
-      margin-top:32px; padding:24px; border-radius:12px;
-      background:#fafafa; border:1px solid #eee;
+      margin-top:40px; padding:28px; border-radius:var(--radius);
+      background:var(--lesson-card); border:1px solid var(--lesson-border);
+      box-shadow:0 2px 12px rgba(0,0,0,.04);
     }
     .quiz-section h3 {
       font-family:'Libre Baskerville',serif;
-      font-size:18px; color:var(--lesson-text); margin-bottom:16px;
+      font-size:20px; color:var(--lesson-text); margin-bottom:20px;
     }
-    .quiz-question { margin-bottom:20px; }
+    .quiz-question { margin-bottom:22px; }
     .quiz-question .q-text {
-      font-weight:600; color:var(--lesson-text); margin-bottom:10px;
+      font-weight:600; color:var(--lesson-text); margin-bottom:10px; font-size:14px;
     }
     .quiz-option {
-      display:flex; align-items:center; gap:10px;
-      padding:10px 14px; border-radius:8px; cursor:pointer;
-      border:2px solid #e5e5e5; margin-bottom:6px;
-      transition:all .15s; color:var(--lesson-text);
+      display:flex; align-items:center; gap:12px;
+      padding:12px 16px; border-radius:var(--radius-sm); cursor:pointer;
+      border:2px solid var(--lesson-border); margin-bottom:6px;
+      transition:all var(--transition); color:var(--lesson-text); font-size:14px;
     }
-    .quiz-option:hover { border-color:#ccc; background:#f9f9f9; }
-    .quiz-option.selected { border-color:var(--gold); background:rgba(199,154,46,.06); }
+    .quiz-option:hover { border-color:#ccc; background:#f9fafb; }
+    .quiz-option.selected { border-color:var(--gold); background:rgba(199,154,46,.04); }
     .quiz-option.correct { border-color:#4ade80; background:rgba(34,197,94,.06); }
     .quiz-option.wrong { border-color:#ef4444; background:rgba(239,68,68,.04); }
-
     .quiz-submit {
-      padding:10px 28px; background:var(--gold); color:var(--white);
-      border:none; border-radius:8px; font-weight:600; cursor:pointer;
-      font-size:14px; margin-top:12px; transition:background .2s;
+      padding:12px 32px; background:var(--gold); color:var(--white);
+      border:none; border-radius:50px; font-weight:600; cursor:pointer;
+      font-size:14px; margin-top:16px; transition:all var(--transition);
       font-family:'Inter',sans-serif;
     }
-    .quiz-submit:hover { background:var(--gold-light); }
+    .quiz-submit:hover { background:var(--gold-bright); transform:translateY(-1px); }
     .quiz-submit:disabled { opacity:.5; cursor:not-allowed; }
-    .quiz-result { font-weight:600; margin-top:8px; font-size:14px; }
+    .quiz-result { font-weight:600; margin-top:10px; font-size:14px; }
 
     .lesson-nav {
-      display:flex; justify-content:space-between; margin-top:40px;
-      padding-top:24px; border-top:1px solid var(--lesson-border);
-      gap:12px;
+      display:flex; justify-content:space-between; margin-top:48px;
+      padding-top:24px; border-top:1px solid var(--lesson-border); gap:12px;
     }
-    .lesson-nav button {
-      padding:10px 20px; border-radius:8px; font-weight:600;
-      font-size:14px; cursor:pointer; transition:all .2s;
-      border:none; font-family:'Inter',sans-serif;
+    .lesson-nav button, .lesson-nav a {
+      padding:12px 22px; border-radius:50px; font-weight:600;
+      font-size:13px; cursor:pointer; transition:all var(--transition);
+      border:none; font-family:'Inter',sans-serif; text-decoration:none; display:inline-block;
     }
-    .nav-prev { background:#f0f0f0; color:var(--lesson-text); }
-    .nav-prev:hover { background:#e0e0e0; }
+    .nav-prev { background:var(--lesson-border); color:var(--lesson-text-mid); }
+    .nav-prev:hover { background:#d1d5db; }
     .nav-next { background:var(--gold); color:var(--white); }
-    .nav-next:hover { background:var(--gold-light); }
+    .nav-next:hover { background:var(--gold-bright); transform:translateX(2px); }
 
     .complete-btn {
-      padding:10px 24px; background:#4ade80; color:var(--white);
-      border:none; border-radius:8px; font-weight:600; cursor:pointer;
-      font-size:14px; transition:background .2s;
+      padding:12px 28px; background:#4ade80; color:var(--white);
+      border:none; border-radius:50px; font-weight:600; cursor:pointer;
+      font-size:14px; transition:all var(--transition);
       font-family:'Inter',sans-serif;
     }
-    .complete-btn:hover { background:#22c55e; }
+    .complete-btn:hover { background:#22c55e; transform:translateY(-1px); }
     .complete-btn.done { background:#d1d5db; color:#666; cursor:default; }
 
-    /* Loading / empty */
-    .state-empty {
-      text-align:center; padding:80px 20px; color:#999;
-    }
+    .state-empty { text-align:center; padding:80px 20px; color:#999; }
     .state-empty .icon { font-size:48px; margin-bottom:12px; }
     .state-empty a { color:var(--gold); text-decoration:underline; }
 
-    /* Mobile */
     @media(max-width:768px) {
       .layout { flex-direction:column; }
-      .sidebar {
-        width:100%; min-width:100%; height:auto; position:relative; top:auto;
-        border-right:none; border-bottom:1px solid var(--border);
-        max-height:35vh;
-      }
+      .sidebar { width:100%; min-width:100%; height:auto; position:relative; top:auto; border-right:none; border-bottom:1px solid var(--border); max-height:40vh; }
       .main-content { height:auto; min-height:60vh; }
-      .lesson-container { padding:20px 16px 40px; }
+      .lesson-container { padding:20px 16px 48px; }
       .lesson-container h1 { font-size:22px; }
     }
   </style>
@@ -259,107 +257,94 @@
 
 <nav class="topbar">
   <div class="back-section">
-    <button class="back-btn" onclick="window.location='/aluno/dashboard.html'" title="Dashboard">←</button>
+    <button class="back-btn" onclick="window.location='/aluno/dashboard.html'">←</button>
     <span class="topbar-title" id="topbarTitle">Carregando...</span>
   </div>
   <span class="progress-pill" id="progressPill">0%</span>
-  <a href="/aluno/dashboard.html" class="nav-home">🏠</a>
+  <a href="/aluno/dashboard.html" class="nav-home">◆</a>
 </nav>
 
 <div class="layout">
   <aside class="sidebar" id="sidebar">
-    <div style="padding:24px 16px;text-align:center;color:var(--text-muted);font-size:13px;">
-      Carregando...
-    </div>
+    <div style="padding:24px 16px;text-align:center;color:var(--text-muted);font-size:13px;">Carregando...</div>
   </aside>
 
   <main class="main-content" id="mainContent">
     <div class="lesson-container">
-      <div class="state-empty">
-        <div class="icon">📖</div>
-        <p>Carregando curso...</p>
-      </div>
+      <div class="state-empty"><div class="icon">◆</div><p>Carregando curso...</p></div>
     </div>
   </main>
 </div>
 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "https://xplqghmhslfpyyqhwvkp.supabase.co";
-  const SUPABASE_ANON_KEY = "***";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const API = '/api';
+  function getToken(){ return localStorage.getItem('lumethos_token'); }
+  function getUser(){ return JSON.parse(localStorage.getItem('lumethos_user')||'null'); }
+  function h(){ return {'Content-Type':'application/json','Authorization':'Bearer '+getToken()}; }
 
-  let courseId = null;
+  let courseSlug = null;
   let modules = [];
   let completedLessons = new Set();
   let user = null;
 
-  function getCourseId() {
-    return new URLSearchParams(location.search).get('id');
+  function getCourseSlug(){ return new URLSearchParams(location.search).get('slug'); }
+
+  async function apiGet(url){
+    const r = await fetch(url,{headers:h()});
+    if(!r.ok) throw new Error('API error '+r.status);
+    const data = await r.json();
+    if(data.error) throw new Error(data.error);
+    return data;
   }
 
-  async function init() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      window.location.href = '/login.html?redirect=' + encodeURIComponent(location.pathname + location.search);
+  async function apiPost(url,body){
+    const r = await fetch(url,{method:'POST',headers:h(),body:JSON.stringify(body)});
+    if(!r.ok) throw new Error('API error '+r.status);
+    const data = await r.json();
+    if(data.error) throw new Error(data.error);
+    return data;
+  }
+
+  async function init(){
+    try {
+      const userData = await apiGet(API+'/auth/me');
+      user = userData;
+    } catch(e){
+      window.location.href = '/login.html?redirect='+encodeURIComponent(location.pathname+location.search);
       return;
     }
-    user = session.user;
 
-    courseId = getCourseId();
-    if (!courseId) {
-      document.getElementById('mainContent').innerHTML = '<div class="lesson-container"><div class="state-empty"><div class="icon">⚠️</div><p>Curso não especificado</p><a href="/biblioteca.html">Ver biblioteca</a></div></div>';
+    courseSlug = getCourseSlug();
+    if(!courseSlug){
+      document.getElementById('mainContent').innerHTML='<div class="lesson-container"><div class="state-empty"><div class="icon">⚠</div><p>Curso não especificado</p><a href="/biblioteca.html">Ver biblioteca</a></div></div>';
       return;
     }
 
-    const { data: course } = await supabase
-      .from('courses').select('id,title,slug,description,image,color,hours')
-      .eq('id', courseId).single();
-
-    if (!course) {
-      document.getElementById('mainContent').innerHTML = '<div class="lesson-container"><div class="state-empty"><div class="icon">🔍</div><p>Curso não encontrado</p><a href="/biblioteca.html">Ver biblioteca</a></div></div>';
+    let course;
+    try{
+      course = await apiGet(API+'/courses/'+courseSlug);
+    } catch(e){
+      document.getElementById('mainContent').innerHTML='<div class="lesson-container"><div class="state-empty"><div class="icon">◈</div><p>Curso não encontrado</p><a href="/biblioteca.html">Ver biblioteca</a></div></div>';
       return;
     }
 
     document.getElementById('topbarTitle').textContent = course.title;
     document.title = course.title + ' · Lumethos';
 
-
-
-    const { data: mods } = await supabase
-      .from('modules').select('id,title,position,lessons(id,title,content_type,video_url,content_body,duration_minutes,position,is_free)')
-      .eq('course_id', courseId).order('position');
-
-    modules = (mods || []).map(m => ({
-      ...m,
-      lessons: (m.lessons || []).sort((a,b) => a.position - b.position)
+    modules = (course.modules||[]).map(m=>({
+      id:m.id, title:m.title, position:m.order_num,
+      lessons:(m.lessons||[]).sort((a,b)=>(a.order_num||0)-(b.order_num||0))
     }));
 
-    if (modules.length === 0) {
-      document.getElementById('sidebar').innerHTML = '<div style="padding:24px 16px;text-align:center;color:var(--text-muted);font-size:13px;">Sem módulos</div>';
-      document.getElementById('mainContent').innerHTML = '<div class="lesson-container"><div class="state-empty"><div class="icon">📭</div><p>Este curso ainda não tem conteúdo</p></div></div>';
+    if(modules.length===0){
+      document.getElementById('sidebar').innerHTML='<div style="padding:24px 16px;text-align:center;color:var(--text-muted);font-size:13px;">Sem módulos</div>';
+      document.getElementById('mainContent').innerHTML='<div class="lesson-container"><div class="state-empty"><div class="icon">◇</div><p>Este curso ainda não tem conteúdo</p></div></div>';
       return;
     }
 
-    // Load progress
-    const allLessonIds = modules.flatMap(m => m.lessons.map(l => l.id));
-    const { data: progress } = await supabase
-      .from('lesson_progress').select('lesson_id')
-      .eq('user_id', user.id).eq('completed', true)
-      .in('lesson_id', allLessonIds);
-    completedLessons = new Set((progress || []).map(p => p.lesson_id));
-
-    // Auto-enroll: create started record if first time opening this course
-    if (progress && progress.length === 0 && modules[0]?.lessons[0]) {
-      try {
-        await supabase.from('lesson_progress').upsert({
-          user_id: user.id,
-          lesson_id: modules[0].lessons[0].id,
-          completed: false,
-          started_at: new Date().toISOString()
-        }, { onConflict: 'user_id,lesson_id', ignoreDuplicates: true });
-      } catch(e) { /* table may not exist */ }
-    }
+    try{
+      const progress = await apiGet(API+'/courses/'+courseSlug+'/progress');
+    } catch(e){}
 
     renderSidebar();
     openModule(modules[0].id);
@@ -367,19 +352,19 @@
     updateProgress();
   }
 
-  function renderSidebar() {
-    document.getElementById('sidebar').innerHTML = modules.map(m => {
+  function renderSidebar(){
+    document.getElementById('sidebar').innerHTML = modules.map((m,i) => {
       const done = m.lessons.filter(l => completedLessons.has(l.id)).length;
       return `<div class="module-group" id="mod-${m.id}">
         <div class="module-header" onclick="toggleModule('${m.id}')">
-          <span class="module-title">📘 ${m.title}</span>
+          <span class="module-title"><span class="module-num">${i+1}</span>${m.title}</span>
           <span class="module-meta">
             <span>${done}/${m.lessons.length}</span>
             <span class="module-arrow">▶</span>
           </span>
         </div>
         <div class="lesson-list">${m.lessons.map(l => `
-          <div class="lesson-item ${completedLessons.has(l.id)?'completed':''}" id="les-${l.id}" onclick="loadLessonById('${l.id}')">
+          <div class="lesson-item${completedLessons.has(l.id)?' completed':''}" id="les-${l.id}" onclick="loadLessonById('${l.id}')">
             <span class="lesson-icon">${completedLessons.has(l.id)?'✓':''}</span>
             ${l.title}
           </div>`).join('')}
@@ -388,185 +373,224 @@
     }).join('');
   }
 
-  function toggleModule(id) { document.getElementById('mod-'+id)?.classList.toggle('open'); }
-  function openModule(id) { document.getElementById('mod-'+id)?.classList.add('open'); }
+  function toggleModule(id){ document.getElementById('mod-'+id)?.classList.toggle('open'); }
+  function openModule(id){ document.getElementById('mod-'+id)?.classList.add('open'); }
 
-  function loadLessonById(id) {
-    for (const m of modules) {
-      const l = m.lessons.find(ls => ls.id === id);
-      if (l) { openModule(m.id); loadLesson(l); return; }
+  function loadLessonById(id){
+    for(const m of modules){
+      const l = m.lessons.find(ls => ls.id===id);
+      if(l){ openModule(m.id); loadLesson(l); return; }
     }
   }
 
-  function loadLesson(lesson) {
+  async function loadLesson(lesson){
     document.querySelectorAll('.lesson-item').forEach(el => el.classList.remove('active'));
     document.getElementById('les-'+lesson.id)?.classList.add('active');
 
-    const typeLabels = { video:'🎥 Vídeo', text:'📄 Leitura', quiz:'❓ Quiz', pdf:'📑 PDF' };
+    let lessonDetail;
+    try{
+      lessonDetail = await apiGet(API+'/lessons/'+lesson.id);
+    } catch(e){ lessonDetail = lesson; }
+
+    if(lessonDetail.completed){
+      completedLessons.add(lesson.id);
+      document.getElementById('les-'+lesson.id)?.classList.add('completed');
+    }
+
+    const typeIcons = { video:'▶', text:'☰', quiz:'?", pdf:'⬡' };
     const isDone = completedLessons.has(lesson.id);
+    const isVideo = lesson.content_type === 'video';
+    const isQuiz = lesson.content_type === 'quiz';
 
     let videoHTML = '';
-    if (lesson.video_url) {
+    if(lesson.video_url){
       const embed = getEmbedUrl(lesson.video_url);
       videoHTML = `<div class="video-wrapper"><iframe src="${embed}" allowfullscreen></iframe></div>`;
-    } else if (lesson.content_type === 'video') {
-      videoHTML = `<div class="video-wrapper"><div class="no-video"><span>🎥</span><p>Vídeo em breve</p></div></div>`;
+    } else if(isVideo){
+      videoHTML = `<div class="video-wrapper"><div class="no-video"><span>▶</span><p>Vídeo em breve</p></div></div>`;
     }
 
     let bodyHTML = '';
-    if (lesson.content_body) {
-      bodyHTML = `<div class="lesson-body">${formatContent(lesson.content_body)}</div>`;
+    if(lesson.content){
+      bodyHTML = `<div class="lesson-body">${formatContent(lesson.content)}</div>`;
     }
 
-    const flat = modules.flatMap(m => m.lessons);
-    const idx = flat.findIndex(l => l.id === lesson.id);
-    const prev = idx > 0 ? flat[idx-1] : null;
-    const next = idx < flat.length-1 ? flat[idx+1] : null;
+    const prev = lessonDetail.prev || null;
+    const next = lessonDetail.next || null;
 
     document.getElementById('mainContent').innerHTML = `
       <div class="lesson-container">
         <h1>${lesson.title}</h1>
         <div class="lesson-meta">
-          <span>${typeLabels[lesson.content_type] || '📄 Leitura'}</span>
-          ${lesson.duration_minutes ? `<span>⏱️ ${lesson.duration_minutes} min</span>` : ''}
-          ${lesson.is_free ? '<span style="color:#4ade80">🆓 Grátis</span>' : ''}
+          ${isVideo ? '<span class="meta-tag video">▶ Vídeo</span>' : isQuiz ? '<span class="meta-tag video">?" Quiz</span>' : '<span>☰ Leitura</span>'}
+          ${lesson.duration_minutes ? `<span>⏱ ${lesson.duration_minutes} min</span>` : ''}
+          ${lesson.is_free ? '<span class="meta-tag free">✦ Grátis</span>' : ''}
         </div>
         ${videoHTML}
         ${bodyHTML}
 
-        <div style="margin-top:32px;">
-          <button class="complete-btn ${isDone?'done':''}" onclick="markComplete('${lesson.id}')" id="completeBtn">
-            ${isDone ? '✓ Concluída' : 'Marcar como concluída'}
+        <div style="margin-top:40px;display:flex;align-items:center;gap:16px;">
+          <button class="complete-btn${isDone?' done':''}" onclick="markComplete('${lesson.id}')" id="completeBtn">
+            ${isDone?'✓ Concluída':'Marcar como concluída'}
           </button>
+          ${!isDone ? '<span style="font-size:12px;color:var(--lesson-text-mid);">Marque após finalizar a aula</span>' : ''}
         </div>
 
-        <div class="quiz-section" id="quizSection" style="display:${lesson.content_type==='quiz'?'block':'none'}">
+        <div class="quiz-section" id="quizSection" style="display:${isQuiz?'block':'none'}">
           <h3>📝 Quiz</h3>
-          <p style="color:var(--lesson-text-light)">Carregando questões...</p>
+          <p style="color:var(--lesson-text-mid);font-size:14px;">Carregando questões...</p>
         </div>
 
         <div class="lesson-nav">
-          <span>${prev ? `<button class="nav-prev" onclick="loadLessonById('${prev.id}')">← ${prev.title}</button>` : ''}</span>
-          <span>${next ? `<button class="nav-next" onclick="loadLessonById('${next.id}')">${next.title} →</button>` : ''}</span>
+          <span>${prev ? `<a href="javascript:void(0)" class="nav-prev" onclick="loadLessonById('${prev.id}')">← ${prev.title}</a>` : ''}</span>
+          <span>${next ? `<a href="javascript:void(0)" class="nav-next" onclick="loadLessonById('${next.id}')">${next.title} →</a>` : ''}</span>
         </div>
       </div>`;
 
     document.getElementById('mainContent').scrollTop = 0;
 
-    if (lesson.content_type === 'quiz') loadQuiz(lesson.id);
+    if(isQuiz) loadQuiz(lesson.id);
+    renderSidebar();
+    updateProgress();
   }
 
-  async function loadQuiz(lessonId) {
+  async function loadQuiz(lessonId){
     const qs = document.getElementById('quizSection');
-    if (!qs) return;
+    if(!qs) return;
 
-    const { data: questions } = await supabase
-      .from('quiz_questions').select('id,question,position,quiz_options(id,option_text,is_correct,position)')
-      .eq('lesson_id', lessonId).order('position');
-
-    if (!questions || questions.length === 0) {
-      qs.innerHTML = '<h3>📝 Quiz</h3><p style="color:var(--lesson-text-light)">Nenhuma questão disponível</p>';
+    let quizData;
+    try{
+      quizData = await apiGet(API+'/quiz/'+lessonId);
+    } catch(e){
+      qs.innerHTML='<h3>📝 Quiz</h3><p style="color:var(--lesson-text-mid);font-size:14px;">Nenhuma questão disponível</p>';
       return;
     }
 
-    const { data: attempt } = await supabase
-      .from('quiz_attempts').select('id,score_pct')
-      .eq('user_id', user.id).eq('lesson_id', lessonId).maybeSingle();
+    const questions = quizData.questions||[];
+    const attempts = quizData.attempts||[];
 
-    if (attempt) {
-      qs.innerHTML = `<h3>📝 Quiz</h3><p style="color:#4ade80;font-weight:600;">✅ Feito — ${attempt.score_pct}%</p>`;
+    if(questions.length===0){
+      qs.innerHTML='<h3>📝 Quiz</h3><p style="color:var(--lesson-text-mid);font-size:14px;">Nenhuma questão disponível</p>';
       return;
     }
 
-    qs.innerHTML = `<h3>📝 Quiz</h3><form id="quizForm">
-      ${questions.map((q,qi) => `<div class="quiz-question">
+    const passedAttempt = attempts.find(a=>a.passed);
+    if(passedAttempt){
+      qs.innerHTML=`<h3>📝 Quiz</h3>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:48px;height:48px;border-radius:50%;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;font-size:20px;">✓</div>
+          <div>
+            <p style="font-weight:600;color:#16a34a;font-size:15px;">Quiz concluído!</p>
+            <p style="color:var(--lesson-text-mid);font-size:13px;">Nota: ${passedAttempt.score}%</p>
+          </div>
+        </div>`;
+      return;
+    }
+
+    qs.innerHTML=`<h3>📝 Quiz</h3><form id="quizForm">
+      ${questions.map((q,qi)=>`<div class="quiz-question">
         <div class="q-text">${qi+1}. ${q.question}</div>
-        ${(q.quiz_options||[]).sort((a,b)=>a.position-b.position).map(opt => `
-          <label class="quiz-option"><input type="radio" name="q_${q.id}" value="${opt.id}"> ${opt.option_text}</label>
+        ${(q.options||[]).map((opt,oi)=>`
+          <label class="quiz-option"><input type="radio" name="q_${q.id}" value="${oi}"> ${opt}</label>
         `).join('')}
       </div>`).join('')}
       <button type="submit" class="quiz-submit">Verificar respostas</button>
     </form><div class="quiz-result" id="quizResult"></div>`;
 
-    document.getElementById('quizForm').addEventListener('submit', async e => {
+    document.getElementById('quizForm').addEventListener('submit',async e=>{
       e.preventDefault();
-      let correct = 0;
-      questions.forEach(q => {
-        const sel = document.querySelector(`input[name="q_${q.id}"]:checked`);
-        if (!sel) return;
-        const optId = sel.value;
-        const isCorrect = q.quiz_options.find(o => o.id === optId)?.is_correct;
-        const parent = sel.closest('.quiz-option');
-        if (isCorrect) { parent.classList.add('correct'); correct++; }
-        else {
-          parent.classList.add('wrong');
-          q.quiz_options.filter(o=>o.is_correct).forEach(o => {
-            document.querySelector(`input[value="${o.id}"]`)?.closest('.quiz-option')?.classList.add('correct');
-          });
-        }
+      const answers={};
+      questions.forEach(q=>{
+        const sel=document.querySelector(`input[name="q_${q.id}"]:checked`);
+        if(sel) answers[q.id]=parseInt(sel.value);
       });
 
-      const score = Math.round((correct/questions.length)*100);
-      document.getElementById('quizResult').textContent = `${correct}/${questions.length} (${score}%)`;
-      document.getElementById('quizResult').style.color = score>=60 ? '#4ade80' : '#ef4444';
+      const submitBtn=document.querySelector('.quiz-submit');
+      submitBtn.disabled=true; submitBtn.textContent='Enviando...';
 
-      document.querySelectorAll('#quizForm input').forEach(i => i.disabled=true);
-      document.querySelector('.quiz-submit').disabled = true;
+      let result;
+      try{
+        result=await apiPost(API+'/quiz/'+quizData.id+'/submit',{answers});
+      } catch(err){
+        document.getElementById('quizResult').textContent='Erro ao enviar: '+err.message;
+        document.getElementById('quizResult').style.color='#ef4444';
+        submitBtn.disabled=false; submitBtn.textContent='Verificar respostas';
+        return;
+      }
 
-      await supabase.from('quiz_attempts').insert({
-        user_id: user.id, lesson_id: lessonId, score_pct: score,
-        passed: score >= 60
-      });
+      const score=result.score;
 
-      if (score >= 60) await doMarkComplete(lessonId);
+      if(result.results){
+        result.results.forEach(r=>{
+          const qi=questions.findIndex(q=>q.id===r.question_id);
+          if(qi===-1) return;
+          const q=questions[qi];
+          const options=document.querySelectorAll(`input[name="q_${q.id}"]`);
+          const correctOption=options[r.correct_index];
+          if(correctOption) correctOption.closest('.quiz-option').classList.add('correct');
+          if(r.user_index!==undefined && r.user_index!==r.correct_index){
+            const userOption=options[r.user_index];
+            if(userOption) userOption.closest('.quiz-option').classList.add('wrong');
+          }
+        });
+      }
+
+      document.getElementById('quizResult').innerHTML=`
+        <div style="display:flex;align-items:center;gap:12px;margin-top:8px;">
+          <div style="width:40px;height:40px;border-radius:50%;background:${score>=(quizData.passing_score||60)?'rgba(34,197,94,.1)':'rgba(239,68,68,.1)'};display:flex;align-items:center;justify-content:center;font-weight:700;color:${score>=(quizData.passing_score||60)?'#16a34a':'#ef4444'};">
+            ${score}%
+          </div>
+          <span style="color:${score>=(quizData.passing_score||60)?'#16a34a':'#ef4444'};font-weight:600;">
+            ${result.correct}/${result.total} corretas${score>=(quizData.passing_score||60)?' — Aprovado!':' — Tente novamente'}
+          </span>
+        </div>`;
+
+      document.querySelectorAll('#quizForm input').forEach(i=>i.disabled=true);
+      submitBtn.disabled=true; submitBtn.textContent='Verificar respostas';
+
+      if(result.passed){
+        completedLessons.add(lessonId);
+        const btn=document.getElementById('completeBtn');
+        if(btn){ btn.textContent='✓ Concluída'; btn.classList.add('done'); }
+        renderSidebar(); updateProgress();
+      }
     });
   }
 
-  async function markComplete(lessonId) {
-    if (completedLessons.has(lessonId)) return;
-    await doMarkComplete(lessonId);
-  }
-
-  async function doMarkComplete(lessonId) {
-    await supabase.from('lesson_progress').upsert({
-      user_id: user.id, lesson_id: lessonId,
-      completed: true, completed_at: new Date().toISOString()
-    }, { onConflict: 'user_id,lesson_id' });
-
+  async function markComplete(lessonId){
+    if(completedLessons.has(lessonId)) return;
+    await apiPost(API+'/lessons/'+lessonId+'/complete');
     completedLessons.add(lessonId);
-
-    const btn = document.getElementById('completeBtn');
-    if (btn) { btn.textContent = '✓ Concluída'; btn.classList.add('done'); }
-
-    renderSidebar();
-    updateProgress();
+    const btn=document.getElementById('completeBtn');
+    if(btn){ btn.textContent='✓ Concluída'; btn.classList.add('done'); }
+    renderSidebar(); updateProgress();
   }
 
-  function updateProgress() {
-    const all = modules.flatMap(m => m.lessons);
-    const done = all.filter(l => completedLessons.has(l.id)).length;
-    const pct = all.length ? Math.round((done/all.length)*100) : 0;
-    document.getElementById('progressPill').textContent = pct + '%';
+  function updateProgress(){
+    const all=modules.flatMap(m=>m.lessons);
+    const done=all.filter(l=>completedLessons.has(l.id)).length;
+    const pct=all.length?Math.round((done/all.length)*100):0;
+    document.getElementById('progressPill').textContent=pct+'%';
   }
 
-  function getEmbedUrl(url) {
-    if (!url) return '';
-    const yt = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([\w-]+)/);
-    if (yt) return `https://www.youtube.com/embed/${yt[1]}`;
-    const vm = url.match(/vimeo\.com\/(\d+)/);
-    if (vm) return `https://player.vimeo.com/video/${vm[1]}`;
+  function getEmbedUrl(url){
+    if(!url) return '';
+    const yt=url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([\w-]+)/);
+    if(yt) return `https://www.youtube.com/embed/${yt[1]}`;
+    const vm=url.match(/vimeo\.com\/(\d+)/);
+    if(vm) return `https://player.vimeo.com/video/${vm[1]}`;
     return url;
   }
 
-  function formatContent(body) {
-    if (!body) return '';
-    return body.split('\n\n').map(block => {
-      block = block.trim();
-      if (!block) return '';
-      if (block.startsWith('## ')) return `<h2>${block.slice(3)}</h2>`;
-      if (block.startsWith('### ')) return `<h3>${block.slice(4)}</h3>`;
-      if (block.startsWith('- ')) return '<ul>'+block.split('\n').filter(l=>l.startsWith('- ')).map(l=>`<li>${l.slice(2)}</li>`).join('')+'</ul>';
-      if (block.startsWith('> ')) return `<blockquote>${block.split('\n').map(l=>l.replace(/^> /,'')).join('<br>')}</blockquote>`;
+  function formatContent(body){
+    if(!body) return '';
+    return body.split('\n\n').map(block=>{
+      block=block.trim();
+      if(!block) return '';
+      if(block.startsWith('## ')) return `<h2>${block.slice(3)}</h2>`;
+      if(block.startsWith('### ')) return `<h3>${block.slice(4)}</h3>`;
+      if(block.startsWith('- ')) return '<ul>'+block.split('\n').filter(l=>l.startsWith('- ')).map(l=>`<li>${l.slice(2)}</li>`).join('')+'</ul>';
+      if(block.startsWith('> ')) return `<blockquote>${block.split('\n').map(l=>l.replace(/^> /,'')).join('<br>')}</blockquote>`;
       return `<p>${block.replace(/\n/g,'<br>')}</p>`;
     }).join('');
   }

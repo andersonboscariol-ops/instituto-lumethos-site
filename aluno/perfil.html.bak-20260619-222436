@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu Perfil · Instituto Lumethos</title>
+  <link rel="icon" href="/img/favicon.ico">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+    :root {
+      --navy:#0D1B2A; --navy-light:#152238; --navy-card:#1a2d45;
+      --gold:#C79A2E; --gold-light:#e0b84c; --white:#fff;
+      --text-secondary:rgba(255,255,255,0.7); --text-muted:rgba(255,255,255,0.45);
+      --border:rgba(255,255,255,0.06); --radius:12px;
+    }
+    body { font-family:'Inter',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; }
+    .topbar {
+      position:fixed; top:0; left:0; right:0; z-index:100; height:48px;
+      background:rgba(13,27,42,0.94); backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px); border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; padding:0 16px;
+    }
+    .topbar .back-btn { color:var(--text-secondary); text-decoration:none; font-size:13px; }
+    .topbar .back-btn:hover { color:var(--white); }
+    .topbar .logo { font-family:'Libre Baskerville',serif; font-size:14px; color:var(--gold); text-decoration:none; }
+
+    .container { padding-top:80px; max-width:600px; margin:0 auto; padding-left:20px; padding-right:20px; padding-bottom:60px; }
+
+    .page-title { font-family:'Libre Baskerville',serif; font-size:26px; margin-bottom:4px; }
+    .page-sub { color:var(--text-secondary); font-size:14px; margin-bottom:24px; }
+
+    .card {
+      background:var(--navy-card); border-radius:var(--radius);
+      border:1px solid var(--border); padding:24px; margin-bottom:16px;
+    }
+    .card h3 { font-size:14px; font-weight:600; margin-bottom:16px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.5px; }
+    
+    .form-group { margin-bottom:14px; }
+    .form-group label { font-size:12px; font-weight:500; color:var(--text-muted); display:block; margin-bottom:5px; }
+    .form-group input, .form-group textarea {
+      width:100%; padding:12px 14px; background:var(--navy-light);
+      border:1px solid var(--border); border-radius:var(--radius-sm);
+      color:var(--white); font-size:14px; font-family:'Inter',sans-serif;
+      outline:none; transition:border-color var(--transition);
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color:var(--gold); box-shadow:0 0 0 3px var(--gold-soft); }
+    .form-group input:disabled { opacity:.4; cursor:not-allowed; }
+    .form-group textarea { min-height:80px; resize:vertical; }
+
+    .avatar-section { display:flex; align-items:center; gap:16px; margin-bottom:16px; }
+    .avatar-circle {
+      width:72px; height:72px; border-radius:50%;
+      background:linear-gradient(135deg,var(--gold),var(--gold-bright));
+      display:flex; align-items:center; justify-content:center;
+      font-size:30px; font-weight:700; color:var(--navy);
+      flex-shrink:0; box-shadow:0 4px 16px rgba(199,154,46,.25);
+    }
+    .avatar-info { font-size:12px; color:var(--text-muted); }
+    .avatar-info strong { color:var(--text-secondary); }
+
+    .mirc-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 16px; border-radius:8px; font-size:13px; font-weight:500;
+    }
+    .mirc-badge.active { background:rgba(34,197,94,.1); color:#4ade80; }
+    .mirc-badge.expired { background:rgba(239,68,68,.1); color:#f87171; }
+    .mirc-badge.pending { background:rgba(199,154,46,.1); color:var(--gold); }
+
+    .btn-primary {
+      padding:12px 28px; background:var(--gold); color:var(--navy);
+      border:none; border-radius:50px; font-weight:700; font-size:14px;
+      cursor:pointer; font-family:'Inter',sans-serif; transition:all var(--transition);
+    }
+    .btn-primary:hover { background:var(--gold-bright); transform:translateY(-1px); box-shadow:0 4px 16px rgba(199,154,46,.3); }
+    .btn-primary:disabled { opacity:.5; cursor:not-allowed; transform:none; box-shadow:none; }
+
+    .btn-secondary {
+      padding:10px 20px; background:transparent; color:var(--text-secondary);
+      border:1px solid var(--border); border-radius:8px; font-size:13px;
+      cursor:pointer; font-family:'Inter',sans-serif; transition:all .2s;
+      text-decoration:none; display:inline-block; margin-top:8px;
+    }
+    .btn-secondary:hover { border-color:var(--text-secondary); color:var(--white); }
+
+    .toast {
+      position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+      padding:12px 20px; border-radius:8px; font-size:13px;
+      background:rgba(34,197,94,.9); color:#fff; z-index:200;
+      opacity:0; transition:opacity .3s; pointer-events:none;
+    }
+    .toast.show { opacity:1; }
+    .toast.error { background:rgba(239,68,68,.9); }
+
+    .stats-row { display:flex; gap:12px; flex-wrap:wrap; }
+    .stat-pill {
+      padding:10px 18px; background:var(--gold-soft);
+      border:1px solid rgba(199,154,46,.15); border-radius:50px;
+      font-size:12px; color:var(--gold); font-weight:500;
+    }
+
+    @media(max-width:480px) {
+      .page-title { font-size:22px; }
+      .container { padding-top:64px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="/aluno/dashboard.html" class="back-btn">← Dashboard</a>
+  <a href="/" class="logo">INSTITUTO LUMETHOS</a>
+  <span></span>
+</nav>
+
+<div class="container">
+  <h1 class="page-title">Meu Perfil</h1>
+  <p class="page-sub" id="pageSub">Carregando...</p>
+
+  <div class="card" id="profileCard">
+    <div style="text-align:center;padding:20px;color:var(--text-muted);">Carregando perfil...</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = '/api';
+  function getToken(){ return localStorage.getItem('lumethos_token'); }
+  function getUser(){ return JSON.parse(localStorage.getItem('lumethos_user')||'null'); }
+  function h(){ return {'Content-Type':'application/json','Authorization':'Bearer '+getToken()}; }
+
+  let profile = null;
+  let user = null;
+
+  async function init() {
+    const res = await fetch(API+'/auth/me', { headers: h() });
+    if (!res.ok) {
+      window.location.href = '/login.html?redirect=' + encodeURIComponent('/aluno/perfil.html');
+      return;
+    }
+    const data = await res.json();
+    user = data.user || data;
+
+    const pfRes = await fetch(API+'/profile', { headers: h() });
+    const pf = await pfRes.json();
+    profile = pf || { name: user.user_metadata?.name || user.name || '', email: user.email, role: 'aluno' };
+    renderProfile();
+  }
+
+  function renderProfile() {
+    const name = profile.name || user.email?.split('@')[0] || 'Aluno';
+    const initial = name.charAt(0).toUpperCase();
+    const mircStatusLabel = profile.mirc_status === 'active' ? '✅ Credencial Ativa' : profile.mirc_status === 'expired' ? '❌ Expirada' : profile.mirc_status ? '⏳ Pendente' : 'Sem credencial';
+    const mircClass = profile.mirc_status === 'active' ? 'active' : profile.mirc_status === 'expired' ? 'expired' : 'pending';
+
+    document.getElementById('pageSub').textContent = name;
+    document.title = name + ' · Perfil · Lumethos';
+
+    document.getElementById('profileCard').innerHTML = `
+      <div class="avatar-section">
+        <div class="avatar-circle">${initial}</div>
+        <div class="avatar-info">
+          <strong>${name}</strong><br>
+          ${profile.role === 'admin' ? '🔑 Administrador' : '🎓 Aluno'}
+          ${user.email ? '<br>' + user.email : ''}
+        </div>
+      </div>
+
+      ${profile.mirc_code ? `
+        <div class="mirc-badge ${mircClass}" style="margin-bottom:16px;">
+          🛡️ ${profile.mirc_code} · ${mircStatusLabel}
+        </div>
+      ` : ''}
+
+      <h3>Informações Pessoais</h3>
+      <div class="form-group">
+        <label>Nome</label>
+        <input type="text" id="editName" value="${escAttr(profile.name || '')}" placeholder="Seu nome completo">
+      </div>
+      <div class="form-group">
+        <label>Telefone (WhatsApp)</label>
+        <input type="text" id="editPhone" value="${escAttr(profile.phone || '')}" placeholder="(XX) XXXXX-XXXX">
+      </div>
+      <div class="form-group">
+        <label>CPF (para credencial MIRC)</label>
+        <input type="text" id="editMatricula" value="${escAttr(profile.matricula || '')}" placeholder="000.000.000-00" ${profile.matricula ? 'disabled' : ''}>
+        ${profile.matricula ? '<small style="color:var(--text-muted);font-size:11px;">CPF vinculado — entre em contato para alterar</small>' : ''}
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" value="${escAttr(user.email || '')}" disabled>
+        <small style="color:var(--text-muted);font-size:11px;">Gerenciado pelo login</small>
+      </div>
+
+      <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="saveProfile()" id="saveBtn">💾 Salvar Alterações</button>
+        <button class="btn-secondary" onclick="window.location.href='/aluno/dashboard.html'">Cancelar</button>
+      </div>
+
+      ${profile.mirc_code ? `
+        <div style="margin-top:24px;">
+          <h3>Credencial MIRC</h3>
+          <div style="padding:12px;background:var(--navy-light);border-radius:8px;margin-top:10px;">
+            <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;">
+              <span style="color:var(--text-muted);">Código</span>
+              <span style="font-weight:500;font-family:monospace;">${escAttr(profile.mirc_code || '—')}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;">
+              <span style="color:var(--text-muted);">Status</span>
+              <span>${mircStatusLabel}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px;">
+              <span style="color:var(--text-muted);">Emitida em</span>
+              <span style="font-weight:500;">${profile.mirc_issued_at ? new Date(profile.mirc_issued_at).toLocaleDateString('pt-BR') : '—'}</span>
+            </div>
+          </div>
+        </div>
+      ` : ''}
+
+      ${(profile.role === 'aluno' || profile.role === 'tutor') ? `
+        <div style="margin-top:24px;">
+          <h3>Estatísticas</h3>
+          <div class="stats-row" style="margin-top:12px;">
+            <span class="stat-pill" id="statCourses">📚 Cursos: carregando...</span>
+            <span class="stat-pill" id="statLessons">✅ Aulas: carregando...</span>
+          </div>
+        </div>
+      ` : ''}
+    `;
+
+    // Load stats
+    if (profile.role === 'aluno' || profile.role === 'tutor') loadStats();
+  }
+
+  async function loadStats() {
+    try {
+      const progRes = await fetch(API+'/courses/progress', { headers: h() });
+      const prog = await progRes.json();
+      const courseCount = prog?.enrollments?.length || prog?.courses?.length || 0;
+      const lessonCount = prog?.completedLessons || prog?.completed || 0;
+      document.getElementById('statCourses').textContent = `📚 ${courseCount} cursos`;
+      document.getElementById('statLessons').textContent = `✅ ${lessonCount} aulas concluídas`;
+    } catch(e) {
+      document.getElementById('statCourses').textContent = '📚 Dados indisponíveis';
+      document.getElementById('statLessons').textContent = '✅ Dados indisponíveis';
+    }
+  }
+
+  async function saveProfile() {
+    const btn = document.getElementById('saveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Salvando...';
+
+    const updates = {
+      name: document.getElementById('editName').value.trim() || null,
+      phone: document.getElementById('editPhone').value.trim() || null
+    };
+
+    const matriculaInput = document.getElementById('editMatricula');
+    if (matriculaInput && !matriculaInput.disabled) {
+      const cpf = matriculaInput.value.replace(/\D/g, '');
+      if (cpf && cpf.length === 11) updates.matricula = cpf;
+    }
+
+    try {
+      const res = await fetch(API+'/profile', {
+        method: 'PUT',
+        headers: h(),
+        body: JSON.stringify(updates)
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        showToast('Erro ao salvar: ' + (err.message || 'Erro desconhecido'), true);
+      } else {
+        showToast('✅ Perfil atualizado!');
+        profile = { ...profile, ...updates };
+      }
+    } catch(e) {
+      showToast('Erro ao salvar: ' + e.message, true);
+    }
+
+    btn.disabled = false;
+    btn.textContent = '💾 Salvar Alterações';
+  }
+
+  function escAttr(s) {
+    if (!s) return '';
+    return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function showToast(msg, isError) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + (isError ? 'error' : '') + ' show';
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  init();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca Ministerial · Instituto Lumethos</title>
+  <meta name="description" content="Explore nossa biblioteca de cursos ministeriais">
+  <link rel="icon" href="../img/favicon.ico">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --bg-primary: #0D1B2A;
+      --bg-secondary: #152238;
+      --bg-card: #1a2d45;
+      --gold: #C79A2E;
+      --gold-bright: #e0b84c;
+      --gold-soft: rgba(199,154,46,.12);
+      --white: #ffffff;
+      --text-secondary: rgba(255,255,255,0.72);
+      --text-muted: rgba(255,255,255,0.42);
+      --border: rgba(255,255,255,0.06);
+      --border-hover: rgba(255,255,255,0.12);
+      --radius: 14px;
+      --sidebar-width: 260px;
+      --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--white);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ======== TOP BAR ======== */
+    .topbar {
+      position: fixed; top:0; left:0; right:0; z-index:100;
+      height:54px; background:rgba(13,27,42,0.92);
+      backdrop-filter:blur(16px) saturate(180%);
+      -webkit-backdrop-filter:blur(16px) saturate(180%);
+      border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 20px;
+    }
+    .topbar .logo {
+      font-family:'Libre Baskerville',serif; font-size:15px; color:var(--gold);
+      text-decoration:none; letter-spacing:.3px;
+    }
+    .topbar .user-area { display:flex; align-items:center; gap:12px; }
+    .topbar .user-name { font-size:13px; color:var(--text-secondary); }
+    .topbar .avatar {
+      width:32px; height:32px; border-radius:50%;
+      background:var(--gold); color:var(--bg-primary);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:14px; cursor:pointer;
+    }
+    .topbar .logout-btn {
+      background:none; border:1px solid rgba(255,255,255,.12);
+      color:var(--text-muted); padding:5px 12px; border-radius:6px;
+      font-size:12px; cursor:pointer; transition:all .2s;
+      font-family:'Inter',sans-serif;
+    }
+    .topbar .logout-btn:hover { color:var(--white); border-color:rgba(255,255,255,.25); }
+
+    /* ======== SIDEBAR ======== */
+    .layout { display:flex; padding-top:52px; min-height:100vh; }
+    .sidebar {
+      width:var(--sidebar-width); min-width:var(--sidebar-width);
+      background:var(--bg-secondary);
+      border-right:1px solid var(--border);
+      position:fixed; top:52px; left:0; bottom:0;
+      overflow-y:auto; z-index:50;
+      padding:16px 0;
+    }
+    .sidebar-section {
+      padding:8px 16px; margin-bottom:4px;
+    }
+    .sidebar-section .section-label {
+      font-size:10px; text-transform:uppercase; letter-spacing:1.2px;
+      color:var(--text-muted); padding:0 12px; margin-bottom:8px;
+    }
+    .sidebar-link {
+      display:flex; align-items:center; gap:12px;
+      padding:10px 12px; border-radius:8px;
+      color:var(--text-secondary); text-decoration:none;
+      font-size:14px; transition:all .2s;
+      font-weight:400;
+    }
+    .sidebar-link:hover { background:rgba(255,255,255,.04); color:var(--white); }
+    .sidebar-link.active { background:rgba(199,154,46,.1); color:var(--gold); font-weight:600; }
+    .sidebar-link .icon { font-size:18px; width:22px; text-align:center; flex-shrink:0; }
+    .sidebar-link .badge {
+      margin-left:auto; background:var(--gold); color:var(--bg-primary);
+      font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px;
+    }
+
+    /* ======== MAIN CONTENT ======== */
+    .main-content {
+      flex:1; margin-left:var(--sidebar-width);
+      padding:32px; max-width:calc(100% - var(--sidebar-width));
+    }
+
+    /* ======== HERO SECTION ======== */
+    .library-hero {
+      position:relative;
+      background:linear-gradient(135deg,#0D1B2A 0%,#1a2d45 40%,#152238 100%);
+      border-radius:16px; overflow:hidden; margin-bottom:36px;
+      border:1px solid var(--border);
+    }
+    .library-hero::before {
+      content:''; position:absolute; top:-60%; right:-10%;
+      width:400px; height:400px;
+      background:radial-gradient(circle,rgba(199,154,46,.08) 0%,transparent 70%);
+      border-radius:50%;
+    }
+    .library-hero-content {
+      position:relative; z-index:1; padding:48px 36px;
+    }
+    .library-hero h1 {
+      font-family:'Libre Baskerville',serif;
+      font-size:38px; color:var(--gold); margin-bottom:8px;
+    }
+    .library-hero p {
+      color:var(--text-secondary); font-size:16px; max-width:480px;
+    }
+    .library-hero .hero-badge {
+      display:inline-flex; align-items:center; gap:6px;
+      margin-top:16px; padding:6px 14px;
+      background:rgba(199,154,46,.1);
+      border:1px solid rgba(199,154,46,.2);
+      border-radius:50px; font-size:12px; color:var(--gold);
+    }
+
+    /* ======== SEARCH / FILTERS ======== */
+    .library-toolbar {
+      display:flex; gap:12px; margin-bottom:28px;
+      flex-wrap:wrap; align-items:center;
+    }
+    .search-input {
+      flex:1; min-width:220px;
+      padding:10px 16px; background:var(--bg-card);
+      border:1px solid var(--border); border-radius:10px;
+      color:var(--white); font-size:14px; font-family:'Inter',sans-serif;
+      outline:none; transition:border-color .2s;
+    }
+    .search-input:focus { border-color:var(--gold); }
+    .search-input::placeholder { color:var(--text-muted); }
+    .filter-btn {
+      padding:8px 16px; background:var(--bg-card);
+      border:1px solid var(--border); border-radius:10px;
+      color:var(--text-secondary); font-size:13px; cursor:pointer;
+      font-family:'Inter',sans-serif; transition:all .2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      border-color:var(--gold); color:var(--gold);
+    }
+
+    /* ======== CATEGORY SECTION ======== */
+    .category-section { margin-bottom:40px; }
+    .category-header {
+      display:flex; align-items:center; gap:12px; margin-bottom:16px;
+    }
+    .category-icon { font-size:24px; }
+    .category-title {
+      font-family:'Libre Baskerville',serif;
+      font-size:22px; color:var(--white);
+    }
+    .category-count {
+      font-size:12px; color:var(--text-muted);
+      background:var(--bg-card); padding:3px 10px; border-radius:12px;
+    }
+
+    /* ======== LIBRARY GRID ======== */
+    .library-grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap:16px;
+    }
+    .library-card {
+      background:var(--bg-card); border-radius:var(--radius);
+      border:1px solid var(--border); overflow:hidden;
+      transition:all .3s;
+    }
+    .library-card:hover {
+      transform:translateY(-4px);
+      border-color:rgba(199,154,46,.25);
+      box-shadow:0 12px 32px rgba(0,0,0,.3);
+    }
+    .library-card .card-img {
+      height:120px; background:var(--bg-secondary);
+      display:flex; align-items:center; justify-content:center;
+      font-size:36px; position:relative;
+    }
+    .library-card .card-img .premium-ribbon {
+      position:absolute; top:10px; right:10px;
+      background:linear-gradient(135deg,var(--gold),var(--gold-light));
+      color:var(--bg-primary); font-size:9px; font-weight:700;
+      padding:3px 10px; border-radius:6px; text-transform:uppercase;
+      letter-spacing:.5px;
+    }
+    .library-card .card-body { padding:16px 18px 18px; }
+    .library-card .card-body h4 {
+      font-size:15px; font-weight:600; margin-bottom:4px;
+    }
+    .library-card .card-body .item-desc {
+      font-size:12px; color:var(--text-muted);
+      display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+      overflow:hidden; margin-bottom:10px;
+    }
+    .library-card .card-footer {
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .file-type-badge {
+      font-size:10px; font-weight:600; padding:3px 8px; border-radius:6px;
+    }
+    .file-type-badge.pdf { background:rgba(239,68,68,.12); color:#f87171; }
+    .file-type-badge.video { background:rgba(96,165,250,.12); color:#93c5fd; }
+    .file-type-badge.link { background:rgba(34,197,94,.12); color:#4ade80; }
+    .file-type-badge.doc { background:rgba(199,154,46,.12); color:var(--gold); }
+    .file-type-badge.audio { background:rgba(168,85,247,.12); color:#c084fc; }
+
+    .download-btn {
+      padding:6px 14px; background:var(--gold);
+      color:var(--bg-primary); border:none; border-radius:8px;
+      font-size:12px; font-weight:600; cursor:pointer;
+      font-family:'Inter',sans-serif; transition:background .2s;
+      text-decoration:none; display:inline-flex; align-items:center; gap:4px;
+    }
+    .download-btn:hover { background:var(--gold-light); }
+    .download-btn.sm { padding:4px 10px; font-size:11px; }
+
+    /* ======== EMPTY STATE ======== */
+    .empty-state {
+      text-align:center; padding:60px 20px;
+      background:var(--bg-card); border-radius:var(--radius);
+      border:1px solid var(--border);
+    }
+    .empty-state .empty-icon { font-size:48px; margin-bottom:12px; }
+    .empty-state h3 { font-size:18px; margin-bottom:6px; }
+    .empty-state p { color:var(--text-muted); font-size:14px; }
+
+    /* ======== LOADING ======== */
+    .loading-spinner {
+      text-align:center; padding:60px; color:var(--text-muted);
+    }
+    .spinner {
+      width:36px; height:36px; border:3px solid var(--border);
+      border-top-color:var(--gold); border-radius:50%;
+      animation:spin .8s linear infinite; margin:0 auto 12px;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* ======== MOBILE ======== */
+    @media(max-width:768px) {
+      .sidebar {
+        width:100%; min-width:100%; position:relative; top:auto;
+        bottom:auto; height:auto; border-right:none; border-bottom:1px solid var(--border);
+        padding:8px 0;
+      }
+      .sidebar .sidebar-section { padding:4px 16px; }
+      .sidebar .sidebar-section .sidebar-link { white-space:nowrap; font-size:12px; padding:8px 10px; }
+      .sidebar .sidebar-section .section-label { display:none; }
+      .layout { flex-direction:column; }
+      .main-content { margin-left:0; max-width:100%; padding:20px 16px; }
+      .library-hero-content { padding:32px 20px; }
+      .library-hero h1 { font-size:28px; }
+      .library-grid { grid-template-columns:1fr; }
+      .category-title { font-size:18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ======== TOP BAR ======== -->
+<nav class="topbar">
+  <a href="/aluno/dashboard.html" class="logo">INSTITUTO LUMETHOS</a>
+  <div class="user-area">
+    <span class="user-name" id="userName">Aluno</span>
+    <div class="avatar" id="userAvatar">?</div>
+    <button class="logout-btn" onclick="logout()">Sair</button>
+  </div>
+</nav>
+
+<!-- ======== LAYOUT ======== -->
+<div class="layout">
+
+  <!-- ======== SIDEBAR ======== -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="section-label">Principal</div>
+      <a href="/aluno/dashboard.html" class="sidebar-link">
+        <span class="icon">🏠</span> Dashboard
+      </a>
+      <a href="/aluno/biblioteca.html" class="sidebar-link active">
+        <span class="icon">📚</span> Biblioteca de Cursos
+      </a>
+      <a href="/aluno/curso.html" class="sidebar-link">
+        <span class="icon">🎓</span> Meus Cursos
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-label">Ferramentas</div>
+      <a href="/scriba.html" class="sidebar-link">
+        <span class="icon">📝</span> Scriba
+        <span class="badge">Escrever</span>
+      </a>
+      <a href="/centelhaz.html" class="sidebar-link">
+        <span class="icon">🔥</span> Centelhaz
+        <span class="badge">CRM</span>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-label">Conta</div>
+      <a href="/aluno/perfil.html" class="sidebar-link">
+        <span class="icon">👤</span> Meu Perfil
+      </a>
+      <a href="/verificacao.html" class="sidebar-link">
+        <span class="icon">🔍</span> Verificar MIRC
+      </a>
+      <a href="#" onclick="logout()" class="sidebar-link">
+        <span class="icon">🚪</span> Sair
+      </a>
+    </div>
+  </aside>
+
+  <!-- ======== MAIN ======== -->
+  <main class="main-content" id="mainContent">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <span>Carregando biblioteca...</span>
+    </div>
+  </main>
+</div>
+
+<script>
+  const API = '/api';
+  function getToken(){ return localStorage.getItem('lumethos_token'); }
+  function getUser(){ return JSON.parse(localStorage.getItem('lumethos_user')||'null'); }
+  function h(){ return {'Content-Type':'application/json','Authorization':'Bearer '+getToken()}; }
+
+  let libraryData = [];
+  let filteredData = [];
+  let activeFilter = 'all';
+
+  async function init() {
+    // Check auth
+    const res = await fetch(API+'/auth/me', { headers: h() });
+    if (!res.ok) {
+      window.location.href = '/login.html?redirect=' + encodeURIComponent('/aluno/biblioteca.html');
+      return;
+    }
+    const data = await res.json();
+    const user = data.user || data;
+    const displayName = data.name || user.email?.split('@')[0] || 'Aluno';
+
+    // Update topbar
+    document.getElementById('userName').textContent = displayName;
+    document.getElementById('userAvatar').textContent = displayName.charAt(0).toUpperCase();
+
+    // Fetch library
+    await loadLibrary();
+  }
+
+  async function loadLibrary() {
+    try {
+      const libRes = await fetch(API+'/library', { headers: h() });
+      libraryData = await libRes.json();
+      filteredData = [...libraryData];
+      renderLibrary();
+    } catch(e) {
+      document.getElementById('mainContent').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📚</div>
+          <h3>Biblioteca indisponível</h3>
+          <p>Não foi possível carregar a biblioteca. Tente novamente mais tarde.</p>
+        </div>`;
+    }
+  }
+
+  function getFileTypeClass(type) {
+    const t = (type || '').toLowerCase();
+    if (t.includes('pdf')) return 'pdf';
+    if (t.includes('video') || t.includes('mp4')) return 'video';
+    if (t.includes('link') || t.includes('url')) return 'link';
+    if (t.includes('doc') || t.includes('word')) return 'doc';
+    if (t.includes('audio') || t.includes('mp3')) return 'audio';
+    return 'pdf';
+  }
+
+  function getFileIcon(type) {
+    const t = (type || '').toLowerCase();
+    if (t.includes('pdf')) return '📄';
+    if (t.includes('video') || t.includes('mp4')) return '🎬';
+    if (t.includes('link') || t.includes('url')) return '🔗';
+    if (t.includes('doc') || t.includes('word')) return '📝';
+    if (t.includes('audio') || t.includes('mp3')) return '🎵';
+    return '📄';
+  }
+
+  function setFilter(filter) {
+    activeFilter = filter;
+    if (filter === 'all') {
+      filteredData = [...libraryData];
+    } else {
+      filteredData = libraryData.filter(item =>
+        (item.category || '').toLowerCase() === filter.toLowerCase() ||
+        (item.file_type || '').toLowerCase().includes(filter.toLowerCase())
+      );
+    }
+
+    // Update filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.filter === filter);
+    });
+
+    renderLibraryItems();
+  }
+
+  function searchLibrary(query) {
+    const q = query.toLowerCase().trim();
+    if (!q) {
+      filteredData = activeFilter === 'all' ? [...libraryData] :
+        libraryData.filter(item => (item.category || '').toLowerCase() === activeFilter.toLowerCase());
+    } else {
+      filteredData = libraryData.filter(item => {
+        const matchesFilter = activeFilter === 'all' ||
+          (item.category || '').toLowerCase() === activeFilter.toLowerCase() ||
+          (item.file_type || '').toLowerCase().includes(activeFilter.toLowerCase());
+        const matchesSearch =
+          (item.name || '').toLowerCase().includes(q) ||
+          (item.title || '').toLowerCase().includes(q) ||
+          (item.description || '').toLowerCase().includes(q) ||
+          (item.category || '').toLowerCase().includes(q);
+        return matchesFilter && matchesSearch;
+      });
+    }
+    renderLibraryItems();
+  }
+
+  function renderLibrary() {
+    // Extract unique categories
+    const categories = [...new Set((libraryData || []).map(item =>
+      item.category || 'Geral'
+    ))];
+
+    // Build filter bar
+    let filterHTML = `
+      <div class="library-toolbar">
+        <input type="text" class="search-input" placeholder="Pesquisar na biblioteca..." oninput="searchLibrary(this.value)">
+        <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">📋 Todas</button>`;
+
+    categories.forEach(cat => {
+      filterHTML += `<button class="filter-btn" data-filter="${cat.toLowerCase()}" onclick="setFilter('${cat.toLowerCase()}')">${cat}</button>`;
+    });
+
+    filterHTML += '</div>';
+
+    const main = document.getElementById('mainContent');
+
+    // Group items by category for grid display
+    const itemsByCategory = {};
+    (libraryData || []).forEach(item => {
+      const cat = item.category || 'Geral';
+      if (!itemsByCategory[cat]) itemsByCategory[cat] = [];
+      itemsByCategory[cat].push(item);
+    });
+
+    const totalItems = (libraryData || []).length;
+
+    let categorySections = '';
+    for (const [cat, items] of Object.entries(itemsByCategory)) {
+      const icon = items[0]?.icon || '📚';
+      categorySections += `
+        <div class="category-section" data-category="${cat.toLowerCase()}">
+          <div class="category-header">
+            <span class="category-icon">${icon}</span>
+            <h2 class="category-title">${cat}</h2>
+            <span class="category-count">${items.length} itens</span>
+          </div>
+          <div class="library-grid">
+            ${items.map(item => {
+              const name = item.name || item.title || 'Item';
+              const desc = item.description || '';
+              const fileType = item.file_type || 'pdf';
+              const fileIcon = getFileIcon(fileType);
+              const typeClass = getFileTypeClass(fileType);
+              const isPremium = item.premium || item.is_premium || false;
+              const downloadUrl = item.download_url || item.url || item.file_url || '#';
+
+              return `
+                <div class="library-card">
+                  <div class="card-img">
+                    ${fileIcon}
+                    ${isPremium ? '<div class="premium-ribbon">⭐ Premium</div>' : ''}
+                  </div>
+                  <div class="card-body">
+                    <h4>${name}</h4>
+                    ${desc ? `<div class="item-desc">${desc}</div>` : ''}
+                    <div class="card-footer">
+                      <span class="file-type-badge ${typeClass}">${fileType.toUpperCase()}</span>
+                      <a href="${downloadUrl}" class="download-btn sm" target="_blank" rel="noopener">
+                        ⬇ Baixar
+                      </a>
+                    </div>
+                  </div>
+                </div>`;
+            }).join('')}
+          </div>
+        </div>`;
+    }
+
+    if (!totalItems) {
+      main.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📚</div>
+          <h3>Biblioteca vazia</h3>
+          <p>Nenhum item disponível no momento.</p>
+        </div>`;
+      return;
+    }
+
+    main.innerHTML = `
+      <div class="library-hero">
+        <div class="library-hero-content">
+          <h1>📖 Biblioteca Ministerial</h1>
+          <p>Acesse materiais de estudo, apostilas, vídeos e recursos para sua formação teológica.</p>
+          <div class="hero-badge">📦 ${totalItems} itens disponíveis</div>
+        </div>
+      </div>
+
+      ${filterHTML}
+
+      <div id="libraryCategories">
+        ${categorySections}
+      </div>`;
+  }
+
+  function renderLibraryItems() {
+    const container = document.getElementById('libraryCategories');
+    if (!container) return;
+
+    // Group filtered items by category
+    const itemsByCategory = {};
+    (filteredData || []).forEach(item => {
+      const cat = item.category || 'Geral';
+      if (!itemsByCategory[cat]) itemsByCategory[cat] = [];
+      itemsByCategory[cat].push(item);
+    });
+
+    const totalFiltered = (filteredData || []).length;
+
+    if (totalFiltered === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <h3>Nenhum resultado</h3>
+          <p>Tente buscar por outro termo ou limpar os filtros.</p>
+        </div>`;
+      return;
+    }
+
+    let html = '';
+    for (const [cat, items] of Object.entries(itemsByCategory)) {
+      const icon = items[0]?.icon || '📚';
+      html += `
+        <div class="category-section" data-category="${cat.toLowerCase()}">
+          <div class="category-header">
+            <span class="category-icon">${icon}</span>
+            <h2 class="category-title">${cat}</h2>
+            <span class="category-count">${items.length} itens</span>
+          </div>
+          <div class="library-grid">
+            ${items.map(item => {
+              const name = item.name || item.title || 'Item';
+              const desc = item.description || '';
+              const fileType = item.file_type || 'pdf';
+              const fileIcon = getFileIcon(fileType);
+              const typeClass = getFileTypeClass(fileType);
+              const isPremium = item.premium || item.is_premium || false;
+              const downloadUrl = item.download_url || item.url || item.file_url || '#';
+
+              return `
+                <div class="library-card">
+                  <div class="card-img">
+                    ${fileIcon}
+                    ${isPremium ? '<div class="premium-ribbon">⭐ Premium</div>' : ''}
+                  </div>
+                  <div class="card-body">
+                    <h4>${name}</h4>
+                    ${desc ? `<div class="item-desc">${desc}</div>` : ''}
+                    <div class="card-footer">
+                      <span class="file-type-badge ${typeClass}">${fileType.toUpperCase()}</span>
+                      <a href="${downloadUrl}" class="download-btn sm" target="_blank" rel="noopener">
+                        ⬇ Baixar
+                      </a>
+                    </div>
+                  </div>
+                </div>`;
+            }).join('')}
+          </div>
+        </div>`;
+    }
+
+    container.innerHTML = html;
+  }
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = '/login.html';
+  }
+
+  // Init
+  init();
+</script>
+
+</body>
+</html>
