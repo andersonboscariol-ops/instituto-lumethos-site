@@ -811,6 +811,13 @@
       </a>
     </div>
 
+    <div class="sidebar-section admin-only" style="display:none;">
+      <div class="section-label">Admin</div>
+      <a href="/aluno/financeiro.html" class="sidebar-link">
+        <span class="icon">💰</span><span class="label">Financeiro</span>
+      </a>
+    </div>
+
     <div class="sidebar-spacer"></div>
 
     <div class="sidebar-section">
@@ -937,6 +944,9 @@
     document.getElementById('sbName').textContent = displayName;
     document.getElementById('sbAvatar').textContent = displayName.charAt(0).toUpperCase();
     document.getElementById('sbRole').textContent = role === 'admin' ? 'ADMIN' : role === 'tutor' ? 'TUTOR' : 'ALUNO';
+    if (role === 'admin' || role === 'superadmin') {
+      document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
+    }
     if (profile?.profile_photo) {
       const sbAv = document.getElementById('sbAvatar');
       sbAv.style.backgroundImage = 'url(' + profile.profile_photo + ')';

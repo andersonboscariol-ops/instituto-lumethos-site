@@ -515,6 +515,58 @@
       .course-card .card-thumb { height: 130px; }
       .topbar-user-name { display: none; }
     }
+
+    /* ═══ FINANCIAL DASHBOARD ═══ */
+    .fin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .fin-kpi {
+      background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 20px;
+      text-align: center; transition: all 0.3s ease;
+    }
+    .fin-kpi:hover { border-color: rgba(199,154,46,0.3); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    .fin-kpi-icon { font-size: 28px; margin-bottom: 8px; }
+    .fin-kpi-value { font-size: 28px; font-weight: 800; color: var(--gold); margin-bottom: 4px; }
+    .fin-kpi-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .fin-kpi-delta { margin-top: 6px; font-size: 11px; }
+    .fin-delta-up { color: #22c55e; }
+    .fin-delta-down { color: #ef4444; }
+
+    .fin-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    .fin-chart-card, .fin-table-card {
+      background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border); border-radius: var(--radius); overflow: hidden;
+    }
+    .fin-chart-header { padding: 16px 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
+    .fin-chart-header h3 { font-size: 14px; font-weight: 600; margin: 0; }
+    .fin-chart-sub { font-size: 11px; color: var(--text-muted); }
+    .fin-chart-body { padding: 20px; }
+    .fin-chart-placeholder, .fin-chart-empty { text-align: center; padding: 40px; color: var(--text-muted); font-size: 13px; }
+
+    .fin-bars { display: flex; align-items: flex-end; gap: 8px; height: 180px; padding: 0 4px; }
+    .fin-bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; min-width: 0; }
+    .fin-bar-val { font-size: 9px; color: var(--text-muted); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+    .fin-bar { width: 100%; max-width: 32px; background: linear-gradient(180deg, var(--gold), rgba(199,154,46,0.3)); border-radius: 4px 4px 0 0; transition: height 0.6s ease; }
+    .fin-bar-label { font-size: 9px; color: var(--text-muted); margin-top: 6px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
+
+    .fin-table-wrap { overflow-x: auto; }
+    .fin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .fin-table th { text-align: left; padding: 12px 20px; font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--glass-border); }
+    .fin-table td { padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.03); color: #e2e8f0; }
+    .fin-table tr:hover td { background: rgba(199,154,46,0.04); }
+    .fin-status-ok { color: #22c55e; font-size: 11px; font-weight: 600; }
+    .fin-status-pend { color: #f59e0b; font-size: 11px; font-weight: 600; }
+    .fin-status-err { color: #ef4444; font-size: 11px; font-weight: 600; }
+
+    .fin-table-card { margin-bottom: 24px; }
+
+    @media (max-width: 768px) {
+      .fin-grid { grid-template-columns: repeat(2, 1fr); }
+      .fin-charts { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .fin-grid { grid-template-columns: 1fr; }
+    }
+
   </style>
 </head>
 <body>
@@ -594,7 +646,7 @@
 
     <div class="sidebar-section admin-only" style="display:none;">
       <div class="section-label">Admin</div>
-      <a href="/aluno/financeiro.html" class="sidebar-link">
+      <a href="/aluno/financeiro.html" class="sidebar-link active">
         <span class="icon">💰</span><span class="label">Financeiro</span>
       </a>
     </div>
@@ -624,20 +676,194 @@
 
 <script>
   const API = '/api';
-  const TOKEN = localStorage.getItem('lumethos_token');
-  const headers = () => ({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN });
+  function getToken(){ return localStorage.getItem('lumethos_token'); }
+  function h(){ return {'Content-Type':'application/json','Authorization':'Bearer '+getToken()}; }
+  let userData = null;
 
-  async function checkAuth() {
-    if (!TOKEN) { goLogin(); return null; }
-    try { const r = await fetch(API + '/auth/me', { headers: headers() }); if (!r.ok) { localStorage.clear(); goLogin(); return null; } return await r.json(); }
-    catch(e) { localStorage.clear(); goLogin(); return null; }
+  async function init() {
+    const res = await fetch(API+'/auth/me', { headers: h() });
+    if (!res.ok) { window.location.href = '/login.html'; return; }
+    const data = await res.json();
+    userData = data.user || data;
+
+    const displayName = userData.user_metadata?.name || userData.name || userData.email?.split('@')[0] || 'Aluno';
+    document.getElementById('userName').textContent = displayName;
+    document.getElementById('sbName').textContent = displayName;
+    document.getElementById('sbAvatar').textContent = displayName.charAt(0).toUpperCase();
+
+    const role = userData.role || 'aluno';
+    const roleLabel = role === 'admin' ? 'ADMIN' : role === 'tutor' ? 'TUTOR' : 'ALUNO';
+    document.getElementById('sbRole').textContent = roleLabel;
+    document.getElementById('sbRole').className = 'sidebar-user-role role-' + role;
+
+    if (role === 'admin' || role === 'superadmin') {
+      document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
+    }
+
+    // Sidebar stats
+    try {
+      const [cr, pr, cer] = await Promise.all([
+        fetch(API + '/courses', { headers: h() }),
+        fetch(API + '/courses/progress', { headers: h() }),
+        fetch(API + '/certificates', { headers: h() })
+      ]);
+      const courses = cr.ok ? await cr.json() : [];
+      const progress = pr.ok ? await pr.json() : [];
+      const certs = cer.ok ? await cer.json() : [];
+      document.getElementById('sbCourses').textContent = courses.length || 0;
+      const pm = {};
+      for (const p of progress) { if (!pm[p.course_id]) pm[p.course_id] = 0; if (p.completed) pm[p.course_id]++; }
+      let completedLessons = 0;
+      for (const c of courses) { completedLessons += pm[c.id] || 0; }
+      document.getElementById('sbCompleted').textContent = completedLessons;
+      document.getElementById('sbCerts').textContent = certs.length || 0;
+    } catch(e) {}
+
+    if (role !== 'admin' && role !== 'superadmin') {
+      document.getElementById('finContent').innerHTML = '<div class="card anim-in anim-d2" style="text-align:center;padding:60px 20px;">' +
+        '<div style="font-size:48px;margin-bottom:16px;">🔒</div>' +
+        '<h3 style="color:var(--gold);margin-bottom:8px;">Acesso Restrito</h3>' +
+        '<p style="color:var(--text-muted);">Apenas administradores têm acesso ao painel financeiro.</p></div>';
+      return;
+    }
+    renderFinanceiro();
   }
-  function goLogin() { window.location.href = '/login.html?redirect=' + encodeURIComponent(location.pathname); }
-  function logout() { localStorage.clear(); window.location.href = '/login.html'; }
 
+  async function renderFinanceiro() {
+    const container = document.getElementById('finContent');
+    container.innerHTML = `
+      <div class="fin-grid anim-in anim-d2">
+        <div class="fin-kpi">
+          <div class="fin-kpi-icon">👥</div>
+          <div class="fin-kpi-value" id="kpiAlunos">—</div>
+          <div class="fin-kpi-label">Alunos Ativos</div>
+          <div class="fin-kpi-delta" id="kpiAlunosDelta"></div>
+        </div>
+        <div class="fin-kpi">
+          <div class="fin-kpi-icon">📚</div>
+          <div class="fin-kpi-value" id="kpiCursos">—</div>
+          <div class="fin-kpi-label">Cursos Ativos</div>
+        </div>
+        <div class="fin-kpi">
+          <div class="fin-kpi-icon">💵</div>
+          <div class="fin-kpi-value" id="kpiReceita">—</div>
+          <div class="fin-kpi-label">Receita Total</div>
+          <div class="fin-kpi-delta" id="kpiReceitaDelta"></div>
+        </div>
+        <div class="fin-kpi">
+          <div class="fin-kpi-icon">🎯</div>
+          <div class="fin-kpi-value" id="kpiConversao">—</div>
+          <div class="fin-kpi-label">Taxa de Conversão</div>
+        </div>
+      </div>
+
+      <div class="fin-charts anim-in anim-d3">
+        <div class="fin-chart-card">
+          <div class="fin-chart-header">
+            <h3>📊 Receita Mensal</h3>
+            <span class="fin-chart-sub">Últimos 12 meses</span>
+          </div>
+          <div class="fin-chart-body" id="chartReceita">
+            <div class="fin-chart-placeholder">Carregando...</div>
+          </div>
+        </div>
+        <div class="fin-chart-card">
+          <div class="fin-chart-header">
+            <h3>📈 Matrículas por Curso</h3>
+            <span class="fin-chart-sub">Distribuição atual</span>
+          </div>
+          <div class="fin-chart-body" id="chartCursos">
+            <div class="fin-chart-placeholder">Carregando...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fin-table-card anim-in anim-d4">
+        <div class="fin-chart-header">
+          <h3>🔄 Últimas Transações</h3>
+        </div>
+        <div class="fin-table-wrap">
+          <table class="fin-table" id="tblTransacoes">
+            <thead><tr><th>Aluno</th><th>Curso</th><th>Valor</th><th>Status</th><th>Data</th></tr></thead>
+            <tbody><tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">Carregando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    try {
+      const res = await fetch(API + '/admin/stats', { headers: h() });
+      if (res.ok) {
+        const stats = await res.json();
+        updateKPIs(stats);
+        if (stats.receita_mensal?.length) renderBarChart('chartReceita', stats.receita_mensal);
+        else document.getElementById('chartReceita').innerHTML = '<div class="fin-chart-empty">Sem dados</div>';
+        if (stats.cursos_matriculas?.length) renderBarChart('chartCursos', stats.cursos_matriculas);
+        else document.getElementById('chartCursos').innerHTML = '<div class="fin-chart-empty">Sem dados</div>';
+        if (stats.transacoes?.length) renderTransacoes(stats.transacoes);
+        else document.getElementById('tblTransacoes').querySelector('tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text-muted)">Nenhuma transação</td></tr>';
+      }
+    } catch(e) {
+      document.getElementById('finContent').innerHTML += '<div style="text-align:center;padding:20px;color:var(--text-muted)">Erro ao carregar dados do servidor.</div>';
+    }
+  }
+
+  function updateKPIs(stats) {
+    document.getElementById('kpiAlunos').textContent = stats.alunos_ativos || 0;
+    document.getElementById('kpiCursos').textContent = stats.cursos_ativos || 0;
+    const receita = stats.receita_total || 0;
+    document.getElementById('kpiReceita').textContent = 'R$ ' + (receita / 100).toLocaleString('pt-BR', {minimumFractionDigits:2});
+    document.getElementById('kpiConversao').textContent = (stats.taxa_conversao || 0).toFixed(1) + '%';
+    if (stats.alunos_delta != null) {
+      const d = stats.alunos_delta, cls = d >= 0 ? 'fin-delta-up' : 'fin-delta-down';
+      document.getElementById('kpiAlunosDelta').innerHTML = '<span class="'+cls+'">'+(d>=0?'+':'')+d+'% este mês</span>';
+    }
+    if (stats.receita_delta != null) {
+      const d = stats.receita_delta, cls = d >= 0 ? 'fin-delta-up' : 'fin-delta-down';
+      document.getElementById('kpiReceitaDelta').innerHTML = '<span class="'+cls+'">'+(d>=0?'+':'')+d+'% vs mês anterior</span>';
+    }
+  }
+
+  function renderBarChart(containerId, data) {
+    const maxVal = Math.max(...data.map(d => d.valor || d.total || d.count || 0), 1);
+    const maxBarPx = 140;
+    let html = '<div class="fin-bars">';
+    for (const d of data) {
+      const val = d.valor || d.total || d.count || 0;
+      const height = Math.max((val / maxVal) * maxBarPx, 4);
+      const label = d.mes || d.curso || d.label || '—';
+      const displayVal = d.valor || d.total ? 'R$ ' + (val/100).toLocaleString('pt-BR',{minimumFractionDigits:0}) : val;
+      html += '<div class="fin-bar-col">' +
+        '<div class="fin-bar-val">'+displayVal+'</div>' +
+        '<div class="fin-bar" style="height:'+height+'px"></div>' +
+        '<div class="fin-bar-label">'+label.substring(0,12)+'</div>' +
+      '</div>';
+    }
+    html += '</div>';
+    document.getElementById(containerId).innerHTML = html;
+  }
+
+  function renderTransacoes(transacoes) {
+    const tbody = document.getElementById('tblTransacoes').querySelector('tbody');
+    tbody.innerHTML = transacoes.slice(0, 20).map(t => {
+      const sc = t.status === 'approved' ? 'fin-status-ok' : t.status === 'pending' ? 'fin-status-pend' : 'fin-status-err';
+      const sl = t.status === 'approved' ? 'Aprovado' : t.status === 'pending' ? 'Pendente' : t.status || '—';
+      const v = t.amount_cents ? 'R$ '+(t.amount_cents/100).toLocaleString('pt-BR',{minimumFractionDigits:2}) : '—';
+      const dt = t.created_at ? new Date(t.created_at).toLocaleDateString('pt-BR') : '—';
+      return '<tr><td>'+(t.user_name||t.user_email||'—')+'</td><td>'+(t.course_title||'—')+'</td><td>'+v+'</td><td><span class="'+sc+'">'+sl+'</span></td><td>'+dt+'</td></tr>';
+    }).join('');
+  }
+
+  function escAttr(s) { if(!s) return ''; return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function showToast(msg, isErr) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'toast ' + (isErr?'error ':'') + 'show';
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+  function logout() { localStorage.clear(); window.location.href = '/login.html'; }
   async function ssoRedirect(target) {
     const token = localStorage.getItem('lumethos_token');
-    if (!token) { goLogin(); return; }
+    if (!token) return;
     try {
       const r = await fetch('/api/auth/sso/token', {
         method: 'POST',
@@ -647,144 +873,9 @@
       if (!r.ok) { alert('Erro ao acessar ' + target); return; }
       const data = await r.json();
       window.open(data.redirect_url, '_blank');
-    } catch(e) { alert('Erro de conexao ao acessar ' + target); }
+    } catch(e) { alert('Erro de conexão ao acessar ' + target); }
   }
-
-  const courseIcons = { 'capelania-crista': '⛪', 'teologia': '📖', 'ministerio-pastoral': '🕊️', 'infantil': '🧒', 'jovens': '🔥', 'diaconia': '🤲', 'musica-louvor': '🎵', 'curso-teste-tutor': '📝' };
-  function getIcon(slug) { return courseIcons[slug] || '◆'; }
-  const courseImages = {
-    'capelania-crista': 'capelania.webp',
-    'teologia': 'teologia.webp',
-    'ministerio-pastoral': 'pastoral.webp',
-    'diaconia': 'pastoral.webp',
-    'musica-louvor': 'teologia.webp',
-    'infantil': 'infantil.webp',
-    'jovens': 'jovens.webp',
-    'curso-teste-tutor': 'capelania.webp'
-  };
-  function getCourseImage(slug) { return courseImages[slug] ? '/img/cursos/' + courseImages[slug] : null; }
-
-  async function loadLibrary() {
-    const authData = await checkAuth();
-    if (!authData || !authData.user) return;
-    const user = authData.user;
-    const nameFallback = (user.email || '').split('@')[0] || 'Aluno';
-    let profile = null;
-    try { const r = await fetch(API + '/profile', { headers: headers() }); if (r.ok) profile = await r.json(); } catch(e) {}
-    const displayName = profile?.name || nameFallback;
-    
-    // Populate sidebar
-    const role = user.role || 'aluno';
-    document.getElementById('sbName').textContent = displayName;
-    document.getElementById('sbAvatar').textContent = displayName.charAt(0).toUpperCase();
-    document.getElementById('sbRole').textContent = role === 'admin' ? 'ADMIN' : role === 'tutor' ? 'TUTOR' : 'ALUNO';
-    if (role === 'admin' || role === 'superadmin') {
-      document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
-    }
-    if (profile?.profile_photo) {
-      const sbAv = document.getElementById('sbAvatar');
-      sbAv.style.backgroundImage = 'url(' + profile.profile_photo + ')';
-      sbAv.style.backgroundSize = 'cover';
-      sbAv.style.backgroundPosition = 'center';
-      sbAv.textContent = '';
-    }
-document.getElementById('userName').textContent = '// ' + displayName.toLowerCase();
-    document.getElementById('userAvatar').textContent = displayName.charAt(0).toUpperCase();
-
-    let enrollments = [];
-    try {
-      const [coursesRes, progressRes] = await Promise.all([
-        fetch(API + '/courses', { headers: headers() }),
-        fetch(API + '/courses/progress', { headers: headers() })
-      ]);
-      const courses = coursesRes.ok ? await coursesRes.json() : [];
-      const progress = progressRes.ok ? await progressRes.json() : [];
-
-      const progressMap = {};
-      for (const p of progress) {
-        if (!progressMap[p.course_id]) progressMap[p.course_id] = 0;
-        if (p.completed) progressMap[p.course_id]++;
-      }
-
-      for (const c of courses) {
-        const completedCount = progressMap[c.id] || 0;
-        const totalLessons = c.total_lessons || (c.modules ? c.modules.length * 4 : 0);
-        const pct = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
-        enrollments.push({
-          id: c.id, slug: c.slug, title: c.title,
-          image_url: getCourseImage(c.slug), color: c.color || '#151f38',
-          progress_pct: pct,
-          modules_completed: completedCount,
-          total_modules: totalLessons,
-          description: c.description || c.subtitle || ''
-        });
-      }
-    } catch(e) { console.error('Erro:', e); }
-
-    if (enrollments.length === 0) {
-      document.getElementById('mainContent').innerHTML = `<div class="empty-state anim-in anim-d1">
-        <div class="empty-glow">◆</div>
-        <h3>Erro ao carregar cursos</h3><p>Não foi possível carregar a biblioteca. Tente novamente.</p>
-        <a href="/aluno/dashboard.html" class="hero-btn-primary">Voltar ao Dashboard</a>
-      </div>`; return;
-    }
-
-    const inProgress = enrollments.filter(c => c.progress_pct > 0 && c.progress_pct < 100);
-    const notStarted = enrollments.filter(c => c.progress_pct === 0);
-    const completed = enrollments.filter(c => c.progress_pct >= 100);
-    const totalModules = enrollments.reduce((s, c) => s + (c.modules_completed || 0), 0);
-    const featured = inProgress[0] || notStarted[0] || completed[0];
-
-    // Update sidebar stats
-    document.getElementById('sbCourses').textContent = enrollments.length;
-    document.getElementById('sbCompleted').textContent = totalModules;
-    document.getElementById('sbCerts').textContent = completed.length;
-
-    const main = document.getElementById('mainContent');
-
-    let html = '';
-
-    /* Hero - featured course */
-    html += `<div class="hero-featured anim-in anim-d1">
-      <div class="hero-overlay"></div>
-      <div class="hero-content">
-        <div class="hero-badge">${featured.progress_pct > 0 ? 'Continue Assistindo' : 'Destaque'}</div>
-        <h1>${featured.title}</h1>
-        <div class="hero-desc">${featured.description || 'Continue sua jornada de formação ministerial.'}</div>
-        <div class="hero-buttons">
-          <a href="/aluno/curso.html?slug=${featured.slug}" class="hero-btn-primary">▶ ${featured.progress_pct > 0 ? 'Continuar' : 'Começar'}</a>
-          <a href="#catalog" class="hero-btn-secondary">ℹ Ver catálogo</a>
-        </div>
-      </div>
-    </div>`;
-
-    function cardHTML(c, status) {
-      const label = status === 'in-progress' ? `${c.progress_pct}%` : status === 'completed' ? '✓ 100%' : 'DISPONÍVEL';
-      return `<a href="/aluno/curso.html?slug=${c.slug}" class="course-card">
-        <div class="card-thumb">
-          <img src="${getCourseImage(c.slug)}" alt="${c.title}" class="card-thumb-img" loading="lazy" onerror="this.style.display='none'">
-          <span class="card-badge ${status}">${label}</span>
-          <div class="card-play-btn"><div class="card-play-circle">${status === 'completed' ? '↻' : '▶'}</div></div>
-        </div>
-        <div class="card-info">
-          <h4>${c.title}</h4>
-        </div>
-      </a>`;
-    }
-
-    if (inProgress.length > 0) {
-      html += `<div class="category-row anim-in anim-d2"><div class="row-header"><div class="row-title"><span class="row-accent gold"></span>Continue Assistindo</div><div class="row-count">${inProgress.length}</div></div><div class="row-scroll">${inProgress.map(c => cardHTML(c, 'in-progress')).join('')}</div></div>`;
-    }
-
-    /* Full catalog — ALL courses Netflix grid */
-    html += `<div id="catalog" class="category-row anim-in anim-d3"><div class="row-header"><div class="row-title"><span class="row-accent"></span>Catálogo Completo</div><div class="row-count">${enrollments.length}</div></div><div class="course-grid-netflix">${enrollments.map(c => {
-      const status = c.progress_pct >= 100 ? 'completed' : c.progress_pct > 0 ? 'in-progress' : 'new';
-      return cardHTML(c, status);
-    }).join('')}</div></div>`;
-    html += `<div id="rows"></div>`;
-    main.innerHTML = html;
-  }
-  loadLibrary();
+  init();
 </script>
 </body>
 </html>

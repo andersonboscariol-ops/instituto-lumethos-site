@@ -637,6 +637,13 @@
         <span class="badge">EM BREVE</span>
       </a>
     </div>
+
+    <div class="sidebar-section admin-only" style="display:none;">
+      <div class="section-label">Admin</div>
+      <a href="/aluno/financeiro.html" class="sidebar-link">
+        <span class="icon">💰</span><span class="label">Financeiro</span>
+      </a>
+    </div>
 </div>
     <div class="sidebar-section">
       <div class="section-label">Conta</div>
@@ -682,6 +689,9 @@
     document.getElementById('sbAvatar').textContent = displayName.charAt(0).toUpperCase();
     const role = (userData.role || userData.user_metadata?.role || 'aluno');
     document.getElementById('sbRole').textContent = role === 'admin' ? 'ADMIN' : role === 'tutor' ? 'TUTOR' : 'ALUNO';
+    if (role === 'admin' || role === 'superadmin') {
+      document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
+    }
 
     // Load profile for photo
     try {
