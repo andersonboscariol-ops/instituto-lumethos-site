@@ -1141,9 +1141,10 @@
 
   function enrolledCard(c, badgeType) {
     const badgeLabel = badgeType === 'new' ? 'NOVO' : badgeType === 'done' ? '100%' : `${c.progress_pct}%`;
+    const img = courseImages[c.slug] ? '/img/cursos/' + courseImages[c.slug] : null;
     return `<a href="/aluno/curso.html?slug=${c.slug}" class="course-card">
       <div class="card-thumb">
-        ${c.image_url ? `<img src="${c.image_url}" alt="${c.title}" class="card-thumb-img" loading="lazy" onerror="this.style.display='none'">` : ''}
+        ${img ? `<img src="${img}" alt="${c.title}" class="card-thumb-img" loading="lazy" onerror="this.style.display='none'">` : ''}
         <span class="card-badge ${badgeType}">${badgeLabel}</span>
         <div class="card-play-btn"><div class="card-play-circle">${badgeType === 'done' ? '↻' : '▶'}</div></div>
       </div>
