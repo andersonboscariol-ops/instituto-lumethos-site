@@ -645,18 +645,17 @@
     } catch(e) { alert('Erro de conexao ao acessar ' + target); }
   }
 
-  const courseIcons = { capelania: '⛪', teologia: '📖', pastoral: '🕊️', infantil: '🧒', jovens: '🔥', diaconal: '🤲', hinologia: '🎵', patristica: '🏛️', 'historia-igreja': '📜' };
+  const courseIcons = { 'capelania-crista': '⛪', 'teologia': '📖', 'ministerio-pastoral': '🕊️', 'infantil': '🧒', 'jovens': '🔥', 'diaconia': '🤲', 'musica-louvor': '🎵', 'curso-teste-tutor': '📝' };
   function getIcon(slug) { return courseIcons[slug] || '◆'; }
   const courseImages = {
     'capelania-crista': 'capelania.webp',
     'teologia': 'teologia.webp',
     'ministerio-pastoral': 'pastoral.webp',
-    'diaconal': 'diaconal.webp',
-    'hinologia': 'hinologia.webp',
+    'diaconia': 'pastoral.webp',
+    'musica-louvor': 'teologia.webp',
     'infantil': 'infantil.webp',
     'jovens': 'jovens.webp',
-    'patristica': 'patristica.webp',
-    'historia-igreja': 'historia-igreja.webp'
+    'curso-teste-tutor': 'capelania.webp'
   };
   function getCourseImage(slug) { return courseImages[slug] ? '/img/cursos/' + courseImages[slug] : null; }
 
@@ -670,6 +669,7 @@
     const displayName = profile?.name || nameFallback;
     
     // Populate sidebar
+    const role = user.role || 'aluno';
     document.getElementById('sbName').textContent = displayName;
     document.getElementById('sbAvatar').textContent = displayName.charAt(0).toUpperCase();
     document.getElementById('sbRole').textContent = role === 'admin' ? 'ADMIN' : role === 'tutor' ? 'TUTOR' : 'ALUNO';
