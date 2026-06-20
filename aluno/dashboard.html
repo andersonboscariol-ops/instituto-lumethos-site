@@ -999,6 +999,10 @@
           });
         }
       }
+      // Admin e Tutor têm acesso total — todos os cursos liberados
+      if (role === 'admin' || role === 'superadmin' || role === 'tutor') {
+        for (const c of allCourses) { enrolledIds.add(c.id); }
+      }
     } catch(e) { console.error('Erro ao carregar cursos:', e); }
 
     // Update sidebar stats
