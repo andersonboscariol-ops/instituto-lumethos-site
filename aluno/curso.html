@@ -397,22 +397,22 @@
       document.getElementById('les-'+lesson.id)?.classList.add('completed');
     }
 
-    const typeIcons = { video:'▶', text:'☰', quiz:'?", pdf:'⬡' };
+    const typeIcons = { video:'▶', text:'☰', quiz:'✎', pdf:'⬡' };
     const isDone = completedLessons.has(lesson.id);
-    const isVideo = lesson.content_type === 'video';
-    const isQuiz = lesson.content_type === 'quiz';
+    const isVideo = lessonDetail.content_type === 'video';
+    const isQuiz = lessonDetail.content_type === 'quiz';
 
     let videoHTML = '';
-    if(lesson.video_url){
-      const embed = getEmbedUrl(lesson.video_url);
+    if(lessonDetail.video_url){
+      const embed = getEmbedUrl(lessonDetail.video_url);
       videoHTML = `<div class="video-wrapper"><iframe src="${embed}" allowfullscreen></iframe></div>`;
     } else if(isVideo){
       videoHTML = `<div class="video-wrapper"><div class="no-video"><span>▶</span><p>Vídeo em breve</p></div></div>`;
     }
 
     let bodyHTML = '';
-    if(lesson.content){
-      bodyHTML = `<div class="lesson-body">${formatContent(lesson.content)}</div>`;
+    if(lessonDetail.content){
+      bodyHTML = `<div class="lesson-body">${formatContent(lessonDetail.content)}</div>`;
     }
 
     const prev = lessonDetail.prev || null;
@@ -423,7 +423,7 @@
         <h1>${lesson.title}</h1>
         <div class="lesson-meta">
           ${isVideo ? '<span class="meta-tag video">▶ Vídeo</span>' : isQuiz ? '<span class="meta-tag video">?" Quiz</span>' : '<span>☰ Leitura</span>'}
-          ${lesson.duration_minutes ? `<span>⏱ ${lesson.duration_minutes} min</span>` : ''}
+          ${lessonDetail.duration_min ? `<span>⏱ ${lessonDetail.duration_min} min</span>` : ''}
           ${lesson.is_free ? '<span class="meta-tag free">✦ Grátis</span>' : ''}
         </div>
         ${videoHTML}
