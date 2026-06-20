@@ -211,7 +211,7 @@
   box-shadow: 0 0 20px rgba(199, 154, 46, 0.4) !important;
 }
 
-/* SWIPER - bullets/paginação */.swiper-pagination-bullet-active {  background: #C79A2E !important;}:root {  --swiper-theme-color: #C79A2E !important;}/* MENU - links ativos/hover */.menu__link:hover, .header--menu .active .menu__link {  color: #C79A2E !important;}.menu__item.active {  color: #C79A2E !important;}.sub-menu li.active a {  color: #C79A2E !important;}.sub-menu li:hover a {  color: #C79A2E !important;}/* TÍTULOS DE SEÇÃO */.headline, .section-headline h2 {  color: #C79A2E !important;}.sub-title {  color: #C79A2E !important;  border-bottom: 1px solid rgba(199, 154, 46, 0.3) !important;  padding-bottom: 8px !important;  display: inline-block !important;}/* LINKS */.more-link, .link-arrow {  color: #C79A2E !important;}/* FORMULÁRIO - focus */.contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus {  border-color: #C79A2E !important;}/* CATEGORY LABEL */.category-label > a {  color: #C79A2E !important;}/* TIMELINE */.timeline__item .timeline-tile {  border-color: #C79A2E !important;}.timeline-circle {  background: #C79A2E !important;  border-color: #C79A2E !important;}/* HIGHLIGHT */.highlight-item__value {  color: #C79A2E !important;}/* TESTIMONIAL */.testimonial-quote__title {  color: #C79A2E !important;}/* LIST */.list > li a:hover {  color: #C79A2E !important;}/* THUMBS / SWIPER */.swiper-slide-thumb-active .thumbs-image {  border-color: #C79A2E !important;}/* HEADER CONTACT */.header-contact__link {  color: #C79A2E !important;}/* INFO LIST */.info-list__text {  color: #E6C47A !important;}/* SVG fills em inline */svg.icon path:not([fill="none"]) {  fill: currentColor !important;  /* herda cor do elemento pai */}.header .btn--outline-white:hover {  background: #C79A2E !important;  color: #0D1B2A !important;}/* === SEÇÃO CERTIFICADO === *//* === SEÇÃO CREDENCIAIS === */.section-credenciais {  background: #0D1B2A;  padding: 80px 0;}.credenciais-grid {  display: grid;  grid-template-columns: 1fr 1fr;  gap: 40px;  max-width: 900px;  margin: 0 auto;}@media (max-width: 768px) {  .credenciais-grid {    grid-template-columns: 1fr;  }}.credenciais-item {  text-align: center;}.credenciais-moldura {  border: 2px solid #C79A2E;  border-radius: 8px;  padding: 12px;  box-shadow: 0 0 25px rgba(199, 154, 46, 0.2), inset 0 0 20px rgba(199, 154, 46, 0.03);  background: rgba(199, 154, 46, 0.03);  transition: all 0.3s ease;}.credenciais-moldura:hover {  box-shadow: 0 0 40px rgba(199, 154, 46, 0.35);  border-color: #E6C47A;}.credenciais-img {  width: 100%;  height: auto;  display: block;  border-radius: 4px;}.credenciais-label {  color: #C79A2E;  font-family: "Libre Baskerville",serif;  font-size: 18px;  margin-top: 16px;  letter-spacing: 0.5px;}/* ============================================ *//* ✅ OVERRIDE FINAL - TODOS OS BOTÕES LUMETHOS *//* ============================================ *//**
+/* /* SWIPER - bullets/paginação */.swiper-pagination-bullet-active {  background: #C79A2E !important;}:root {  --swiper-theme-color: #C79A2E !important;}/* MENU - links ativos/hover */.menu__link:hover, .header--menu .active .menu__link {  color: #C79A2E !important;}.menu__item.active {  color: #C79A2E !important;}.sub-menu li.active a {  color: #C79A2E !important;}.sub-menu li:hover a {  color: #C79A2E !important;}/* TÍTULOS DE SEÇÃO */.headline, .section-headline h2 {  color: #C79A2E !important;}.sub-title {  color: #C79A2E !important;  border-bottom: 1px solid rgba(199, 154, 46, 0.3) !important;  padding-bottom: 8px !important;  display: inline-block !important;}/* LINKS */.more-link, .link-arrow {  color: #C79A2E !important;}/* FORMULÁRIO - focus */.contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus {  border-color: #C79A2E !important;}/* CATEGORY LABEL */.category-label > a {  color: #C79A2E !important;}/* TIMELINE */.timeline__item .timeline-tile {  border-color: #C79A2E !important;}.timeline-circle {  background: #C79A2E !important;  border-color: #C79A2E !important;}/* HIGHLIGHT */.highlight-item__value {  color: #C79A2E !important;}/* TESTIMONIAL */.testimonial-quote__title {  color: #C79A2E !important;}/* LIST */.list > li a:hover {  color: #C79A2E !important;}/* THUMBS / SWIPER */.swiper-slide-thumb-active .thumbs-image {  border-color: #C79A2E !important;}/* HEADER CONTACT */.header-contact__link {  color: #C79A2E !important;}/* INFO LIST */.info-list__text {  color: #E6C47A !important;}/* SVG fills em inline */svg.icon path:not([fill="none"]) {  fill: currentColor !important;  /* herda cor do elemento pai */}  color: #C79A2E !important;  border-color: #C79A2E !important;}.header .btn--outline-white:hover {  background: #C79A2E !important;  color: #0D1B2A !important;}/* === SEÇÃO CERTIFICADO === *//* === SEÇÃO CREDENCIAIS === */.section-credenciais {  background: #0D1B2A;  padding: 80px 0;}.credenciais-grid {  display: grid;  grid-template-columns: 1fr 1fr;  gap: 40px;  max-width: 900px;  margin: 0 auto;}@media (max-width: 768px) {  .credenciais-grid {    grid-template-columns: 1fr;  }}.credenciais-item {  text-align: center;}.credenciais-moldura {  border: 2px solid #C79A2E;  border-radius: 8px;  padding: 12px;  box-shadow: 0 0 25px rgba(199, 154, 46, 0.2), inset 0 0 20px rgba(199, 154, 46, 0.03);  background: rgba(199, 154, 46, 0.03);  transition: all 0.3s ease;}.credenciais-moldura:hover {  box-shadow: 0 0 40px rgba(199, 154, 46, 0.35);  border-color: #E6C47A;}.credenciais-img {  width: 100%;  height: auto;  display: block;  border-radius: 4px;}.credenciais-label {  color: #C79A2E;  font-family: "Libre Baskerville",serif;  font-size: 18px;  margin-top: 16px;  letter-spacing: 0.5px;}/* ============================================ *//* ✅ OVERRIDE FINAL - TODOS OS BOTÕES LUMETHOS *//* ============================================ *//**
  * BOTÃO OUTLINE-WHITE (header - Fale Conosco) */.btn-- */
 .btn--outline-white {
   color: #C79A2E !important;
@@ -1276,15 +1276,14 @@ a.card-cream {
   color: #1a2a3a;
 }
 
-/* ===== DROPDOWN NAVBAR — LUMETHOS NAVY + GOLD ===== */
+/* ===== DROPDOWN NAVBAR ===== */
 .nav-item.dropdown {
   position: relative;
 }
 .dropdown-arrow {
   font-size: 10px;
   margin-left: 4px;
-  transition: transform 0.25s ease;
-  color: #C79A2E;
+  transition: transform 0.2s;
 }
 .nav-item.dropdown:hover .dropdown-arrow {
   transform: rotate(180deg);
@@ -1295,52 +1294,42 @@ a.card-cream {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(180deg, rgba(9,20,35,0.98) 0%, rgba(13,27,42,0.96) 100%);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(199,154,46,0.18);
-  border-radius: 14px;
-  padding: 6px;
-  min-width: 230px;
-  box-shadow: 0 12px 50px rgba(0,0,0,0.40), 0 0 30px rgba(199,154,46,0.10), inset 0 1px 0 rgba(199,154,46,0.06);
+  background: #fff;
+  border: 1px solid rgba(13,27,42,0.08);
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 220px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
   z-index: 1000;
   list-style: none;
-  margin: 10px 0 0;
+  margin: 8px 0 0;
 }
 .nav-item.dropdown:hover .dropdown-menu {
   display: block;
-  animation: dropdownIn 0.2s ease;
-}
-@keyframes dropdownIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 .dropdown-menu li {
   margin: 0;
 }
 .dropdown-link {
   display: block;
-  padding: 10px 16px;
-  color: rgba(226,232,240,0.82);
+  padding: 10px 14px;
+  color: #0D1B2A;
   font-size: 13.5px;
   font-weight: 500;
   text-decoration: none;
   border-radius: 8px;
-  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  transition: all 0.2s;
   white-space: nowrap;
-  position: relative;
 }
 .dropdown-link:hover {
-  background: rgba(199,154,46,0.12);
-  color: #E6C47A;
-  text-shadow: 0 0 12px rgba(199,154,46,0.3);
-  padding-left: 22px;
+  background: rgba(199,154,46,0.08);
+  color: #C79A2E;
 }
 .dropdown-link:first-child {
   font-weight: 700;
   color: #C79A2E;
-  border-bottom: 1px solid rgba(199,154,46,0.10);
-  margin-bottom: 2px;
+  border-bottom: 1px solid rgba(13,27,42,0.06);
+  margin-bottom: 4px;
   padding-bottom: 12px;
 }
 
@@ -1377,31 +1366,12 @@ a.card-cream {
   line-height: 1.6;
   position: relative;
 }
-.curso-card-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.curso-card-link:hover {
-  text-decoration: none;
-  transform: translateY(-4px);
-}
-.curso-card-link .curso-card {
-  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-  border: 1px solid rgba(13,27,42,0.06);
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
-}
-.curso-card-link:hover .curso-card {
-  box-shadow: 0 12px 40px rgba(0,0,0,0.1);
-  border-color: rgba(199,154,46,0.2);
-}
 .cursos-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 28px;
 }
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .cursos-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
 }
 @media (max-width: 640px) {
@@ -1413,8 +1383,16 @@ a.card-cream {
   background: #fff;
   border-radius: 16px;
   overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(13,27,42,0.06);
   display: flex;
   flex-direction: column;
+}
+.curso-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+  border-color: rgba(199,154,46,0.2);
 }
 .curso-card-img {
   width: 100%;

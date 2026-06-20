@@ -156,26 +156,26 @@
   </main>
 </div>
 
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "https://xplqghmhslfpyyqhwvkp.supabase.co";
-  const SUPABASE_ANON_KEY = "***";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const API = '/api';
+  function getToken(){ return localStorage.getItem('lumethos_token'); }
+  function getUser(){ return JSON.parse(localStorage.getItem('lumethos_user')||'null'); }
+  function h(){ return {'Content-Type':'application/json','Authorization':'Bearer '+getToken()}; }
 
   let adminUser = null;
   let currentSection = 'dashboard';
 
   async function init() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
+    const res = await fetch(API+'/auth/me', { headers: h() });
+    if (!res.ok) {
       window.location.href = '/login.html?redirect=/admin/index.html';
       return;
     }
-    adminUser = session.user;
+    const data = await res.json();
+    adminUser = data.user || data;
 
-    // Check if admin
-    const { data: profile } = await supabase.from('profiles').select('role,name').eq('id', adminUser.id).maybeSingle();
-    const isAdmin = (profile && profile.role === 'admin') || adminUser.email === 'anderson.boscariol@gmail.com';
+    // Check if admin (role comes from auth/me response)
+    const isAdmin = data.role === 'admin' || adminUser.email === 'anderson.boscariol@gmail.com';
     if (!isAdmin) {
       document.getElementById('mainContent').innerHTML = `
         <div class="page-title">Acesso Negado</div>
@@ -184,12 +184,12 @@
       return;
     }
 
-    document.getElementById('adminName').textContent = profile.name || adminUser.email;
+    document.getElementById('adminName').textContent = data.name || adminUser.email;
     showSection('dashboard');
   }
 
-  async function logout() {
-    await supabase.auth.signOut();
+  function logout() {
+    localStorage.clear();
     window.location.href = '/login.html';
   }
 
@@ -214,10 +214,8 @@
   }
 
   async function renderDashboard(mc) {
-    const { count: courseCount } = await supabase.from('courses').select('*', { count:'exact', head:true });
-    const { count: studentCount } = await supabase.from('profiles').select('*', { count:'exact', head:true });
-    const { count: lessonCount } = await supabase.from('lessons').select('*', { count:'exact', head:true });
-    const { count: mircCount } = await supabase.from('profiles').select('*', { count:'exact', head:true }).not('mirc_code', 'is', null);
+    const dashRes = await fetch(API+'/admin/dashboard', { headers: h() });
+    const dash = await dashRes.json();
 
     mc.innerHTML = `
       <div class="page-title">Dashboard Admin</div>
@@ -226,22 +224,22 @@
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon">📚</div>
-          <div class="stat-num gold">${courseCount || 0}</div>
+          <div class="stat-num gold">${dash.courseCount || 0}</div>
           <div class="stat-label">Cursos ativos</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">👥</div>
-          <div class="stat-num">${studentCount || 0}</div>
+          <div class="stat-num">${dash.studentCount || 0}</div>
           <div class="stat-label">Alunos cadastrados</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">📖</div>
-          <div class="stat-num">${lessonCount || 0}</div>
+          <div class="stat-num">${dash.lessonCount || 0}</div>
           <div class="stat-label">Aulas</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">🔍</div>
-          <div class="stat-num">${mircCount || 0}</div>
+          <div class="stat-num">${dash.mircCount || 0}</div>
           <div class="stat-label">Registros MIRC</div>
         </div>
       </div>
@@ -261,7 +259,8 @@
   }
 
   async function renderCourses(mc) {
-    const { data: courses } = await supabase.from('courses').select('*').order('title');
+    const coursesRes = await fetch(API+'/admin/courses', { headers: h() });
+    const courses = await coursesRes.json();
 
     const rows = (courses || []).map(c => `
       <tr>
@@ -277,7 +276,7 @@
 
     mc.innerHTML = `
       <div class="page-title">📚 Cursos</div>
-      <div class="page-subtitle">${courses?.length || 0} cursos cadastrados no Supabase</div>
+      <div class="page-subtitle">${courses?.length || 0} cursos cadastrados</div>
 
       <div class="panel">
         <div class="panel-header">
@@ -294,9 +293,10 @@
   }
 
   async function renderStudents(mc) {
-    const { data: students } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
+    const usersRes = await fetch(API+'/admin/users', { headers: h() });
+    const users = await usersRes.json();
 
-    const rows = (students || []).map(s => `
+    const rows = (users || []).map(s => `
       <tr>
         <td><strong>${s.name || 'Sem nome'}</strong></td>
         <td>${s.email || '-'}</td>
@@ -307,7 +307,7 @@
 
     mc.innerHTML = `
       <div class="page-title">👥 Alunos</div>
-      <div class="page-subtitle">${students?.length || 0} perfis cadastrados</div>
+      <div class="page-subtitle">${users?.length || 0} perfis cadastrados</div>
 
       <div class="panel">
         <div class="panel-header">
@@ -323,7 +323,8 @@
   }
 
   async function renderMIRC(mc) {
-    const { data: profiles } = await supabase.from('profiles').select('name,email,mirc_code,mirc_status,mirc_issued_at').not('mirc_code', 'is', null).order('mirc_issued_at', { ascending: false });
+    const mircRes = await fetch(API+'/mirc/admin/listar', { headers: h() });
+    const profiles = await mircRes.json();
 
     const rows = (profiles || []).map(p => `
       <tr>
@@ -351,9 +352,350 @@
       </div>`;
   }
 
-  function editCourse(id) {
-    alert('Editor de curso: ' + id + '\n\nFuncionalidade de edição via Supabase em desenvolvimento.');
+  // === MODAL SYSTEM ===
+  let modalZ = 1000;
+  function openModal(title, bodyHtml, onSave, width = '720px') {
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:'+(++modalZ)+';background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;';
+    overlay.onclick = (e) => { if(e.target===overlay) overlay.remove(); };
+
+    const box = document.createElement('div');
+    box.style.cssText = 'background:var(--navy-card);border:1px solid var(--border);border-radius:12px;width:100%;max-width:'+width+';max-height:85vh;overflow-y:auto;padding:0;';
+
+    box.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--navy-card);z-index:1;border-radius:12px 12px 0 0;">
+        <h3 style="font-family:'Libre Baskerville',serif;font-size:18px;color:var(--gold);margin:0;">${title}</h3>
+        <button onclick="this.closest('.modal-overlay').remove()" style="background:none;border:none;color:var(--text-muted);font-size:22px;cursor:pointer;line-height:1;padding:0;">&times;</button>
+      </div>
+      <div style="padding:22px;">${bodyHtml}</div>
+      ${onSave ? `<div style="padding:16px 22px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;position:sticky;bottom:0;background:var(--navy-card);border-radius:0 0 12px 12px;">
+        <button onclick="this.closest('.modal-overlay').remove()" style="background:none;border:1px solid var(--border);color:var(--text-secondary);padding:8px 18px;border-radius:7px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;">Cancelar</button>
+        <button id="modalSaveBtn" style="background:var(--gold);border:none;color:var(--navy);padding:8px 24px;border-radius:7px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;">Salvar</button>
+      </div>` : ''}
+    `;
+
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    if(onSave) {
+      document.getElementById('modalSaveBtn').onclick = async () => {
+        const btn = document.getElementById('modalSaveBtn');
+        btn.textContent = 'Salvando...';
+        btn.disabled = true;
+        try { await onSave(overlay); overlay.remove(); } catch(e) { btn.textContent = 'Salvar'; btn.disabled = false; alert('Erro: '+e.message); }
+      };
+    }
+
+    document.addEventListener('keydown', function escClose(e) { if(e.key==='Escape') { overlay.remove(); this.removeEventListener('keydown', escClose); } });
   }
+
+  function formField(label, name, value='', type='text', placeholder='', opts={}) {
+    const id = 'f_'+name+'_'+Date.now()%10000;
+    if(type==='textarea') {
+      return `<div style="margin-bottom:14px;"><label for="${id}" style="display:block;font-size:11px;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;">${label}</label><textarea id="${id}" name="${name}" placeholder="${placeholder}" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:7px;padding:10px 12px;color:var(--white);font-family:'Inter',sans-serif;font-size:13px;min-height:80px;resize:vertical;">${value}</textarea></div>`;
+    }
+    if(type==='select') {
+      const options = (opts.options||[]).map(o => `<option value="${o.value}" ${o.value==value?'selected':''}>${o.label}</option>`).join('');
+      return `<div style="margin-bottom:14px;"><label for="${id}" style="display:block;font-size:11px;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;">${label}</label><select id="${id}" name="${name}" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:7px;padding:10px 12px;color:var(--white);font-family:'Inter',sans-serif;font-size:13px;">${options}</select></div>`;
+    }
+    if(type==='toggle') {
+      return `<div style="margin-bottom:14px;display:flex;align-items:center;gap:10px;"><label style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;">${label}</label><input type="checkbox" id="${id}" name="${name}" ${value?'checked':''} style="accent-color:var(--gold);"></div>`;
+    }
+    return `<div style="margin-bottom:14px;"><label for="${id}" style="display:block;font-size:11px;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;">${label}</label><input type="${type}" id="${id}" name="${name}" value="${value}" placeholder="${placeholder}" style="width:100%;background:var(--navy);border:1px solid var(--border);border-radius:7px;padding:10px 12px;color:var(--white);font-family:'Inter',sans-serif;font-size:13px;"></div>`;
+  }
+
+  function getFormData(container) {
+    const data = {};
+    container.querySelectorAll('[name]').forEach(el => {
+      if(el.type==='checkbox') data[el.name] = el.checked ? 1 : 0;
+      else data[el.name] = el.value;
+    });
+    return data;
+  }
+
+  // === COURSE EDITOR ===
+  async function editCourse(id) {
+    let course = { id:'', title:'', slug:'', subtitle:'', description:'', color:'#C79A2E', image:'', hours:0, price_cents:0, active:1 };
+    let modules = [];
+
+    if(id) {
+      const res = await fetch(API+'/admin/courses/'+id, { headers:h() });
+      if(res.ok) {
+        const data = await res.json();
+        course = data.course || data;
+        modules = data.modules || [];
+      }
+    }
+
+    function buildForm() {
+      return `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          ${formField('Título *','title',course.title,'text','Ex: Formação em Capelania Cristã')}
+          ${formField('Slug *','slug',course.slug,'text','ex: capelania-crista')}
+          ${formField('Subtítulo','subtitle',course.subtitle||'','text','Ex: Curso completo de 150h')}
+          ${formField('Cor','color',course.color||'#C79A2E','text')}
+          ${formField('Imagem URL','image',course.image||'','text','/img/cursos/curso.png')}
+          ${formField('Carga Horária','hours',String(course.hours||0),'number')}
+          ${formField('Preço (centavos)','price_cents',String(course.price_cents||0),'number','0 = Grátis')}
+          ${formField('Ativo','active',course.active?1:0,'toggle')}
+        </div>
+        ${formField('Descrição','description',course.description||'','textarea','Descrição completa do curso...')}
+
+        <h4 style="font-family:'Libre Baskerville',serif;font-size:15px;margin:24px 0 12px;color:var(--gold);">Módulos (${modules.length})</h4>
+        <div id="modulesList">${modules.map((m,i) => `
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--navy);border-radius:7px;margin-bottom:6px;font-size:13px;">
+            <span style="color:var(--text-muted);font-size:11px;width:20px;">${i+1}.</span>
+            <span style="flex:1;color:var(--white);">${m.title}</span>
+            <span style="color:var(--text-muted);font-size:11px;">${m.lessons?.length||0} aulas</span>
+            <button onclick="editModule('${m.id}','${course.id||'new'}',()=>editCourse('${course.id||''}'))" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:12px;">Editar</button>
+            <button onclick="deleteModule('${m.id}',()=>editCourse('${course.id||''}'))" style="background:none;border:none;color:#f87171;cursor:pointer;font-size:12px;">Remover</button>
+          </div>`).join('') || '<p style="color:var(--text-muted);font-size:12px;">Nenhum módulo. Salve o curso primeiro.</p>'}</div>
+        ${course.id ? `<button onclick="addModule('${course.id}',()=>editCourse('${course.id}'))" style="margin-top:10px;font-size:12px;background:none;border:1px dashed var(--border);color:var(--gold);padding:8px 16px;border-radius:7px;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">+ Adicionar Módulo</button>` : ''}
+      `;
+    }
+
+    openModal(
+      id ? 'Editar Curso' : 'Novo Curso',
+      buildForm(),
+      async (overlay) => {
+        const data = getFormData(overlay);
+        if(!data.title || !data.slug) throw new Error('Título e Slug são obrigatórios');
+        data.hours = parseInt(data.hours)||0;
+        data.price_cents = parseInt(data.price_cents)||0;
+        data.active = data.active ? 1 : 0;
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? API+'/admin/courses/'+id : API+'/admin/courses';
+        const res = await fetch(url, { method, headers:h(), body:JSON.stringify(data) });
+        if(!res.ok) { const err=await res.json(); throw new Error(err.error||'Erro ao salvar'); }
+        showSection('courses');
+      },
+      '800px'
+    );
+  }
+
+  // === MODULE EDITOR ===
+  async function editModule(moduleId, courseId, refreshFn) {
+    let mod = { id:'', title:'', order_num:1, course_id:courseId };
+    let lessons = [];
+
+    if(moduleId) {
+      const res = await fetch(API+'/admin/modules/'+moduleId, { headers:h() });
+      if(res.ok) { const data = await res.json(); mod = data.module||data; lessons = data.lessons||[]; }
+    }
+
+    function buildModuleForm() {
+      return `
+        ${formField('Título do Módulo *','title',mod.title,'text','Ex: Fundamentos da Capelania')}
+        ${formField('Ordem','order_num',String(mod.order_num||1),'number')}
+
+        <h4 style="font-family:'Libre Baskerville',serif;font-size:15px;margin:24px 0 12px;color:var(--gold);">Aulas (${lessons.length})</h4>
+        <div>${lessons.map((l,i) => `
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--navy);border-radius:7px;margin-bottom:6px;font-size:13px;">
+            <span style="color:var(--text-muted);font-size:11px;width:20px;">${i+1}.</span>
+            <span style="flex:1;color:var(--white);">${l.title}</span>
+            <span style="color:var(--text-muted);font-size:11px;">${l.content_type||'video'}</span>
+            <button onclick="editLesson('${l.id}','${mod.id}','${courseId}',()=>editModule('${mod.id}','${courseId}',${refreshFn?refreshFn.toString():'null'}))" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:12px;">Editar</button>
+            <button onclick="deleteLesson('${l.id}',()=>editModule('${mod.id}','${courseId}',${refreshFn?refreshFn.toString():'null'}))" style="background:none;border:none;color:#f87171;cursor:pointer;font-size:12px;">Remover</button>
+          </div>`).join('') || '<p style="color:var(--text-muted);font-size:12px;">Nenhuma aula.</p>'}</div>
+        ${mod.id ? `<button onclick="addLesson('${mod.id}','${courseId}',()=>editModule('${mod.id}','${courseId}',${refreshFn?refreshFn.toString():'null'}))" style="margin-top:10px;font-size:12px;background:none;border:1px dashed var(--border);color:var(--gold);padding:8px 16px;border-radius:7px;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">+ Adicionar Aula</button>
+          <button onclick="manageQuiz('${mod.id}','${courseId}')" style="margin-top:8px;font-size:12px;background:rgba(199,154,46,0.1);border:1px solid rgba(199,154,46,0.3);color:var(--gold);padding:8px 16px;border-radius:7px;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">📝 Gerenciar Quiz</button>` : ''}
+      `;
+    }
+
+    openModal(
+      moduleId ? 'Editar Módulo' : 'Novo Módulo',
+      buildModuleForm(),
+      async (overlay) => {
+        const data = getFormData(overlay);
+        if(!data.title) throw new Error('Título do módulo é obrigatório');
+        data.order_num = parseInt(data.order_num)||1;
+        const method = moduleId ? 'PUT' : 'POST';
+        const url = moduleId ? API+'/admin/modules/'+moduleId : API+'/admin/modules';
+        const body = { ...data, course_id:courseId };
+        const res = await fetch(url, { method, headers:h(), body:JSON.stringify(body) });
+        if(!res.ok) { const err=await res.json(); throw new Error(err.error||'Erro ao salvar módulo'); }
+        if(refreshFn) { refreshFn(); } else { showSection('courses'); }
+      }
+    );
+  }
+
+  function addModule(courseId, refreshFn) { editModule(null, courseId, refreshFn); }
+
+  async function deleteModule(moduleId, refreshFn) {
+    if(!confirm('Remover este módulo e todas as suas aulas?')) return;
+    const res = await fetch(API+'/admin/modules/'+moduleId, { method:'DELETE', headers:h() });
+    if(!res.ok) { alert('Erro ao remover módulo'); return; }
+    if(refreshFn) refreshFn(); else showSection('courses');
+  }
+
+  // === LESSON EDITOR ===
+  async function editLesson(lessonId, moduleId, courseId, refreshFn) {
+    let lesson = { id:'', title:'', content:'', video_url:'', content_type:'video', order_num:1, is_free:0, module_id:moduleId };
+
+    if(lessonId) {
+      const res = await fetch(API+'/admin/lessons/'+lessonId, { headers:h() });
+      if(res.ok) { const data = await res.json(); lesson = data.lesson || data; }
+    }
+
+    function buildLessonForm() {
+      return `
+        ${formField('Título da Aula *','title',lesson.title,'text','Ex: Introdução à Capelania')}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          ${formField('Tipo','content_type',lesson.content_type||'video','select','',{options:[{value:'video',label:'Vídeo'},{value:'text',label:'Texto'},{value:'quiz',label:'Quiz'}]})}
+          ${formField('Ordem','order_num',String(lesson.order_num||1),'number')}
+          ${formField('Grátis','is_free',lesson.is_free?1:0,'toggle')}
+        </div>
+        ${formField('URL do Vídeo','video_url',lesson.video_url||'','text','https://youtube.com/embed/...')}
+        ${formField('Conteúdo','content',lesson.content||'','textarea','Conteúdo da aula (HTML permitido)...')}
+      `;
+    }
+
+    openModal(
+      lessonId ? 'Editar Aula' : 'Nova Aula',
+      buildLessonForm(),
+      async (overlay) => {
+        const data = getFormData(overlay);
+        if(!data.title) throw new Error('Título da aula é obrigatório');
+        data.order_num = parseInt(data.order_num)||1;
+        data.is_free = data.is_free ? 1 : 0;
+        const method = lessonId ? 'PUT' : 'POST';
+        const url = lessonId ? API+'/admin/lessons/'+lessonId : API+'/admin/lessons';
+        const body = { ...data, module_id:moduleId };
+        const res = await fetch(url, { method, headers:h(), body:JSON.stringify(body) });
+        if(!res.ok) { const err=await res.json(); throw new Error(err.error||'Erro ao salvar aula'); }
+        if(refreshFn) { refreshFn(); } else { showSection('courses'); }
+      }
+    );
+  }
+
+  function addLesson(moduleId, courseId, refreshFn) { editLesson(null, moduleId, courseId, refreshFn); }
+
+  async function deleteLesson(lessonId, refreshFn) {
+    if(!confirm('Remover esta aula?')) return;
+    const res = await fetch(API+'/admin/lessons/'+lessonId, { method:'DELETE', headers:h() });
+    if(!res.ok) { alert('Erro ao remover aula'); return; }
+    if(refreshFn) refreshFn(); else showSection('courses');
+  }
+
+  // === QUIZ MANAGER ===
+  async function manageQuiz(moduleId, courseId) {
+    let quiz = null;
+    let questions = [];
+    const qRes = await fetch(API+'/admin/modules/'+moduleId+'/quiz', { headers:h() });
+    if(qRes.ok) { const data = await qRes.json(); quiz = data.quiz||data; questions = data.questions||[]; }
+
+    function buildQuizForm() {
+      return `
+        ${quiz ? `<p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">Quiz: <strong>${quiz.title||'Sem título'}</strong> — Nota mínima: ${quiz.passing_score||70}%</p>` : ''}
+        ${formField('Título do Quiz','quizTitle',quiz?.title||'','text','Quiz do Módulo')}
+        ${formField('Nota Mínima (%)','passingScore',String(quiz?.passing_score||70),'number')}
+        ${formField('Tentativas Máximas','maxAttempts',String(quiz?.max_attempts||3),'number')}
+
+        <h4 style="font-family:'Libre Baskerville',serif;font-size:15px;margin:24px 0 12px;color:var(--gold);">Questões (${questions.length})</h4>
+        <div>${questions.map((q,i) => `
+          <div style="padding:10px 12px;background:var(--navy);border-radius:7px;margin-bottom:8px;font-size:13px;">
+            <div style="color:var(--gold);font-size:11px;margin-bottom:4px;">Q${i+1}</div>
+            <div style="color:var(--white);margin-bottom:6px;">${q.question||q.text||'Sem texto'}</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              ${(q.options||[]).map((o,j) => `<span style="font-size:10px;padding:2px 8px;border-radius:10px;background:${j===q.correct_answer?\'rgba(199,154,46,0.15)\':\'rgba(255,255,255,0.04)\'};color:${j===q.correct_answer?\'var(--gold)\':\'var(--text-muted)\'};">${String.fromCharCode(65+j)}) ${o}</span>`).join('')}
+            </div>
+            <div style="margin-top:8px;">
+              <button onclick="editQuestion('${q.id}','${moduleId}',()=>manageQuiz('${moduleId}','${courseId}'))" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:11px;">Editar</button>
+              <button onclick="deleteQuestion('${q.id}',()=>manageQuiz('${moduleId}','${courseId}'))" style="background:none;border:none;color:#f87171;cursor:pointer;font-size:11px;margin-left:8px;">Remover</button>
+            </div>
+          </div>`).join('') || '<p style="color:var(--text-muted);font-size:12px;">Nenhuma questão.</p>'}</div>
+        <button onclick="addQuestion('${moduleId}','${courseId}')" style="margin-top:10px;font-size:12px;background:none;border:1px dashed var(--border);color:var(--gold);padding:8px 16px;border-radius:7px;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">+ Adicionar Questão</button>
+      `;
+    }
+
+    openModal(
+      'Gerenciar Quiz',
+      buildQuizForm(),
+      async (overlay) => {
+        const data = getFormData(overlay);
+        const quizData = {
+          title: data.quizTitle || 'Quiz',
+          passing_score: parseInt(data.passingScore)||70,
+          max_attempts: parseInt(data.maxAttempts)||3,
+          module_id: moduleId
+        };
+        const url = quiz ? API+'/admin/quizzes/'+quiz.id : API+'/admin/modules/'+moduleId+'/quiz';
+        const method = quiz ? 'PUT' : 'POST';
+        const res = await fetch(url, { method, headers:h(), body:JSON.stringify(quizData) });
+        if(!res.ok) { const err=await res.json(); throw new Error(err.error||'Erro ao salvar quiz'); }
+      }
+    );
+  }
+
+  async function addQuestion(moduleId, courseId) {
+    openModal(
+      'Nova Questão',
+      `
+        ${formField('Pergunta *','question','','text','Digite a pergunta...')}
+        ${['A','B','C','D'].map(l => formField('Opção '+l,'opt_'+l,'','text','Alternativa '+l)).join('')}
+        ${formField('Resposta Correta','correct_answer','0','select','',{options:[{value:'0',label:'A'},{value:'1',label:'B'},{value:'2',label:'C'},{value:'3',label:'D'}]})}
+      `,
+      async (overlay) => {
+        const data = getFormData(overlay);
+        if(!data.question) throw new Error('Pergunta é obrigatória');
+        const options = [data.opt_A, data.opt_B, data.opt_C, data.opt_D].filter(o=>o);
+        if(options.length < 2) throw new Error('Mínimo 2 opções');
+        const body = {
+          module_id: moduleId,
+          question: data.question,
+          options: options,
+          correct_answer: parseInt(data.correct_answer)||0
+        };
+        const res = await fetch(API+'/admin/questions', { method:'POST', headers:h(), body:JSON.stringify(body) });
+        if(!res.ok) { const err=await res.json(); throw new Error(err.error||'Erro ao salvar questão'); }
+        manageQuiz(moduleId, courseId);
+      }
+    );
+  }
+
+  async function editQuestion(questionId, moduleId, refreshFn) {
+    let q = { id:questionId, question:'', options:[], correct_answer:0 };
+    const res = await fetch(API+'/admin/questions/'+questionId, { headers:h() });
+    if(res.ok) { const data = await res.json(); q = data.question||data; }
+    const opts = q.options||[];
+
+    openModal(
+      'Editar Questão',
+      `
+        ${formField('Pergunta *','question',q.question||'','text')}
+        ${['A','B','C','D'].map((l,i) => formField('Opção '+l,'opt_'+l,opts[i]||'','text','Alternativa '+l)).join('')}
+        ${formField('Resposta Correta','correct_answer',String(q.correct_answer||0),'select','',{options:[{value:'0',label:'A'},{value:'1',label:'B'},{value:'2',label:'C'},{value:'3',label:'D'}]})}
+      `,
+      async (overlay) => {
+        const data = getFormData(overlay);
+        const options = [data.opt_A, data.opt_B, data.opt_C, data.opt_D].filter(o=>o);
+        const body = {
+          question: data.question,
+          options: options,
+          correct_answer: parseInt(data.correct_answer)||0
+        };
+        const r = await fetch(API+'/admin/questions/'+questionId, { method:'PUT', headers:h(), body:JSON.stringify(body) });
+        if(!r.ok) { const err=await r.json(); throw new Error(err.error||'Erro ao salvar'); }
+        if(refreshFn) refreshFn();
+      }
+    );
+  }
+
+  async function deleteQuestion(questionId, refreshFn) {
+    if(!confirm('Remover esta questão?')) return;
+    const res = await fetch(API+'/admin/questions/'+questionId, { method:'DELETE', headers:h() });
+    if(!res.ok) { alert('Erro ao remover'); return; }
+    if(refreshFn) refreshFn();
+  }
+
+  // Hook up "Novo Curso" button
+  document.addEventListener('click', function(e) {
+    if(e.target.closest('.panel-action') && e.target.closest('.panel-action').textContent.includes('Novo Curso')) {
+      e.preventDefault();
+      editCourse(null);
+    }
+  });
 
   init();
 </script>

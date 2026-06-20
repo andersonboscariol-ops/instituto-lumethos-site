@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meu Perfil · Instituto Lumethos</title>
+  <title>Meus Certificados · Instituto Lumethos</title>
   <link rel="icon" href="../img/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -474,6 +474,93 @@
       color: var(--text-muted); font-size: 11px;
       text-align: center; max-width: 300px;
     }
+
+    /* ── Certificate Cards ── */
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .cert-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    }
+    .cert-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 8px 40px rgba(199,154,46,0.12);
+      transform: translateY(-4px);
+    }
+    .cert-card-img {
+      height: 160px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-secondary);
+    }
+    .cert-card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .cert-card:hover .cert-card-img img { transform: scale(1.08); }
+    .cert-badge {
+      position: absolute;
+      top: 12px; right: 12px;
+      font-size: 28px;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+      z-index: 2;
+    }
+    .cert-card-body {
+      padding: 20px;
+    }
+    .cert-card-body h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .cert-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .cert-code {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--gold);
+      font-size: 11px;
+      background: rgba(199,154,46,0.08);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .cert-date, .cert-hours {
+      display: flex; align-items: center; gap: 4px;
+    }
+    .cert-status {
+      font-size: 12px; font-weight: 600;
+      padding: 4px 12px; border-radius: 50px;
+      display: inline-block; margin-bottom: 14px;
+    }
+    .cert-status.verified {
+      background: rgba(34,197,94,0.1); color: #22c55e;
+    }
+    .cert-actions {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    @media (max-width: 768px) {
+      .certs-grid { grid-template-columns: 1fr; }
+    }
+    
   </style>
 </head>
 <body>
@@ -529,7 +616,7 @@
       <a href="/aluno/biblioteca.html" class="sidebar-link">
         <span class="icon">▤</span><span class="label">Biblioteca</span>
       </a>
-      <a href="/aluno/certificados.html" class="sidebar-link">
+      <a href="/aluno/certificados.html" class="sidebar-link active">
         <span class="icon">✦</span><span class="label">Certificados</span>
       </a>
       <a href="#" onclick="ssoRedirect('scriba');return false;" class="sidebar-link">
@@ -542,7 +629,7 @@
     <div class="sidebar-spacer"></div>
     <div class="sidebar-section">
       <div class="section-label">Conta</div>
-      <a href="/aluno/perfil.html" class="sidebar-link active">
+      <a href="/aluno/perfil.html" class="sidebar-link">
         <span class="icon">○</span><span class="label">Meu Perfil</span>
       </a>
       <a href="#" onclick="logout()" class="sidebar-link">
@@ -557,10 +644,10 @@
   <!-- ═══════════ MAIN ═══════════ -->
   <main class="main-content">
     <div class="page-title anim-in anim-d1">
-      <h1>Meu Perfil</h1>
+      <h1>Meus Certificados</h1>
       <p id="pageSub">Carregando...</p>
     </div>
-    <div id="profileContent" style="color:var(--text-muted);text-align:center;padding:40px;">Carregando perfil...</div>
+    <div id="profileContent" style="color:var(--text-muted);text-align:center;padding:40px;">Carregando certificados...</div>
   </main>
 </div>
 
@@ -574,24 +661,30 @@
 
   async function init() {
     const res = await fetch(API+'/auth/me', { headers: h() });
-    if (!res.ok) { window.location.href = '/login.html?redirect=' + encodeURIComponent('/aluno/perfil.html'); return; }
+    if (!res.ok) { window.location.href = '/login.html?redirect=' + encodeURIComponent('/aluno/certificados.html'); return; }
     const data = await res.json();
     userData = data.user || data;
 
     const displayName = userData.user_metadata?.name || userData.name || userData.email?.split('@')[0] || 'Aluno';
     document.getElementById('userName').textContent = displayName;
-        // Populate sidebar
     document.getElementById('sbName').textContent = displayName;
     document.getElementById('sbAvatar').textContent = displayName.charAt(0).toUpperCase();
     const role = (userData.role || userData.user_metadata?.role || 'aluno');
     document.getElementById('sbRole').textContent = role === 'admin' ? 'ADMIN' : role === 'tutor' ? 'TUTOR' : 'ALUNO';
-    if (profile?.profile_photo) {
-      const sbAv = document.getElementById('sbAvatar');
-      sbAv.style.backgroundImage = 'url(' + profile.profile_photo + ')';
-      sbAv.style.backgroundSize = 'cover';
-      sbAv.style.backgroundPosition = 'center';
-      sbAv.textContent = '';
-    }
+
+    // Load profile for photo
+    try {
+      const pfRes = await fetch(API+'/profile', { headers: h() });
+      const pf = await pfRes.json();
+      profile = pf;
+      if (profile?.profile_photo) {
+        const sbAv = document.getElementById('sbAvatar');
+        sbAv.style.backgroundImage = 'url(' + profile.profile_photo + ')';
+        sbAv.style.backgroundSize = 'cover';
+        sbAv.style.backgroundPosition = 'center';
+        sbAv.textContent = '';
+      }
+    } catch(e) {}
 
     // Fetch sidebar stats
     try {
@@ -612,247 +705,76 @@
       document.getElementById('sbCompleted').textContent = completedLessons;
     } catch(e) {}
 
-document.getElementById('userAvatar').textContent = displayName.charAt(0).toUpperCase();
-
-    const pfRes = await fetch(API+'/profile', { headers: h() });
-    const pf = await pfRes.json();
-    profile = pf || { name: userData.user_metadata?.name || userData.name || '', email: userData.email, role: 'aluno' };
-    renderProfile();
+    document.getElementById('userAvatar').textContent = displayName.charAt(0).toUpperCase();
+    renderCertificates();
   }
 
-  function renderProfile() {
-    const name = profile.name || userData.email?.split('@')[0] || 'Aluno';
-    const initial = name.charAt(0).toUpperCase();
-    const mircLabel = profile.mirc_status === 'active' ? '✅ Credencial Ativa' : profile.mirc_status === 'expired' ? '❌ Expirada' : profile.mirc_status ? '⏳ Pendente' : 'Sem credencial';
-    const mircClass = profile.mirc_status === 'active' ? 'active' : profile.mirc_status === 'expired' ? 'expired' : 'pending';
-
+  async function renderCertificates() {
+    const container = document.getElementById('profileContent');
+    const name = profile?.name || userData?.email?.split('@')[0] || 'Aluno';
     document.getElementById('pageSub').textContent = name;
-    document.title = name + ' · Perfil · Lumethos';
 
-    let html = '<div class="card anim-in anim-d2">';
-    const photoUrl = profile.profile_photo || '';
-    html += `<div class="avatar-section">
-      <div class="avatar-info">
-        <strong>${name}</strong>
-        ${profile.role === 'admin' ? '🔑 Administrador' : profile.role === 'tutor' ? '👨‍🏫 Tutor' : '🎓 Aluno'}
-        ${userData.email ? '<br>' + userData.email : ''}
-        <div class="photo-actions">
-          <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhotoSelect(event)">
-          <button class="btn-photo" onclick="document.getElementById('photoInput').click()">📷 ${photoUrl ? 'Alterar foto' : 'Adicionar foto'}</button>
-          ${photoUrl ? '<button class="btn-photo remove" onclick="removePhoto()">🗑 Remover</button>' : ''}
-        </div>
-      </div>
-    <div class="avatar-circle${photoUrl ? ' has-photo' : ''}" onclick="document.getElementById('photoInput').click()" id="avatarPreview" style="${photoUrl ? 'background-image:url(' + photoUrl + ')' : ''}">
-        ${!photoUrl ? initial : ''}
-        <div class="avatar-overlay"><span class="avatar-overlay-text">${photoUrl ? '✎ Trocar' : '📷 Foto'}</span></div>
-      </div>
-      </div>`;
-
-    if (profile.mirc_code) {
-      html += `<div class="mirc-badge ${mircClass}" style="margin-bottom:18px;">🛡️ ${profile.mirc_code} · ${mircLabel}</div>`;
-    }
-
-    html += `<h3>Informações Pessoais</h3>
-      <div class="form-group"><label>Nome</label><input type="text" id="editName" value="${escAttr(profile.name || '')}" placeholder="Seu nome completo"></div>
-      <div class="form-group"><label>Telefone (WhatsApp)</label><input type="text" id="editPhone" value="${escAttr(profile.phone || '')}" placeholder="(XX) XXXXX-XXXX"></div>
-      <div class="form-group"><label>CPF (para credencial MIRC)</label><input type="text" id="editMatricula" value="${escAttr(profile.matricula || '')}" placeholder="000.000.000-00" ${profile.matricula ? 'disabled' : ''}>${profile.matricula ? '<small style="color:var(--text-muted);font-size:11px;">CPF vinculado — entre em contato para alterar</small>' : ''}</div>
-      <div class="form-group"><label>Email</label><input type="email" value="${escAttr(userData.email || '')}" disabled><small style="color:var(--text-muted);font-size:11px;">Gerenciado pelo login</small></div>
-      <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;">
-        <button class="btn-primary" onclick="saveProfile()" id="saveBtn">💾 Salvar Alterações</button>
-        <a href="/aluno/dashboard.html" class="btn-outline">← Dashboard</a>
-      </div>
-    </div>`;
-
-    if (profile.mirc_code) {
-      html += `<div class="card anim-in anim-d2">
-        <h3>Credencial MIRC</h3>
-        <div style="padding:8px 0;">
-          <div class="info-row"><span class="info-key">Código</span><span class="info-val">${escAttr(profile.mirc_code || '—')}</span></div>
-          <div class="info-row"><span class="info-key">Status</span><span class="info-val">${mircLabel}</span></div>
-          <div class="info-row"><span class="info-key">Emitida em</span><span class="info-val">${profile.mirc_issued_at ? new Date(profile.mirc_issued_at).toLocaleDateString('pt-BR') : '—'}</span></div>
-        </div>
-      </div>`;
-    }
-
-    if (profile.role === 'aluno' || profile.role === 'tutor') {
-      html += `<div class="card anim-in anim-d2">
-        <h3>Estatísticas</h3>
-        <div class="stats-row">
-          <span class="stat-pill" id="statCourses">📚 Carregando...</span>
-          <span class="stat-pill" id="statLessons">✅ Carregando...</span>
-          <span class="stat-pill" id="statCert">🏅 Carregando...</span>
-        </div>
-      </div>`;
-    }
-
-    document.getElementById('profileContent').innerHTML = html;
-    if (profile.role === 'aluno' || profile.role === 'tutor') loadStats();
-  }
-
-  async function loadStats() {
+    let certs = [];
     try {
-      const r = await fetch(API+'/courses/progress', { headers: h() });
-      const d = await r.json();
-      const courses = d?.enrollments || d?.courses || [];
-      const courseCount = courses.length;
-      const lessonCount = courses.reduce((s,c) => s + (c.modules_completed || 0), 0);
-      const certCount = courses.filter(c => c.progress_pct >= 100).length;
-      document.getElementById('statCourses').textContent = `📚 ${courseCount} cursos`;
-      document.getElementById('statLessons').textContent = `✅ ${lessonCount} aulas`;
-      document.getElementById('statCert').textContent = `🏅 ${certCount} certificados`;
-    } catch(e) {
-      document.getElementById('statCourses').textContent = '📚 —';
-      document.getElementById('statLessons').textContent = '✅ —';
-      document.getElementById('statCert').textContent = '🏅 —';
-    }
-  }
+      const certRes = await fetch(API + '/certificates', { headers: h() });
+      certs = certRes.ok ? await certRes.json() : [];
+    } catch(e) { console.error('Erro ao carregar certificados:', e); }
 
-  async function saveProfile() {
-    const btn = document.getElementById('saveBtn');
-    btn.disabled = true; btn.textContent = 'Salvando...';
-    const updates = {
-      name: document.getElementById('editName').value.trim() || null,
-      phone: document.getElementById('editPhone').value.trim() || null
+    if (!certs || certs.length === 0) {
+      container.innerHTML = '<div class="card anim-in anim-d2" style="text-align:center;padding:60px 20px;">' +
+        '<div style="font-size:48px;margin-bottom:16px;">🏅</div>' +
+        '<h3 style="color:var(--gold);margin-bottom:8px;">Nenhum certificado ainda</h3>' +
+        '<p style="color:var(--text-muted);font-size:14px;">Conclua seus cursos para ganhar certificados aqui.</p>' +
+        '<a href="/aluno/biblioteca.html" class="btn-photo" style="display:inline-block;margin-top:16px;">Explorar Cursos →</a></div>';
+      return;
+    }
+
+    const courseImages = {
+      'capelania': 'capelania', 'teologia': 'teologia', 'patristica': 'patristica',
+      'escatologia': 'escatologia', 'hermeneutica': 'hermeneutica',
+      'lideranca': 'lideranca', 'ministerio': 'ministerio', 'louvor': 'louvor'
     };
-    try {
-      const r = await fetch(API+'/profile', { method:'PUT', headers:h(), body:JSON.stringify(updates) });
-      if (!r.ok) { const e = await r.json().catch(()=>({})); showToast('Erro: ' + (e.message||'Desconhecido'), true); }
-      else { showToast('✅ Perfil atualizado!'); profile = {...profile, ...updates}; }
-    } catch(e) { showToast('Erro: ' + e.message, true); }
-    btn.disabled = false; btn.textContent = '💾 Salvar Alterações';
-  }
 
+    let html = '<div class="certs-grid anim-in anim-d2">';
+    for (const c of certs) {
+      const imgSlug = courseImages[c.course_slug] || c.course_slug || 'default';
+      const issueDate = c.issued_at ? new Date(c.issued_at + 'T00:00:00').toLocaleDateString('pt-BR', {day:'2-digit',month:'long',year:'numeric'}) : '—';
 
-  // ── Crop State ──
-  let cropFile = null, cropImgEl = null, cropContainer = null;
-  let cropDrag = { active: false, startX: 0, startY: 0, imgX: 0, imgY: 0 };
-
-  function updateCropZoom(val) {
-    if (!cropImgEl || !cropContainer) return;
-    const pct = parseInt(val) / 100;
-    const baseW = cropContainer.clientWidth;
-    const baseH = cropContainer.clientHeight;
-    const newW = baseW * pct;
-    const newH = baseH * pct;
-    cropImgEl.style.width = newW + "px";
-    cropImgEl.style.height = newH + "px";
-    cropImgEl.style.left = ((baseW - newW) / 2) + "px";
-    cropImgEl.style.top = ((baseH - newH) / 2) + "px";
-    cropDrag.imgX = parseInt(cropImgEl.style.left);
-    cropDrag.imgY = parseInt(cropImgEl.style.top);
-  }
-
-  function closeCrop() {
-    document.getElementById("cropModal").classList.add("hidden");
-    cropFile = null;
-  }
-
-  async function confirmCrop() {
-    if (!cropFile) return;
-    const container = document.getElementById("cropContainer");
-    const img = document.getElementById("cropImage");
-
-    const canvas = document.createElement("canvas");
-    canvas.width = 400;
-    canvas.height = 400;
-    const ctx = canvas.getContext("2d");
-
-    ctx.beginPath();
-    ctx.arc(200, 200, 200, 0, Math.PI * 2, true);
-    ctx.clip();
-
-    const imgX = parseInt(img.style.left) || 0;
-    const imgY = parseInt(img.style.top) || 0;
-    const imgW = parseInt(img.style.width) || img.naturalWidth;
-    const imgH = parseInt(img.style.height) || img.naturalHeight;
-
-    const scaleX = 400 / container.clientWidth;
-    const scaleY = 400 / container.clientHeight;
-
-    ctx.drawImage(img, imgX * scaleX, imgY * scaleY, imgW * scaleX, imgH * scaleY);
-
-    const croppedDataUrl = canvas.toDataURL("image/jpeg", 0.9);
-
-    const av = document.getElementById("avatarPreview");
-    av.style.backgroundImage = "url(" + croppedDataUrl + ")";
-    av.classList.add("has-photo");
-    av.innerHTML = '<div class="avatar-overlay"><span class="avatar-overlay-text">✎ Trocar</span></div>';
-
-    closeCrop();
-
-    showToast("Enviando foto...");
-    try {
-      const res = await fetch(API + "/profile/photo", {
-        method: "POST", headers: h(),
-        body: JSON.stringify({ photo: croppedDataUrl })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        profile.profile_photo = data.photo_url;
-        showToast("✅ Foto atualizada!");
-        setTimeout(() => renderProfile(), 800);
-      } else {
-        const err = await res.json().catch(()=>({}));
-        showToast("Erro: " + (err.error || "Falha ao salvar"), true);
-      }
-    } catch(ex) { showToast("Erro ao enviar foto", true); }
-  }
-
-  async function handlePhotoSelect(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { showToast('Foto muito grande (máx 5MB)', true); return; }
-    if (!file.type.startsWith('image/')) { showToast('Selecione uma imagem', true); return; }
-
-    // Preview
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-      document.getElementById('avatarPreview').style.backgroundImage = 'url(' + ev.target.result + ')';
-      document.getElementById('avatarPreview').classList.add('has-photo');
-      document.getElementById('avatarPreview').innerHTML = '<div class="avatar-overlay"><span class="avatar-overlay-text">✎ Trocar</span></div>';
-    };
-    reader.readAsDataURL(file);
-
-    // Upload
-    showToast('Enviando foto...');
-    try {
-      const base64 = await new Promise((resolve) => {
-        const r = new FileReader();
-        r.onload = () => resolve(r.result);
-        r.readAsDataURL(file);
-      });
-      const res = await fetch(API + '/profile/photo', {
-        method: 'POST', headers: h(),
-        body: JSON.stringify({ photo: base64 })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        profile.profile_photo = data.photo_url;
-        showToast('✅ Foto atualizada!');
-        setTimeout(() => renderProfile(), 800);
-      } else {
-        const err = await res.json();
-        showToast('Erro: ' + (err.error || 'Falha ao salvar'), true);
-      }
-    } catch(ex) { showToast('Erro ao enviar foto', true); }
-  }
-
-  async function removePhoto() {
-    if (!confirm('Remover foto do perfil?')) return;
-    try {
-      const res = await fetch(API + '/profile/photo', { method: 'DELETE', headers: h() });
-      if (res.ok) {
-        profile.profile_photo = null;
-        document.getElementById('avatarPreview').style.backgroundImage = '';
-        document.getElementById('avatarPreview').classList.remove('has-photo');
-        document.getElementById('avatarPreview').innerHTML = profile.name?.charAt(0).toUpperCase() || '?';
-        showToast('✅ Foto removida');
-        setTimeout(() => renderProfile(), 800);
-      }
-    } catch(ex) { showToast('Erro ao remover foto', true); }
+      html += '<div class="cert-card">' +
+        '<div class="cert-card-img">' +
+          '<img src="/img/cursos/' + imgSlug + '.webp" alt="' + escAttr(c.course_title) + '" loading="lazy" onerror="this.style.opacity=\'0.3\'">' +
+          '<span class="cert-badge">🏅</span>' +
+        '</div>' +
+        '<div class="cert-card-body">' +
+          '<h3>' + escAttr(c.course_title) + '</h3>' +
+          '<div class="cert-meta">' +
+            '<span class="cert-code">' + escAttr(c.code) + '</span>' +
+            '<span class="cert-date">🗓️ ' + issueDate + '</span>' +
+            '<span class="cert-hours">⏱️ ' + (c.hours||'?') + 'h</span>' +
+          '</div>' +
+          '<div class="cert-status verified">✅ Verificado</div>' +
+          '<div class="cert-actions">' +
+            '<a href="/certificado/' + escAttr(c.code) + '" target="_blank" class="btn-photo">📜 Ver Certificado</a>' +
+            '<button class="btn-photo" onclick="shareCert(\'' + escJs(c.code) + '\',\'' + escJs(c.course_title) + '\')">📤 Compartilhar</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+    html += '</div>';
+    container.innerHTML = html;
   }
 
   function escAttr(s) { if(!s) return ''; return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function escJs(s) { if(!s) return ''; return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"'); }
+  function shareCert(code, title) {
+    const url = window.location.origin + '/certificado/' + code;
+    if (navigator.share) {
+      navigator.share({ title: 'Meu Certificado - ' + title, text: 'Veja meu certificado em ' + title + ' pelo Instituto Lumethos!', url: url });
+    } else {
+      navigator.clipboard.writeText(url).then(() => showToast('📋 Link copiado!')).catch(() => showToast('Link: ' + url));
+    }
+  }
+
   function showToast(msg, isErr) {
     const t = document.getElementById('toast');
     t.textContent = msg; t.className = 'toast ' + (isErr?'error ':'') + 'show';
@@ -877,23 +799,7 @@ document.getElementById('userAvatar').textContent = displayName.charAt(0).toUppe
 
   init();
 </script>
-  <!-- ── Crop Modal ── -->
-  <div class="crop-overlay hidden" id="cropModal">
-    <div class="crop-container" id="cropContainer">
-      <img id="cropImage" src="" alt="Ajustar foto" draggable="false">
-      <div class="crop-guide"></div>
-    </div>
-    <div class="crop-controls">
-      <span>🔍</span>
-      <input type="range" id="cropZoom" min="50" max="300" value="100" oninput="updateCropZoom(this.value)">
-      <span>🔍</span>
-    </div>
-    <div class="crop-hint">🖱️ Arraste para centralizar · Ajuste o zoom com o slider</div>
-    <div class="crop-actions">
-      <button class="crop-btn cancel" onclick="closeCrop()">Cancelar</button>
-      <button class="crop-btn confirm" onclick="confirmCrop()">✓ Confirmar</button>
-    </div>
-  </div>
+  
 
 </body>
 </html>
